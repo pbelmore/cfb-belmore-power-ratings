@@ -1,0 +1,1382 @@
+[
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Air Force",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Akron",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Alabama",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "App State",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Arizona",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Arizona State",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Arkansas",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Arkansas State",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Army",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Auburn",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "BYU",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Ball State",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Baylor",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Boise State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Boston College",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Bowling Green",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Buffalo",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "California",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Central Michigan",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Charlotte",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Cincinnati",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Clemson",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Coastal Carolina",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Colorado",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Colorado State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Delaware",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Duke",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "East Carolina",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Eastern Michigan",
+    "conference": "Mid-American",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Florida",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Florida Atlantic",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Florida International",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Florida State",
+    "conference": "ACC",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Fresno State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Georgia",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Georgia Southern",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Georgia State",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Georgia Tech",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Hawai'i",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Houston",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Illinois",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Indiana",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Iowa",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Iowa State",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Jacksonville State",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "James Madison",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Kansas",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Kansas State",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Kennesaw State",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Kent State",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Kentucky",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "LSU",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Liberty",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Louisiana",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Louisiana Tech",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Louisville",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Marshall",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Maryland",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Massachusetts",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Memphis",
+    "conference": "American Athletic",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Miami",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Miami (OH)",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Michigan",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Michigan State",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Middle Tennessee",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Minnesota",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Mississippi State",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Missouri",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Missouri State",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "NC State",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Navy",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Nebraska",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Nevada",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "New Mexico",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "New Mexico State",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "North Carolina",
+    "conference": "ACC",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "North Dakota State",
+    "conference": "Mountain West",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "North Texas",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Northern Illinois",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Northwestern",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Notre Dame",
+    "conference": "FBS Independents",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Ohio",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Ohio State",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Oklahoma",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Oklahoma State",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Old Dominion",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Ole Miss",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Oregon",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Oregon State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Penn State",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Pittsburgh",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Purdue",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Rice",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Rutgers",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "SMU",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Sacramento State",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Sam Houston",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "San Diego State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "San Jos\u00e9 State",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "South Alabama",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "South Carolina",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "South Florida",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Southern Miss",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Stanford",
+    "conference": "ACC",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Syracuse",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "TCU",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Temple",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Tennessee",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Texas",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Texas A&M",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Texas State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Texas Tech",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Toledo",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Troy",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Tulane",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Tulsa",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UAB",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UCF",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UCLA",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UConn",
+    "conference": "FBS Independents",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UL Monroe",
+    "conference": "Sun Belt",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UNLV",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 1,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "USC",
+    "conference": "Big Ten",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UTEP",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "UTSA",
+    "conference": "American Athletic",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Utah",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Utah State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Vanderbilt",
+    "conference": "SEC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Virginia",
+    "conference": "ACC",
+    "wins": 1,
+    "losses": 0,
+    "win_pct": 1.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Virginia Tech",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Wake Forest",
+    "conference": "ACC",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Washington",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Washington State",
+    "conference": "Pac-12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "West Virginia",
+    "conference": "Big 12",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Western Kentucky",
+    "conference": "Conference USA",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Western Michigan",
+    "conference": "Mid-American",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Wisconsin",
+    "conference": "Big Ten",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  },
+  {
+    "season": 2026,
+    "as_of": "2026-09-03",
+    "team": "Wyoming",
+    "conference": "Mountain West",
+    "wins": 0,
+    "losses": 0,
+    "win_pct": 0.0,
+    "power_score": 0.0
+  }
+]

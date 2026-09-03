@@ -1,0 +1,90 @@
+[
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-29T16:00:00.000Z",
+    "winner": "North Carolina",
+    "winner_pts": 15,
+    "loser": "TCU",
+    "loser_pts": 10,
+    "location": "neutral",
+    "notes": "Aer Lingus College Football Classic"
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-29T19:00:00.000Z",
+    "winner": "USC",
+    "winner_pts": 42,
+    "loser": "San Jos\u00e9 State",
+    "loser_pts": 26,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-29T19:30:00.000Z",
+    "winner": "Virginia",
+    "winner_pts": 34,
+    "loser": "NC State",
+    "loser_pts": 8,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-29T21:30:00.000Z",
+    "winner": "North Dakota State",
+    "winner_pts": 33,
+    "loser": "Jacksonville State",
+    "loser_pts": 7,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-29T22:30:00.000Z",
+    "winner": "Eastern Michigan",
+    "winner_pts": 28,
+    "loser": "Sacramento State",
+    "loser_pts": 17,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-29T23:00:00.000Z",
+    "winner": "Florida State",
+    "winner_pts": 34,
+    "loser": "New Mexico State",
+    "loser_pts": 17,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-29T23:00:00.000Z",
+    "winner": "Stanford",
+    "winner_pts": 37,
+    "loser": "Hawai'i",
+    "loser_pts": 27,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-08-30T02:00:00.000Z",
+    "winner": "Memphis",
+    "winner_pts": 27,
+    "loser": "UNLV",
+    "loser_pts": 21,
+    "location": "away",
+    "notes": ""
+  }
+]

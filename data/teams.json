@@ -1,0 +1,554 @@
+[
+  {
+    "school": "Air Force",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "Akron",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Alabama",
+    "conference": "SEC"
+  },
+  {
+    "school": "App State",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Arizona",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Arizona State",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Arkansas",
+    "conference": "SEC"
+  },
+  {
+    "school": "Arkansas State",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Army",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Auburn",
+    "conference": "SEC"
+  },
+  {
+    "school": "Ball State",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Baylor",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Boise State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "Boston College",
+    "conference": "ACC"
+  },
+  {
+    "school": "Bowling Green",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Buffalo",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "BYU",
+    "conference": "Big 12"
+  },
+  {
+    "school": "California",
+    "conference": "ACC"
+  },
+  {
+    "school": "Central Michigan",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Charlotte",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Cincinnati",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Clemson",
+    "conference": "ACC"
+  },
+  {
+    "school": "Coastal Carolina",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Colorado",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Colorado State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "Delaware",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "Duke",
+    "conference": "ACC"
+  },
+  {
+    "school": "East Carolina",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Eastern Michigan",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Florida",
+    "conference": "SEC"
+  },
+  {
+    "school": "Florida Atlantic",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Florida International",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "Florida State",
+    "conference": "ACC"
+  },
+  {
+    "school": "Fresno State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "Georgia",
+    "conference": "SEC"
+  },
+  {
+    "school": "Georgia Southern",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Georgia State",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Georgia Tech",
+    "conference": "ACC"
+  },
+  {
+    "school": "Hawai'i",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "Houston",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Illinois",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Indiana",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Iowa",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Iowa State",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Jacksonville State",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "James Madison",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Kansas",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Kansas State",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Kennesaw State",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "Kent State",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Kentucky",
+    "conference": "SEC"
+  },
+  {
+    "school": "Liberty",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "Louisiana",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Louisiana Tech",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Louisville",
+    "conference": "ACC"
+  },
+  {
+    "school": "LSU",
+    "conference": "SEC"
+  },
+  {
+    "school": "Marshall",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Maryland",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Massachusetts",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Memphis",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Miami",
+    "conference": "ACC"
+  },
+  {
+    "school": "Miami (OH)",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Michigan",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Michigan State",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Middle Tennessee",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "Minnesota",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Mississippi State",
+    "conference": "SEC"
+  },
+  {
+    "school": "Missouri",
+    "conference": "SEC"
+  },
+  {
+    "school": "Missouri State",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "Navy",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "NC State",
+    "conference": "ACC"
+  },
+  {
+    "school": "Nebraska",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Nevada",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "New Mexico",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "New Mexico State",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "North Carolina",
+    "conference": "ACC"
+  },
+  {
+    "school": "North Dakota State",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "Northern Illinois",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "North Texas",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Northwestern",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Notre Dame",
+    "conference": "FBS Independents"
+  },
+  {
+    "school": "Ohio",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Ohio State",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Oklahoma",
+    "conference": "SEC"
+  },
+  {
+    "school": "Oklahoma State",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Old Dominion",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Ole Miss",
+    "conference": "SEC"
+  },
+  {
+    "school": "Oregon",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Oregon State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "Penn State",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Pittsburgh",
+    "conference": "ACC"
+  },
+  {
+    "school": "Purdue",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Rice",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Rutgers",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Sacramento State",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Sam Houston",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "San Diego State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "San Jos\u00e9 State",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "SMU",
+    "conference": "ACC"
+  },
+  {
+    "school": "South Alabama",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "South Carolina",
+    "conference": "SEC"
+  },
+  {
+    "school": "Southern Miss",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "South Florida",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Stanford",
+    "conference": "ACC"
+  },
+  {
+    "school": "Syracuse",
+    "conference": "ACC"
+  },
+  {
+    "school": "TCU",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Temple",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Tennessee",
+    "conference": "SEC"
+  },
+  {
+    "school": "Texas",
+    "conference": "SEC"
+  },
+  {
+    "school": "Texas A&M",
+    "conference": "SEC"
+  },
+  {
+    "school": "Texas State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "Texas Tech",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Toledo",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "Troy",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "Tulane",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Tulsa",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "UAB",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "UCF",
+    "conference": "Big 12"
+  },
+  {
+    "school": "UCLA",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "UConn",
+    "conference": "FBS Independents"
+  },
+  {
+    "school": "UL Monroe",
+    "conference": "Sun Belt"
+  },
+  {
+    "school": "UNLV",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "USC",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Utah",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Utah State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "UTEP",
+    "conference": "Mountain West"
+  },
+  {
+    "school": "UTSA",
+    "conference": "American Athletic"
+  },
+  {
+    "school": "Vanderbilt",
+    "conference": "SEC"
+  },
+  {
+    "school": "Virginia",
+    "conference": "ACC"
+  },
+  {
+    "school": "Virginia Tech",
+    "conference": "ACC"
+  },
+  {
+    "school": "Wake Forest",
+    "conference": "ACC"
+  },
+  {
+    "school": "Washington",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Washington State",
+    "conference": "Pac-12"
+  },
+  {
+    "school": "Western Kentucky",
+    "conference": "Conference USA"
+  },
+  {
+    "school": "Western Michigan",
+    "conference": "Mid-American"
+  },
+  {
+    "school": "West Virginia",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Wisconsin",
+    "conference": "Big Ten"
+  },
+  {
+    "school": "Wyoming",
+    "conference": "Mountain West"
+  }
+]
