@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CFB Power Ratings</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666666;
+    --border: #e0e0e0;
+    --row-alt: #f7f7f7;
+    --accent: #b3121b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --fg: #eaeaea;
+      --muted: #9a9a9a;
+      --border: #2c2f34;
+      --row-alt: #1b1e23;
+      --accent: #ff6b6b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
+  .subtitle { color: var(--muted); margin: 0 0 1.5rem; font-size: 0.9rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { padding: 0.5rem 0.6rem; text-align: right; white-space: nowrap; }
+  th:nth-child(2), td:nth-child(2) { text-align: left; white-space: normal; }
+  th:nth-child(3), td:nth-child(3) { text-align: left; white-space: normal; color: var(--muted); }
+  thead th {
+    border-bottom: 2px solid var(--border);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+  }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  td.rank { color: var(--muted); font-variant-numeric: tabular-nums; }
+  td.rating { font-weight: 600; }
+  .status { color: var(--muted); padding: 2rem 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>CFB Power Ratings</h1>
+  <p class="subtitle" id="subtitle">Loading&hellip;</p>
+  <div id="content"></div>
+</div>
+
+<script>
+async function main() {
+  const content = document.getElementById('content');
+  const subtitle = document.getElementById('subtitle');
+
+  let rows;
+  try {
+    const res = await fetch('data/ratings_history.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    rows = await res.json();
+  } catch (err) {
+    subtitle.textContent = '';
+    content.innerHTML = `<p class="status">Couldn't load ratings data (${err.message}).</p>`;
+    return;
+  }
+
+  if (!rows.length) {
+    subtitle.textContent = '';
+    content.innerHTML = '<p class="status">No data yet.</p>';
+    return;
+  }
+
+  const latestSeason = Math.max(...rows.map(r => r.season));
+  const seasonRows = rows.filter(r => r.season === latestSeason);
+  const latestAsOf = seasonRows.reduce((a, b) => (b.as_of > a ? b.as_of : a), seasonRows[0].as_of);
+  const current = seasonRows
+    .filter(r => r.as_of === latestAsOf)
+    .sort((a, b) => b.rating - a.rating);
+
+  subtitle.textContent = `${latestSeason} season — as of ${latestAsOf}`;
+
+  const table = document.createElement('table');
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Team</th>
+        <th>Conf</th>
+        <th>W</th>
+        <th>L</th>
+        <th>Win%</th>
+        <th>SOS</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${current.map((r, i) => `
+        <tr>
+          <td class="rank">${i + 1}</td>
+          <td>${r.team}</td>
+          <td>${r.conference ?? ''}</td>
+          <td>${r.wins}</td>
+          <td>${r.losses}</td>
+          <td>${(r.win_pct * 100).toFixed(1)}%</td>
+          <td>${r.sos.toFixed(4)}</td>
+          <td class="rating">${r.rating.toFixed(4)}</td>
+        </tr>
+      `).join('')}
+    </tbody>
+  `;
+  content.appendChild(table);
+}
+
+main();
+</script>
+</body>
+</html>
