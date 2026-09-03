@@ -40,6 +40,10 @@
     "conference": "SEC"
   },
   {
+    "school": "BYU",
+    "conference": "Big 12"
+  },
+  {
     "school": "Ball State",
     "conference": "Mid-American"
   },
@@ -62,10 +66,6 @@
   {
     "school": "Buffalo",
     "conference": "Mid-American"
-  },
-  {
-    "school": "BYU",
-    "conference": "Big 12"
   },
   {
     "school": "California",
@@ -204,6 +204,10 @@
     "conference": "SEC"
   },
   {
+    "school": "LSU",
+    "conference": "SEC"
+  },
+  {
     "school": "Liberty",
     "conference": "Conference USA"
   },
@@ -218,10 +222,6 @@
   {
     "school": "Louisville",
     "conference": "ACC"
-  },
-  {
-    "school": "LSU",
-    "conference": "SEC"
   },
   {
     "school": "Marshall",
@@ -276,12 +276,12 @@
     "conference": "Conference USA"
   },
   {
-    "school": "Navy",
-    "conference": "American Athletic"
-  },
-  {
     "school": "NC State",
     "conference": "ACC"
+  },
+  {
+    "school": "Navy",
+    "conference": "American Athletic"
   },
   {
     "school": "Nebraska",
@@ -308,12 +308,12 @@
     "conference": "Mountain West"
   },
   {
-    "school": "Northern Illinois",
-    "conference": "Mountain West"
-  },
-  {
     "school": "North Texas",
     "conference": "American Athletic"
+  },
+  {
+    "school": "Northern Illinois",
+    "conference": "Mountain West"
   },
   {
     "school": "Northwestern",
@@ -376,6 +376,10 @@
     "conference": "Big Ten"
   },
   {
+    "school": "SMU",
+    "conference": "ACC"
+  },
+  {
     "school": "Sacramento State",
     "conference": "Mid-American"
   },
@@ -392,10 +396,6 @@
     "conference": "Mountain West"
   },
   {
-    "school": "SMU",
-    "conference": "ACC"
-  },
-  {
     "school": "South Alabama",
     "conference": "Sun Belt"
   },
@@ -404,12 +404,12 @@
     "conference": "SEC"
   },
   {
-    "school": "Southern Miss",
-    "conference": "Sun Belt"
-  },
-  {
     "school": "South Florida",
     "conference": "American Athletic"
+  },
+  {
+    "school": "Southern Miss",
+    "conference": "Sun Belt"
   },
   {
     "school": "Stanford",
@@ -492,20 +492,20 @@
     "conference": "Big Ten"
   },
   {
-    "school": "Utah",
-    "conference": "Big 12"
-  },
-  {
-    "school": "Utah State",
-    "conference": "Pac-12"
-  },
-  {
     "school": "UTEP",
     "conference": "Mountain West"
   },
   {
     "school": "UTSA",
     "conference": "American Athletic"
+  },
+  {
+    "school": "Utah",
+    "conference": "Big 12"
+  },
+  {
+    "school": "Utah State",
+    "conference": "Pac-12"
   },
   {
     "school": "Vanderbilt",
@@ -532,16 +532,16 @@
     "conference": "Pac-12"
   },
   {
+    "school": "West Virginia",
+    "conference": "Big 12"
+  },
+  {
     "school": "Western Kentucky",
     "conference": "Conference USA"
   },
   {
     "school": "Western Michigan",
     "conference": "Mid-American"
-  },
-  {
-    "school": "West Virginia",
-    "conference": "Big 12"
   },
   {
     "school": "Wisconsin",

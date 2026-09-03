@@ -42,7 +42,9 @@ def cfbd_get(path, api_key, **params):
 
 def fetch_teams(year, api_key):
     raw = cfbd_get("/teams/fbs", api_key, year=year)
-    return [{"school": t["school"], "conference": t.get("conference")} for t in raw]
+    teams = [{"school": t["school"], "conference": t.get("conference")} for t in raw]
+    teams.sort(key=lambda t: t["school"])
+    return teams
 
 
 def fetch_games(year, api_key, through_week=None):
@@ -75,6 +77,10 @@ def fetch_games(year, api_key, through_week=None):
             "location": location,
             "notes": g.get("notes") or "",
         })
+    # Sort deterministically -- the CFBD API doesn't guarantee stable ordering
+    # between calls for games sharing a timestamp, which would otherwise cause
+    # a spurious diff/commit every run even when no game data actually changed.
+    games.sort(key=lambda r: (r["date"] or "", r["winner"], r["loser"]))
     return games
 
 
