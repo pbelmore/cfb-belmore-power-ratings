@@ -149,6 +149,10 @@ def main():
     # same day's snapshot updates it in place instead of duplicating it.
     history = [r for r in history if not (r["season"] == args.year and r["as_of"] == as_of)]
     history.extend(new_rows)
+    # Sort deterministically -- compute_ratings() iterates a set() internally,
+    # whose order varies per process (Python string-hash randomization), so
+    # without this every run would rewrite the whole file's line order.
+    history.sort(key=lambda r: (r["season"], r["as_of"], r["team"]))
     write_json(history_path, history)
 
     top = sorted(results.items(), key=lambda kv: kv[1]["rating"], reverse=True)[:5]

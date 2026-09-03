@@ -115,6 +115,10 @@ def main():
         as_ofs_this_run = {(year, r["as_of"]) for r in season_new_rows}
         history = [r for r in history if (r["season"], r["as_of"]) not in as_ofs_this_run]
         history.extend(season_new_rows)
+        # Sort deterministically -- compute_ratings() iterates a set() internally,
+        # whose order varies per process (Python string-hash randomization), so
+        # without this every run would rewrite the whole file's line order.
+        history.sort(key=lambda r: (r["season"], r["as_of"], r["team"]))
         write_json(history_path, history)
         print(f"  wrote {len(season_new_rows)} rows across {len(as_ofs_this_run)} snapshots")
 
