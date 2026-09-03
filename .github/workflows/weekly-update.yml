@@ -7,9 +7,8 @@ on:
         description: "Season year to pull"
         required: false
         default: "2026"
-  # Enabled once a manual run has been verified end-to-end:
-  # schedule:
-  #   - cron: "0 13 * * 2"   # Tuesdays, 9am ET
+  schedule:
+    - cron: "0 13 * * 2"   # Tuesdays, 9am ET (13:00 UTC; drifts to 8am ET once DST ends in Nov)
 
 permissions:
   contents: write
