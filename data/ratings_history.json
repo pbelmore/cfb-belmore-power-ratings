@@ -8,7 +8,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -22,7 +22,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -36,7 +36,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -50,7 +50,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -64,7 +64,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -78,7 +78,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -92,7 +92,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -106,7 +106,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -120,7 +120,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -134,7 +134,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -148,7 +148,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -162,7 +162,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -176,7 +176,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -190,7 +190,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -204,7 +204,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -218,7 +218,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -232,7 +232,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -246,7 +246,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -260,7 +260,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -274,7 +274,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -288,7 +288,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -302,7 +302,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -316,7 +316,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -330,7 +330,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -344,7 +344,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -358,7 +358,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -372,7 +372,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -386,7 +386,7 @@
     "wins": 0,
     "losses": 0,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -400,7 +400,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -414,7 +414,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -428,7 +428,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -442,7 +442,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -456,7 +456,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -470,7 +470,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -484,7 +484,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -498,7 +498,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -512,7 +512,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -526,7 +526,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -540,7 +540,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -554,7 +554,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -568,7 +568,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -582,7 +582,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -596,7 +596,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -610,7 +610,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -624,7 +624,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -638,7 +638,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -652,7 +652,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -666,7 +666,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -680,7 +680,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -694,7 +694,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -708,7 +708,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -722,7 +722,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -736,7 +736,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -750,7 +750,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -764,7 +764,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -778,7 +778,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -792,7 +792,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -806,7 +806,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -820,7 +820,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -834,7 +834,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -848,7 +848,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -862,7 +862,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -876,7 +876,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -890,7 +890,7 @@
     "wins": 0,
     "losses": 0,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -904,7 +904,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -918,7 +918,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -932,7 +932,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -946,7 +946,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -960,7 +960,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -974,7 +974,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -988,7 +988,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1002,7 +1002,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1016,7 +1016,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1030,7 +1030,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1044,7 +1044,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1058,7 +1058,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1072,7 +1072,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1086,7 +1086,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1100,7 +1100,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1114,7 +1114,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1128,7 +1128,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1142,7 +1142,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1156,7 +1156,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1170,7 +1170,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1184,7 +1184,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1198,7 +1198,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1212,7 +1212,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1226,7 +1226,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1240,7 +1240,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1254,7 +1254,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1268,7 +1268,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1282,7 +1282,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1296,7 +1296,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1310,7 +1310,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1324,7 +1324,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1338,7 +1338,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1352,7 +1352,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1366,7 +1366,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1380,7 +1380,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1394,7 +1394,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1408,7 +1408,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1422,7 +1422,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1436,7 +1436,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1450,7 +1450,7 @@
     "wins": 0,
     "losses": 0,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1464,7 +1464,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1478,7 +1478,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1492,7 +1492,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1506,7 +1506,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1520,7 +1520,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1534,7 +1534,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1548,7 +1548,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1562,7 +1562,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1576,7 +1576,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1590,7 +1590,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1604,7 +1604,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1618,7 +1618,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1632,7 +1632,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1646,7 +1646,7 @@
     "wins": 0,
     "losses": 1,
     "win_pct": 0.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1660,7 +1660,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -1674,7 +1674,7 @@
     "wins": 1,
     "losses": 0,
     "win_pct": 1.0,
-    "power_score": 0.0,
+    "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
     "seed": null
@@ -23557,7 +23557,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 58.4,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -23599,7 +23599,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 61.4,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -23641,7 +23641,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -23697,7 +23697,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 77.5,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -23921,7 +23921,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 50.0,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -23977,7 +23977,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 42.5,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -24131,7 +24131,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 72.1,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -24271,7 +24271,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 63.9,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -24313,7 +24313,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 44.2,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -24327,7 +24327,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 58.1,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -24369,7 +24369,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 45.8,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -24383,7 +24383,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 63.2,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -24509,7 +24509,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 77.8,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -24523,7 +24523,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 77.6,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -24537,7 +24537,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 68.7,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -24565,7 +24565,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 71.6,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -24705,7 +24705,7 @@
     "losses": 5,
     "win_pct": 0.642857,
     "power_score": 43.1,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -24747,7 +24747,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 73.6,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": false,
     "seed": null
   },
@@ -24775,7 +24775,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 79.7,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": false,
     "seed": null
   },
@@ -24831,7 +24831,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 50.1,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -24929,7 +24929,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 42.3,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -25027,7 +25027,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 52.2,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -25083,7 +25083,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 55.8,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -25139,7 +25139,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 43.3,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -25181,7 +25181,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 61.9,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -48757,7 +48757,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 88.7,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -48799,7 +48799,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 70.1,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -48841,7 +48841,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 42.5,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -48883,7 +48883,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 61.5,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -48897,7 +48897,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 82.2,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -48995,7 +48995,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 53.1,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -49149,7 +49149,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 52.9,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -49191,7 +49191,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 75.9,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -49289,7 +49289,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 62.0,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -49331,7 +49331,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -49457,7 +49457,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 77.7,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -49471,7 +49471,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 56.6,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -49569,7 +49569,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 51.1,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -49723,7 +49723,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 67.7,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -49737,7 +49737,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 97.4,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": false,
     "seed": null
   },
@@ -49765,7 +49765,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 71.4,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -49793,7 +49793,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 50.8,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -49905,7 +49905,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 72.6,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -49933,7 +49933,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 64.9,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -49947,7 +49947,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 69.5,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": false,
     "seed": null
   },
@@ -49975,7 +49975,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 68.7,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -50017,7 +50017,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 42.2,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -50283,7 +50283,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 62.9,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -50339,7 +50339,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.0,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -50381,7 +50381,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 59.0,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -74741,7 +74741,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 92.0,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -74881,7 +74881,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 59.5,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -74979,7 +74979,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 70.8,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -75063,7 +75063,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 89.9,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": false,
     "seed": null
   },
@@ -75105,7 +75105,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 67.7,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -75133,7 +75133,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 73.4,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -75273,7 +75273,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 76.2,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -75287,7 +75287,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 53.5,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -75315,7 +75315,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 64.4,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -75357,7 +75357,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 61.5,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -75455,7 +75455,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 46.1,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -75567,7 +75567,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 58.1,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -75651,7 +75651,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 55.1,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -75665,7 +75665,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 55.3,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -75679,7 +75679,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -75721,7 +75721,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 65.0,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -75763,7 +75763,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 89.6,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": false,
     "seed": null
   },
@@ -75777,7 +75777,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 52.7,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -75889,7 +75889,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 73.1,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -75917,7 +75917,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 77.0,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -75959,7 +75959,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 85.2,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -76029,7 +76029,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 52.4,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -76043,7 +76043,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 76.7,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -76169,7 +76169,7 @@
     "losses": 5,
     "win_pct": 0.642857,
     "power_score": 44.5,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -76281,7 +76281,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 63.9,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -102727,7 +102727,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 73.8,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": false,
     "seed": null
   },
@@ -102755,7 +102755,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 61.9,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -102811,7 +102811,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 89.8,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -102853,7 +102853,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 77.1,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -102965,7 +102965,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 72.2,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -103007,7 +103007,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 52.1,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -103091,7 +103091,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -103105,7 +103105,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 60.7,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -103119,7 +103119,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 47.6,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -103315,7 +103315,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 59.8,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -103357,7 +103357,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 68.6,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -103469,7 +103469,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 82.8,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": false,
     "seed": null
   },
@@ -103525,7 +103525,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 84.2,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -103651,7 +103651,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 56.9,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -103707,7 +103707,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 74.1,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -103721,7 +103721,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 81.3,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -103735,7 +103735,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 64.3,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -103763,7 +103763,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 68.8,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -103917,7 +103917,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 80.2,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -103959,7 +103959,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 77.2,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -104043,7 +104043,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 57.4,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -104155,7 +104155,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 83.5,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -104169,7 +104169,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 68.5,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -104225,7 +104225,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 57.4,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -104421,7 +104421,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 48.7,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -131357,7 +131357,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 78.2,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -131385,7 +131385,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 55.8,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -131399,7 +131399,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.4,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -131455,7 +131455,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 43.7,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -131497,7 +131497,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 62.7,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -131511,7 +131511,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 77.6,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -131609,7 +131609,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.7,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -131735,7 +131735,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 87.5,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -131763,7 +131763,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 59.1,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -131805,7 +131805,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 67.3,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -131931,7 +131931,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 47.0,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -131973,7 +131973,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 38.9,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -132015,7 +132015,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 45.3,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -132127,7 +132127,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 69.3,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -132155,7 +132155,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 39.0,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -132169,7 +132169,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 58.1,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -132183,7 +132183,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 63.4,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -132365,7 +132365,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -132421,7 +132421,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 56.5,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -132435,7 +132435,7 @@
     "losses": 2,
     "win_pct": 0.866667,
     "power_score": 80.9,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -132659,7 +132659,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 73.6,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -132841,7 +132841,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 68.2,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -132897,7 +132897,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 50.7,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -132939,7 +132939,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 48.9,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -133093,7 +133093,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 60.8,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -158237,7 +158237,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -158377,7 +158377,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 51.0,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -158503,7 +158503,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 85.6,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -158587,7 +158587,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 51.6,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -158629,7 +158629,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 52.4,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -158727,7 +158727,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 68.1,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -158783,7 +158783,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 62.3,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -158867,7 +158867,7 @@
     "losses": 3,
     "win_pct": 0.75,
     "power_score": 59.4,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -159007,7 +159007,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 59.5,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -159021,7 +159021,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 78.2,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -159105,7 +159105,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 62.6,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -159175,7 +159175,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 49.6,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -159217,7 +159217,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.2,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -159231,7 +159231,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 60.7,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -159259,7 +159259,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 81.5,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -159273,7 +159273,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 74.3,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -159287,7 +159287,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 52.4,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -159315,7 +159315,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 60.2,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -159329,7 +159329,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 48.4,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -159525,7 +159525,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 73.8,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -159553,7 +159553,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 61.3,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -159567,7 +159567,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 44.5,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -159581,7 +159581,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 46.4,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -159777,7 +159777,7 @@
     "losses": 6,
     "win_pct": 0.571429,
     "power_score": 37.5,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -159819,7 +159819,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 55.6,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -185117,7 +185117,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 97.1,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -185215,7 +185215,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 40.4,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -185383,7 +185383,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -185397,7 +185397,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 51.5,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -185467,7 +185467,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 50.5,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -185509,7 +185509,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 65.6,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -185747,7 +185747,7 @@
     "losses": 4,
     "win_pct": 0.666667,
     "power_score": 45.8,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -185789,7 +185789,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 46.1,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -185887,7 +185887,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 59.9,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -185985,7 +185985,7 @@
     "losses": 5,
     "win_pct": 0.642857,
     "power_score": 40.2,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -186139,7 +186139,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 81.3,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -186153,7 +186153,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 72.1,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -186167,7 +186167,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 54.6,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -186237,7 +186237,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 63.3,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -186251,7 +186251,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 37.4,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -186405,7 +186405,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 55.8,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -186447,7 +186447,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 44.3,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -186461,7 +186461,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 51.0,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -186657,7 +186657,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 61.3,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -186699,7 +186699,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 41.0,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -186755,7 +186755,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 46.3,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -186783,7 +186783,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 70.3,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -186811,7 +186811,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 53.6,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -186839,7 +186839,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 68.2,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -186853,7 +186853,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 66.2,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -212389,7 +212389,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 96.0,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -212487,7 +212487,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 61.1,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -212543,7 +212543,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 67.6,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -212655,7 +212655,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 82.3,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -212823,7 +212823,7 @@
     "losses": 2,
     "win_pct": 0.866667,
     "power_score": 88.0,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -213033,7 +213033,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 49.7,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -213131,7 +213131,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 56.6,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -213145,7 +213145,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 63.5,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -213187,7 +213187,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 67.2,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -213229,7 +213229,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 51.4,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -213257,7 +213257,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 50.7,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -213383,7 +213383,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 58.7,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -213397,7 +213397,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 74.1,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -213425,7 +213425,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 86.0,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -213439,7 +213439,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 78.6,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -213453,7 +213453,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.1,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -213523,7 +213523,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 81.6,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -213691,7 +213691,7 @@
     "losses": 5,
     "win_pct": 0.642857,
     "power_score": 47.7,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -213719,7 +213719,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 62.7,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -213887,7 +213887,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -213957,7 +213957,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 67.9,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -214055,7 +214055,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 46.7,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -214083,7 +214083,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 56.7,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -214097,7 +214097,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 48.7,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -214153,7 +214153,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 91.0,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -239689,7 +239689,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 82.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -239843,7 +239843,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 55.2,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -239955,7 +239955,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -240053,7 +240053,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 50.0,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -240109,7 +240109,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 57.8,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -240123,7 +240123,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 61.3,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -240249,7 +240249,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 34.0,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -240305,7 +240305,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 50.3,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -240319,7 +240319,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 56.4,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -240473,7 +240473,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.5,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -240529,7 +240529,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 36.9,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -240543,7 +240543,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 34.6,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -240683,7 +240683,7 @@
     "losses": 5,
     "win_pct": 0.642857,
     "power_score": 39.3,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -240697,7 +240697,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 81.6,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -240725,7 +240725,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 72.7,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -240739,7 +240739,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 71.0,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -240823,7 +240823,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 44.4,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -241005,7 +241005,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 50.1,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -241061,7 +241061,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 47.2,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -241075,7 +241075,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 49.2,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -241187,7 +241187,7 @@
     "losses": 1,
     "win_pct": 0.923077,
     "power_score": 64.7,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -241299,7 +241299,7 @@
     "losses": 5,
     "win_pct": 0.642857,
     "power_score": 38.0,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -241383,7 +241383,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 47.5,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -241397,7 +241397,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 55.7,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -241411,7 +241411,7 @@
     "losses": 4,
     "win_pct": 0.666667,
     "power_score": 38.7,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -268809,7 +268809,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 58.2,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -268823,7 +268823,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 69.1,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -268907,7 +268907,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 51.1,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -268949,7 +268949,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 53.7,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -268963,7 +268963,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 62.6,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -269061,7 +269061,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 59.0,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -269075,7 +269075,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 79.0,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -269173,7 +269173,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 62.6,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -269243,7 +269243,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 72.9,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -269355,7 +269355,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 54.1,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -269439,7 +269439,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -269551,7 +269551,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 64.9,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -269593,7 +269593,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 49.7,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -269635,7 +269635,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 55.4,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -269691,7 +269691,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 61.6,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -269817,7 +269817,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 68.1,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -269845,7 +269845,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 88.6,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -269859,7 +269859,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 65.4,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -269873,7 +269873,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 31.7,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -269915,7 +269915,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 65.9,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -269943,7 +269943,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 70.3,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -270377,7 +270377,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 38.1,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -270419,7 +270419,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 53.1,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -270461,7 +270461,7 @@
     "losses": 5,
     "win_pct": 0.642857,
     "power_score": 38.2,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -270573,7 +270573,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 54.2,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -299301,7 +299301,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -299413,7 +299413,7 @@
     "losses": 1,
     "win_pct": 0.916667,
     "power_score": 67.0,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -299553,7 +299553,7 @@
     "losses": 1,
     "win_pct": 0.9,
     "power_score": 70.0,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -299567,7 +299567,7 @@
     "losses": 2,
     "win_pct": 0.833333,
     "power_score": 61.6,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 2
   },
@@ -299581,7 +299581,7 @@
     "losses": 1,
     "win_pct": 0.916667,
     "power_score": 73.0,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -299595,7 +299595,7 @@
     "losses": 2,
     "win_pct": 0.666667,
     "power_score": 36.7,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -299665,7 +299665,7 @@
     "losses": 4,
     "win_pct": 0.666667,
     "power_score": 40.2,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -299735,7 +299735,7 @@
     "losses": 2,
     "win_pct": 0.8,
     "power_score": 58.8,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -299833,7 +299833,7 @@
     "losses": 2,
     "win_pct": 0.75,
     "power_score": 46.2,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -299847,7 +299847,7 @@
     "losses": 2,
     "win_pct": 0.75,
     "power_score": 42.0,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -299861,7 +299861,7 @@
     "losses": 3,
     "win_pct": 0.75,
     "power_score": 54.5,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -299959,7 +299959,7 @@
     "losses": 1,
     "win_pct": 0.909091,
     "power_score": 75.8,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -300057,7 +300057,7 @@
     "losses": 3,
     "win_pct": 0.727273,
     "power_score": 49.5,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -300169,7 +300169,7 @@
     "losses": 4,
     "win_pct": 0.666667,
     "power_score": 35.8,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -300253,7 +300253,7 @@
     "losses": 4,
     "win_pct": 0.666667,
     "power_score": 36.4,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -300295,7 +300295,7 @@
     "losses": 2,
     "win_pct": 0.777778,
     "power_score": 51.0,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -300309,7 +300309,7 @@
     "losses": 2,
     "win_pct": 0.833333,
     "power_score": 58.4,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 4
   },
@@ -300337,7 +300337,7 @@
     "losses": 1,
     "win_pct": 0.875,
     "power_score": 79.1,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 3
   },
@@ -300351,7 +300351,7 @@
     "losses": 2,
     "win_pct": 0.818182,
     "power_score": 55.3,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -300365,7 +300365,7 @@
     "losses": 3,
     "win_pct": 0.727273,
     "power_score": 48.7,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -300519,7 +300519,7 @@
     "losses": 1,
     "win_pct": 0.875,
     "power_score": 69.0,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -300659,7 +300659,7 @@
     "losses": 3,
     "win_pct": 0.7,
     "power_score": 46.8,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -300673,7 +300673,7 @@
     "losses": 1,
     "win_pct": 0.9,
     "power_score": 64.5,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -300757,7 +300757,7 @@
     "losses": 3,
     "win_pct": 0.666667,
     "power_score": 39.3,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -300841,7 +300841,7 @@
     "losses": 1,
     "win_pct": 0.833333,
     "power_score": 46.9,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -326573,7 +326573,7 @@
     "losses": 2,
     "win_pct": 0.866667,
     "power_score": 86.6,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -326629,7 +326629,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 51.1,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -326685,7 +326685,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.6,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -326713,7 +326713,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 81.8,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -326825,7 +326825,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 84.3,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -326839,7 +326839,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 61.2,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -327007,7 +327007,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -327077,7 +327077,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 60.4,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -327119,7 +327119,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 53.4,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -327189,7 +327189,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 54.3,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -327231,7 +327231,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 73.2,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -327357,7 +327357,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 84.0,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -327371,7 +327371,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 74.5,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -327441,7 +327441,7 @@
     "losses": 3,
     "win_pct": 0.75,
     "power_score": 51.8,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -327581,7 +327581,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 75.4,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -327609,7 +327609,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 80.0,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -327623,7 +327623,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 68.4,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -327637,7 +327637,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 83.0,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -327665,7 +327665,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 60.9,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -327679,7 +327679,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 53.0,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -327721,7 +327721,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 59.2,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -327791,7 +327791,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 71.0,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -327959,7 +327959,7 @@
     "losses": 4,
     "win_pct": 0.666667,
     "power_score": 44.2,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -328183,7 +328183,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 54.6,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -328253,7 +328253,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 62.8,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -354069,7 +354069,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 66.2,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -354335,7 +354335,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 56.4,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -354475,7 +354475,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 50.6,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -354503,7 +354503,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -354671,7 +354671,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 49.7,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -354713,7 +354713,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 50.0,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -354867,7 +354867,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 79.0,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -354923,7 +354923,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 46.1,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -354951,7 +354951,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 34.7,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -355091,7 +355091,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 46.1,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -355119,7 +355119,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 69.8,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -355189,7 +355189,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 55.0,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -355203,7 +355203,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 51.6,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -355217,7 +355217,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 67.5,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -355343,7 +355343,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 34.2,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -355413,7 +355413,7 @@
     "losses": 2,
     "win_pct": 0.866667,
     "power_score": 69.7,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -355441,7 +355441,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 69.5,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": false,
     "seed": null
   },
@@ -355455,7 +355455,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 38.8,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -355525,7 +355525,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 66.0,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -355539,7 +355539,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 63.5,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -355595,7 +355595,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 40.3,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -355651,7 +355651,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 57.6,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -355679,7 +355679,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 52.6,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -355693,7 +355693,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 46.1,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -355777,7 +355777,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 54.0,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -381971,7 +381971,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 76.8,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -381999,7 +381999,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 48.9,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -382237,7 +382237,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 44.2,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -382377,7 +382377,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 77.5,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -382405,7 +382405,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 80.4,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": false,
     "seed": null
   },
@@ -382517,7 +382517,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 48.1,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -382587,7 +382587,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 47.0,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -382629,7 +382629,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 58.7,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -382643,7 +382643,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 69.8,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -382685,7 +382685,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 45.2,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -382783,7 +382783,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -382853,7 +382853,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 67.2,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": false,
     "seed": null
   },
@@ -382867,7 +382867,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 41.8,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -383007,7 +383007,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 52.5,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -383035,7 +383035,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 69.8,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": false,
     "seed": null
   },
@@ -383049,7 +383049,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 59.6,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -383063,7 +383063,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 45.2,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -383091,7 +383091,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 66.6,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -383105,7 +383105,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 68.0,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": false,
     "seed": null
   },
@@ -383119,7 +383119,7 @@
     "losses": 5,
     "win_pct": 0.615385,
     "power_score": 35.7,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -383133,7 +383133,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.4,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": false,
     "seed": null
   },
@@ -383203,7 +383203,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 46.4,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -383371,7 +383371,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 43.2,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -383385,7 +383385,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 77.4,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -383707,7 +383707,7 @@
     "losses": 1,
     "win_pct": 0.933333,
     "power_score": 91.0,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -411973,7 +411973,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 55.7,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -412015,7 +412015,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 64.3,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": true,
     "seed": 4
   },
@@ -412057,7 +412057,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 65.4,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -412085,7 +412085,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 68.7,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -412127,7 +412127,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 77.1,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": true,
     "seed": 3
   },
@@ -412239,7 +412239,7 @@
     "losses": 4,
     "win_pct": 0.714286,
     "power_score": 52.0,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": true,
     "seed": 12
   },
@@ -412267,7 +412267,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 47.0,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -412407,7 +412407,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 71.1,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -412491,7 +412491,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 60.3,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": false,
     "seed": null
   },
@@ -412505,7 +412505,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 65.5,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": true,
     "seed": 10
   },
@@ -412533,7 +412533,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 64.7,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -412757,7 +412757,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 59.5,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -412771,7 +412771,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 60.8,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -412869,7 +412869,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 58.0,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
@@ -413023,7 +413023,7 @@
     "losses": 2,
     "win_pct": 0.875,
     "power_score": 93.9,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": true,
     "seed": 7
   },
@@ -413051,7 +413051,7 @@
     "losses": 2,
     "win_pct": 0.875,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": true,
     "seed": 8
   },
@@ -413107,7 +413107,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 58.9,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -413121,7 +413121,7 @@
     "losses": 1,
     "win_pct": 0.928571,
     "power_score": 93.5,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -413149,7 +413149,7 @@
     "losses": 3,
     "win_pct": 0.8125,
     "power_score": 76.4,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 6
   },
@@ -413219,7 +413219,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 65.0,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": true,
     "seed": 11
   },
@@ -413289,7 +413289,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 54.4,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -413345,7 +413345,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 65.3,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -413387,7 +413387,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 55.0,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": true,
     "seed": 9
   },
@@ -413401,7 +413401,7 @@
     "losses": 3,
     "win_pct": 0.8125,
     "power_score": 80.3,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 5
   },
@@ -413583,7 +413583,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 58.6,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": false,
     "seed": null
   },
@@ -442409,7 +442409,7 @@
     "losses": 4,
     "win_pct": 0.733333,
     "power_score": 54.9,
-    "committee_rank": null,
+    "committee_rank": 9,
     "made_playoff": true,
     "seed": 9
   },
@@ -442437,7 +442437,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 42.9,
-    "committee_rank": null,
+    "committee_rank": 17,
     "made_playoff": false,
     "seed": null
   },
@@ -442521,7 +442521,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 74.4,
-    "committee_rank": null,
+    "committee_rank": 12,
     "made_playoff": false,
     "seed": null
   },
@@ -442857,7 +442857,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 68.0,
-    "committee_rank": null,
+    "committee_rank": 3,
     "made_playoff": true,
     "seed": 3
   },
@@ -442899,7 +442899,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 40.7,
-    "committee_rank": null,
+    "committee_rank": 22,
     "made_playoff": false,
     "seed": null
   },
@@ -442927,7 +442927,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 44.1,
-    "committee_rank": null,
+    "committee_rank": 21,
     "made_playoff": false,
     "seed": null
   },
@@ -442955,7 +442955,7 @@
     "losses": 0,
     "win_pct": 1.0,
     "power_score": 100.0,
-    "committee_rank": null,
+    "committee_rank": 1,
     "made_playoff": true,
     "seed": 1
   },
@@ -442969,7 +442969,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 44.5,
-    "committee_rank": null,
+    "committee_rank": 23,
     "made_playoff": false,
     "seed": null
   },
@@ -443011,7 +443011,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 62.6,
-    "committee_rank": null,
+    "committee_rank": 24,
     "made_playoff": true,
     "seed": 12
   },
@@ -443221,7 +443221,7 @@
     "losses": 3,
     "win_pct": 0.8125,
     "power_score": 68.3,
-    "committee_rank": null,
+    "committee_rank": 10,
     "made_playoff": true,
     "seed": 10
   },
@@ -443249,7 +443249,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 47.7,
-    "committee_rank": null,
+    "committee_rank": 18,
     "made_playoff": false,
     "seed": null
   },
@@ -443445,7 +443445,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 64.6,
-    "committee_rank": null,
+    "committee_rank": 25,
     "made_playoff": false,
     "seed": null
   },
@@ -443487,7 +443487,7 @@
     "losses": 2,
     "win_pct": 0.833333,
     "power_score": 62.8,
-    "committee_rank": null,
+    "committee_rank": 11,
     "made_playoff": false,
     "seed": null
   },
@@ -443515,7 +443515,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 71.8,
-    "committee_rank": null,
+    "committee_rank": 2,
     "made_playoff": true,
     "seed": 2
   },
@@ -443529,7 +443529,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 57.4,
-    "committee_rank": null,
+    "committee_rank": 8,
     "made_playoff": true,
     "seed": 8
   },
@@ -443571,7 +443571,7 @@
     "losses": 2,
     "win_pct": 0.866667,
     "power_score": 68.2,
-    "committee_rank": null,
+    "committee_rank": 6,
     "made_playoff": true,
     "seed": 6
   },
@@ -443585,7 +443585,7 @@
     "losses": 2,
     "win_pct": 0.866667,
     "power_score": 75.7,
-    "committee_rank": null,
+    "committee_rank": 5,
     "made_playoff": true,
     "seed": 5
   },
@@ -443865,7 +443865,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 54.6,
-    "committee_rank": null,
+    "committee_rank": 13,
     "made_playoff": false,
     "seed": null
   },
@@ -443879,7 +443879,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 61.0,
-    "committee_rank": null,
+    "committee_rank": 7,
     "made_playoff": true,
     "seed": 7
   },
@@ -443907,7 +443907,7 @@
     "losses": 2,
     "win_pct": 0.857143,
     "power_score": 67.5,
-    "committee_rank": null,
+    "committee_rank": 4,
     "made_playoff": true,
     "seed": 4
   },
@@ -443949,7 +443949,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 60.6,
-    "committee_rank": null,
+    "committee_rank": 20,
     "made_playoff": true,
     "seed": 11
   },
@@ -444061,7 +444061,7 @@
     "losses": 4,
     "win_pct": 0.692308,
     "power_score": 48.5,
-    "committee_rank": null,
+    "committee_rank": 16,
     "made_playoff": false,
     "seed": null
   },
@@ -444103,7 +444103,7 @@
     "losses": 2,
     "win_pct": 0.846154,
     "power_score": 58.2,
-    "committee_rank": null,
+    "committee_rank": 15,
     "made_playoff": false,
     "seed": null
   },
@@ -444131,7 +444131,7 @@
     "losses": 3,
     "win_pct": 0.769231,
     "power_score": 48.4,
-    "committee_rank": null,
+    "committee_rank": 14,
     "made_playoff": false,
     "seed": null
   },
@@ -444145,7 +444145,7 @@
     "losses": 3,
     "win_pct": 0.785714,
     "power_score": 53.5,
-    "committee_rank": null,
+    "committee_rank": 19,
     "made_playoff": false,
     "seed": null
   },
