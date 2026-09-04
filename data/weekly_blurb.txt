@@ -1,13 +1,13 @@
 CFB Power Ratings -- 2026 as of 2026-09-04
-1. Indiana (0-0) -- 100.0
-2. Oregon (0-0) -- 75.7
-3. BYU (0-0) -- 74.4
-4. Ohio State (0-0) -- 71.8
-5. Miami (0-0) -- 68.3
-6. Ole Miss (0-0) -- 68.2
-7. Georgia (0-0) -- 68.0
-8. Texas Tech (0-0) -- 67.5
-9. North Texas (0-0) -- 64.6
-10. Notre Dame (0-0) -- 62.8
-11. James Madison (0-0) -- 62.6
-12. Navy (0-0) -- 61.7
+1. Indiana (0-0)
+2. Oregon (0-0)
+3. BYU (0-0)
+4. Ohio State (0-0)
+5. Miami (0-0)
+6. Ole Miss (0-0)
+7. Georgia (0-0)
+8. Texas Tech (0-0)
+9. North Texas (0-0)
+10. Notre Dame (0-0)
+11. James Madison (0-0)
+12. Navy (0-0)

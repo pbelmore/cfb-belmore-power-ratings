@@ -324,7 +324,7 @@ function renderBlurbCard(current, season, asOf, highlighted) {
   current.forEach((r, i) => {
     const include = season < 2024 ? i < 10 : highlighted.has(r.team);
     if (!include) return;
-    lines.push(`${i + 1}. ${r.team} (${r.wins}-${r.losses}) -- ${r.power_score.toFixed(1)}`);
+    lines.push(`${i + 1}. ${r.team} (${r.wins}-${r.losses})`);
   });
   currentBlurbText = lines.join('\n');
   document.getElementById('blurb-text').textContent = currentBlurbText;

@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from ratings_core import Game, compute_ratings
 
 API_BASE = "https://api.collegefootballdata.com"
+SITE_URL = "https://pbelmore.github.io/cfb-belmore-power-ratings/"
 
 # Game.location codes <-> the human-readable words stored in games.json
 CODE_TO_WORD = {"": "home", "@": "away", "N": "neutral"}
@@ -264,13 +265,18 @@ def conference_champions(game_rows, teams):
     return champions
 
 
-def conference_leader_field(ranked_teams, teams, leaders=5, at_large=7, conf_champions=None):
+def conference_leaders_and_at_large(ranked_teams, teams, leaders=5, at_large=7, conf_champions=None):
     """The 12-team format's "5 conference-leader auto bids + 7 at-large"
     selection rule, shared by every playoff-field projection in this
     module (real_field_projection fed committee ranks, playoff_projection
     fed our own scores). `ranked_teams` is [(team, value)] already sorted
     best-first; independents are excluded from auto bids since there's no
-    conference championship to win one.
+    conference championship to win one. Returns (leader_teams,
+    at_large_teams) as two separate ordered lists (best-first) rather than
+    one merged set, so a caller that needs to tell a conference-leader auto
+    bid apart from an at-large team (e.g. format_slack_blurb's "*") doesn't
+    have to re-derive it -- conference_leader_field() below is just this
+    with the two unioned, for callers that only need the combined field.
 
     `conf_champions` ({conference: team}, from conference_champions())
     overrides the "best-ranked/-scored team in that conference" stand-in
@@ -302,9 +308,19 @@ def conference_leader_field(ranked_teams, teams, leaders=5, at_large=7, conf_cha
             conf_leader[conf] = champ
 
     ordered_leaders = sorted(conf_leader.values(), key=lambda t: rank_of[t])
-    leader_names = set(ordered_leaders[:leaders])
+    leader_teams = ordered_leaders[:leaders]
+    leader_names = set(leader_teams)
     at_large_teams = [team for team, _ in ranked_teams if team not in leader_names][:at_large]
-    return leader_names | set(at_large_teams)
+    return leader_teams, at_large_teams
+
+
+def conference_leader_field(ranked_teams, teams, leaders=5, at_large=7, conf_champions=None):
+    """The 12-team field as a single set -- see
+    conference_leaders_and_at_large() for the leader/at-large split."""
+    leader_teams, at_large_teams = conference_leaders_and_at_large(
+        ranked_teams, teams, leaders=leaders, at_large=at_large, conf_champions=conf_champions,
+    )
+    return set(leader_teams) | set(at_large_teams)
 
 
 def playoff_field_from_ranked(ranked_teams, teams, season, conf_champions=None):
@@ -597,8 +613,39 @@ def format_weekly_blurb(results, scores, teams, season, title=None, conf_champio
     for i, (team, r) in enumerate(ranked, start=1):
         if team not in selected:
             continue
-        lines.append(f"{i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")
+        lines.append(f"{i}. {team} ({r['wins']}-{r['losses']})")
     return "\n".join(lines)
+
+
+def format_slack_blurb(results, scores, teams, season, conf_champions=None, title=None, link=None):
+    """The Slack-posted version of the blurb -- 12-team-era only (we'll
+    never post this for a past pre-2024 season, so there's no top-10/top-4/
+    top-2 branching here like format_weekly_blurb has). Same team/record
+    lines, but with a "*" marking the 5 conference-leader auto bids (vs.
+    the 7 at-large teams), a trailing note explaining that marker, and a
+    link to the full site so Slack readers can click through."""
+    ranked = sorted(results.items(), key=lambda kv: (-scores[kv[0]], kv[0]))
+    ranked_by_score = [(team, scores[team]) for team, _ in ranked]
+    leader_teams, at_large_teams = conference_leaders_and_at_large(ranked_by_score, teams, conf_champions=conf_champions)
+    leader_names = set(leader_teams)
+    selected = leader_names | set(at_large_teams)
+
+    lines = [title or "Power Ratings"]
+    for i, (team, r) in enumerate(ranked, start=1):
+        if team not in selected:
+            continue
+        marker = " *" if team in leader_names else ""
+        lines.append(f"{i}. {team} ({r['wins']}-{r['losses']}){marker}")
+    lines.append("")
+    lines.append("* = conference leader/champion (automatic bid)")
+    if link:
+        lines.append(link)
+    return "\n".join(lines)
+
+
+def post_to_slack(webhook_url, text):
+    resp = requests.post(webhook_url, json={"text": text}, timeout=15)
+    resp.raise_for_status()
 
 
 def main():
@@ -694,6 +741,20 @@ def main():
         conf_champions=conf_champions,
     )
     (out_dir / "weekly_blurb.txt").write_text(blurb + "\n")
+
+    # Slack posting only makes sense for the 12-team era -- we'll never
+    # run this script against a past pre-2024 season, so there's no need
+    # for format_slack_blurb to handle the older top-10/top-4/top-2 eras.
+    # SLACK_WEBHOOK_URL is optional: unset (e.g. a local manual run) just
+    # skips posting rather than erroring.
+    slack_webhook = os.environ.get("SLACK_WEBHOOK_URL")
+    if args.year >= TWELVE_TEAM_ERA_START and slack_webhook:
+        print("Posting to Slack...")
+        slack_text = format_slack_blurb(
+            results, scores, teams, args.year, conf_champions=conf_champions,
+            title=f"CFB Power Ratings -- {args.year} as of {as_of}", link=SITE_URL,
+        )
+        post_to_slack(slack_webhook, slack_text)
 
     top = sorted(results.items(), key=lambda kv: (-scores[kv[0]], kv[0]))[:5]
     print(f"\nTop 5 as of {as_of}:")

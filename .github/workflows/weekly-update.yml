@@ -85,6 +85,11 @@ jobs:
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
           SEASON_YEAR: ${{ steps.season.outputs.year }}
+          # Optional -- weekly_update.py only posts when this is set AND
+          # the season is 2024+ (the 12-team format Slack posting was
+          # never built for older eras, since we'll never run this
+          # against one again).
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: python scripts/weekly_update.py --year "$SEASON_YEAR"
 
       - name: Commit and push updated data

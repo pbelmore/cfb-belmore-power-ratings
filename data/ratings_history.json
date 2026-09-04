@@ -450602,7 +450602,8 @@
     "power_score": 10.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450616,7 +450617,8 @@
     "power_score": 11.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450630,7 +450632,8 @@
     "power_score": 54.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450644,7 +450647,8 @@
     "power_score": 11.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450658,7 +450662,8 @@
     "power_score": 42.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450672,7 +450677,8 @@
     "power_score": 36.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450686,7 +450692,8 @@
     "power_score": 2.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450700,7 +450707,8 @@
     "power_score": 22.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450714,7 +450722,8 @@
     "power_score": 25.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450728,7 +450737,8 @@
     "power_score": 16.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450742,7 +450752,8 @@
     "power_score": 74.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450756,7 +450767,8 @@
     "power_score": 8.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450770,7 +450782,8 @@
     "power_score": 16.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450784,7 +450797,8 @@
     "power_score": 38.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450798,7 +450812,8 @@
     "power_score": 2.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450812,7 +450827,8 @@
     "power_score": 8.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450826,7 +450842,8 @@
     "power_score": 13.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450840,7 +450857,8 @@
     "power_score": 24.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450854,7 +450872,8 @@
     "power_score": 21.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450868,7 +450887,8 @@
     "power_score": 0.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450882,7 +450902,8 @@
     "power_score": 26.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450896,7 +450917,8 @@
     "power_score": 23.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450910,7 +450932,8 @@
     "power_score": 17.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450924,7 +450947,8 @@
     "power_score": 7.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450938,7 +450962,8 @@
     "power_score": 2.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450952,7 +450977,8 @@
     "power_score": 22.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450966,7 +450992,8 @@
     "power_score": 42.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450980,7 +451007,8 @@
     "power_score": 41.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -450994,7 +451022,8 @@
     "power_score": 8.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451008,7 +451037,8 @@
     "power_score": 12.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451022,7 +451052,8 @@
     "power_score": 10.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451036,7 +451067,8 @@
     "power_score": 23.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451050,7 +451082,8 @@
     "power_score": 15.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451064,7 +451097,8 @@
     "power_score": 33.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451078,7 +451112,8 @@
     "power_score": 68.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451092,7 +451127,8 @@
     "power_score": 26.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451106,7 +451142,8 @@
     "power_score": 0.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451120,7 +451157,8 @@
     "power_score": 40.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451134,7 +451172,8 @@
     "power_score": 35.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451148,7 +451187,8 @@
     "power_score": 44.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451162,7 +451202,8 @@
     "power_score": 46.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451176,7 +451217,8 @@
     "power_score": 100.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451190,7 +451232,8 @@
     "power_score": 44.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451204,7 +451247,8 @@
     "power_score": 38.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451218,7 +451262,8 @@
     "power_score": 32.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451232,7 +451277,8 @@
     "power_score": 62.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451246,7 +451292,8 @@
     "power_score": 16.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451260,7 +451307,8 @@
     "power_score": 21.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451274,7 +451322,8 @@
     "power_score": 46.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451288,7 +451337,8 @@
     "power_score": 13.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451302,7 +451352,8 @@
     "power_score": 17.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451316,7 +451367,8 @@
     "power_score": 29.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451330,7 +451382,8 @@
     "power_score": 10.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451344,7 +451397,8 @@
     "power_score": 17.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451358,7 +451412,8 @@
     "power_score": 29.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451372,7 +451427,8 @@
     "power_score": 43.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451386,7 +451442,8 @@
     "power_score": 14.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451400,7 +451457,8 @@
     "power_score": 9.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451414,7 +451472,8 @@
     "power_score": 0.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451428,7 +451487,8 @@
     "power_score": 30.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451442,7 +451502,8 @@
     "power_score": 68.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451456,7 +451517,8 @@
     "power_score": 21.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451470,7 +451532,8 @@
     "power_score": 47.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451484,7 +451547,8 @@
     "power_score": 10.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451498,7 +451562,8 @@
     "power_score": 4.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451512,7 +451577,8 @@
     "power_score": 33.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451526,7 +451592,8 @@
     "power_score": 14.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451540,7 +451607,8 @@
     "power_score": 31.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451554,7 +451622,8 @@
     "power_score": 23.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451568,7 +451637,8 @@
     "power_score": 38.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451582,7 +451652,8 @@
     "power_score": 61.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451596,7 +451667,8 @@
     "power_score": 25.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451610,7 +451682,8 @@
     "power_score": 5.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451624,7 +451697,8 @@
     "power_score": 36.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451638,7 +451712,8 @@
     "power_score": 8.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451652,7 +451727,8 @@
     "power_score": 9.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451666,7 +451742,8 @@
     "power_score": 0.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451680,7 +451757,8 @@
     "power_score": 64.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451694,7 +451772,8 @@
     "power_score": 4.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451708,7 +451787,8 @@
     "power_score": 26.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451722,7 +451802,8 @@
     "power_score": 62.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451736,7 +451817,8 @@
     "power_score": 34.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451750,7 +451832,8 @@
     "power_score": 71.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451764,7 +451847,8 @@
     "power_score": 57.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451778,7 +451862,8 @@
     "power_score": 0.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451792,7 +451877,8 @@
     "power_score": 48.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451806,7 +451892,8 @@
     "power_score": 68.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451820,7 +451907,8 @@
     "power_score": 75.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451834,7 +451922,8 @@
     "power_score": 2.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451848,7 +451937,8 @@
     "power_score": 27.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451862,7 +451952,8 @@
     "power_score": 32.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451876,7 +451967,8 @@
     "power_score": 3.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451890,7 +451982,8 @@
     "power_score": 13.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451904,7 +451997,8 @@
     "power_score": 17.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451918,7 +452012,8 @@
     "power_score": 42.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451932,7 +452027,8 @@
     "power_score": 0.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451946,7 +452042,8 @@
     "power_score": 2.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451960,7 +452057,8 @@
     "power_score": 39.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451974,7 +452072,8 @@
     "power_score": 5.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -451988,7 +452087,8 @@
     "power_score": 9.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452002,7 +452102,8 @@
     "power_score": 11.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452016,7 +452117,8 @@
     "power_score": 43.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452030,7 +452132,8 @@
     "power_score": 23.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452044,7 +452147,8 @@
     "power_score": 11.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452058,7 +452162,8 @@
     "power_score": 6.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452072,7 +452177,8 @@
     "power_score": 44.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452086,7 +452192,8 @@
     "power_score": 15.8,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452100,7 +452207,8 @@
     "power_score": 31.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452114,7 +452222,8 @@
     "power_score": 54.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452128,7 +452237,8 @@
     "power_score": 61.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452142,7 +452252,8 @@
     "power_score": 23.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452156,7 +452267,8 @@
     "power_score": 67.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452170,7 +452282,8 @@
     "power_score": 30.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452184,7 +452297,8 @@
     "power_score": 27.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452198,7 +452312,8 @@
     "power_score": 60.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452212,7 +452327,8 @@
     "power_score": 8.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452226,7 +452342,8 @@
     "power_score": 10.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452240,7 +452357,8 @@
     "power_score": 15.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452254,7 +452372,8 @@
     "power_score": 7.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452268,7 +452387,8 @@
     "power_score": 31.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452282,7 +452402,8 @@
     "power_score": 5.3,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452296,7 +452417,8 @@
     "power_score": 38.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452310,7 +452432,8 @@
     "power_score": 48.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452324,7 +452447,8 @@
     "power_score": 2.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452338,7 +452462,8 @@
     "power_score": 26.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452352,7 +452477,8 @@
     "power_score": 58.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452366,7 +452492,8 @@
     "power_score": 19.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452380,7 +452507,8 @@
     "power_score": 48.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452394,7 +452522,8 @@
     "power_score": 53.5,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452408,7 +452537,8 @@
     "power_score": 6.6,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452422,7 +452552,8 @@
     "power_score": 40.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452436,7 +452567,8 @@
     "power_score": 39.0,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452450,7 +452582,8 @@
     "power_score": 27.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452464,7 +452597,8 @@
     "power_score": 11.7,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452478,7 +452612,8 @@
     "power_score": 37.4,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452492,7 +452627,8 @@
     "power_score": 41.2,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452506,7 +452642,8 @@
     "power_score": 13.1,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   },
   {
     "season": 2026,
@@ -452520,6 +452657,7 @@
     "power_score": 8.9,
     "committee_rank": null,
     "made_playoff": null,
-    "seed": null
+    "seed": null,
+    "conf_champion": false
   }
 ]
