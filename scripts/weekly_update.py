@@ -6,6 +6,7 @@ the CFBD API, runs them through ratings_core, and writes:
   data/teams.json            current-season roster (school, conference)
   data/games.json             one row per completed game
   data/ratings_history.json   long-format, one row per team per run (appended)
+  data/weekly_blurb.txt       plain-text top-25, ready to paste into a group chat
 
 Usage:
   CFBD_API_KEY=xxxx python scripts/weekly_update.py --year 2026
@@ -20,7 +21,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from ratings_core import Game, build_snapshot_rows, compute_ratings
+from ratings_core import Game, build_snapshot_rows, compute_ratings, format_weekly_blurb
 
 API_BASE = "https://api.collegefootballdata.com"
 
@@ -161,12 +162,15 @@ def main():
     history.sort(key=lambda r: (r["season"], r["as_of"], r["team"]))
     write_json(history_path, history)
 
+    blurb = format_weekly_blurb(results, title=f"CFB Power Ratings -- {args.year} as of {as_of}")
+    (out_dir / "weekly_blurb.txt").write_text(blurb + "\n")
+
     top = sorted(results.items(), key=lambda kv: kv[1]["rating"], reverse=True)[:5]
     print(f"\nTop 5 as of {as_of}:")
     for i, (team, r) in enumerate(top, start=1):
         print(f"  {i}. {team} ({r['wins']}-{r['losses']}) -- {r['rating']:.4f}")
 
-    print(f"\nWrote {out_dir}/teams.json, {out_dir}/games.json, {out_dir}/ratings_history.json")
+    print(f"\nWrote {out_dir}/teams.json, {out_dir}/games.json, {out_dir}/ratings_history.json, {out_dir}/weekly_blurb.txt")
 
 
 if __name__ == "__main__":
