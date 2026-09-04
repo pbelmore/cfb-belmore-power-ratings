@@ -124,6 +124,45 @@ def normalized_scores(results):
     return {team: (r["rating"] - lo) / (hi - lo) * 100 for team, r in results.items()}
 
 
+def preseason_blend_weight(week):
+    """Linear ramp: 50% weight on last season's final score at week 1, down
+    to 0% (pure current-season) by week 7. week=None/0 (preseason, no games
+    yet) gets the full week-1 weight."""
+    week = week or 1
+    if week >= 7:
+        return 0.0
+    return 0.5 * (7 - week) / 6
+
+
+def prior_season_final_scores(history, season):
+    """team -> power_score from `season - 1`'s last snapshot, or None if that
+    season isn't in history at all (e.g. season is the earliest one tracked)."""
+    prior_rows = [r for r in history if r["season"] == season - 1]
+    if not prior_rows:
+        return None
+    last_as_of = max(r["as_of"] for r in prior_rows)
+    return {r["team"]: r["power_score"] for r in prior_rows if r["as_of"] == last_as_of}
+
+
+def apply_preseason_blend(scores, prior_scores, week):
+    """Blends this week's power scores toward last season's final scores.
+    A team missing from prior_scores (new to FBS, say) is left alone."""
+    if not prior_scores:
+        return scores
+    w = preseason_blend_weight(week)
+    if w <= 0:
+        return scores
+    return {
+        team: round(w * prior_scores[team] + (1 - w) * score, 1) if team in prior_scores else score
+        for team, score in scores.items()
+    }
+
+
+def current_week_number(game_rows):
+    weeks = [g["week"] for g in game_rows if g.get("week") is not None]
+    return max(weeks) if weeks else 1
+
+
 def build_public_rows(results, scores, teams, season, as_of):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
@@ -146,7 +185,10 @@ def build_public_rows(results, scores, teams, season, as_of):
 
 
 def format_weekly_blurb(results, scores, top_n=25, title=None):
-    ranked = sorted(results.items(), key=lambda kv: kv[1]["rating"], reverse=True)[:top_n]
+    # Rank by the same (possibly blended) scores being displayed -- sorting
+    # by raw rating instead would let the blend reorder teams without the
+    # printed rank agreeing with the printed number.
+    ranked = sorted(results.items(), key=lambda kv: scores[kv[0]], reverse=True)[:top_n]
     lines = [title or "Power Ratings"]
     for i, (team, r) in enumerate(ranked, start=1):
         lines.append(f"{i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")
@@ -187,13 +229,16 @@ def main():
     write_json(out_dir / "teams.json", teams)
     write_json(out_dir / "games.json", game_rows)
 
+    history_path = out_dir / "ratings_history.json"
+    history = load_json(history_path, [])
+
     print("Computing ratings...")
     results = compute_ratings(teams, to_rating_games(game_rows))
     scores = normalized_scores(results)
+    prior_scores = prior_season_final_scores(history, args.year)
+    scores = apply_preseason_blend(scores, prior_scores, current_week_number(game_rows))
     new_rows = build_public_rows(results, scores, teams, season=args.year, as_of=as_of)
 
-    history_path = out_dir / "ratings_history.json"
-    history = load_json(history_path, [])
     # Replace any existing rows for this (season, as_of) so re-running the
     # same day's snapshot updates it in place instead of duplicating it.
     history = [r for r in history if not (r["season"] == args.year and r["as_of"] == as_of)]
@@ -207,7 +252,7 @@ def main():
     blurb = format_weekly_blurb(results, scores, title=f"CFB Power Ratings -- {args.year} as of {as_of}")
     (out_dir / "weekly_blurb.txt").write_text(blurb + "\n")
 
-    top = sorted(results.items(), key=lambda kv: kv[1]["rating"], reverse=True)[:5]
+    top = sorted(results.items(), key=lambda kv: scores[kv[0]], reverse=True)[:5]
     print(f"\nTop 5 as of {as_of}:")
     for i, (team, r) in enumerate(top, start=1):
         print(f"  {i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")

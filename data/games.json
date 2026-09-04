@@ -97,5 +97,38 @@
     "loser_pts": 21,
     "location": "away",
     "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-09-03T23:00:00.000Z",
+    "winner": "Delaware",
+    "winner_pts": 42,
+    "loser": "Merrimack",
+    "loser_pts": 7,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-09-03T23:00:00.000Z",
+    "winner": "UCF",
+    "winner_pts": 73,
+    "loser": "Bethune-Cookman",
+    "loser_pts": 6,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-09-03T23:00:00.000Z",
+    "winner": "Wake Forest",
+    "winner_pts": 38,
+    "loser": "Akron",
+    "loser_pts": 16,
+    "location": "home",
+    "notes": ""
   }
 ]
