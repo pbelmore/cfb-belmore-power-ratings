@@ -144,6 +144,26 @@ def current_stage(game_rows):
     return "regular"
 
 
+def season_week_label(current_week, stage, conf_champions, game_rows):
+    """The Slack blurb's title suffix: "Week N" during the regular season,
+    "End of Regular Season" once conference championships have been played
+    (they're always the last week of the regular season, so a non-empty
+    `conf_champions` means that week is done), "Bowl Season" once
+    postseason games have started, "End of Bowl Season" once the actual
+    final game of the season -- the CFP National Championship, detected
+    via CFBD's `notes` field the same way conference_champions() detects
+    title games -- has been played."""
+    if stage == "postseason":
+        is_final = any(
+            g.get("season_type") == "postseason" and "national championship" in (g.get("notes") or "").lower()
+            for g in game_rows
+        )
+        return "End of Bowl Season" if is_final else "Bowl Season"
+    if conf_champions:
+        return "End of Regular Season"
+    return f"Week {current_week}"
+
+
 # CFBD's own raw data for the 2023 season's final ("week 15") Playoff
 # Committee Rankings release ties Florida State and Georgia at rank 5 and
 # skips rank 6 entirely -- verified against the committee's own final
@@ -617,29 +637,35 @@ def format_weekly_blurb(results, scores, teams, season, title=None, conf_champio
     return "\n".join(lines)
 
 
-def format_slack_blurb(results, scores, teams, season, conf_champions=None, title=None, link=None):
+def format_slack_blurb(results, scores, teams, season, week_label, conf_champions=None, link=None):
     """The Slack-posted version of the blurb -- 12-team-era only (we'll
     never post this for a past pre-2024 season, so there's no top-10/top-4/
-    top-2 branching here like format_weekly_blurb has). Same team/record
-    lines, but with a "*" marking the 5 conference-leader auto bids (vs.
-    the 7 at-large teams), a trailing note explaining that marker, and a
-    link to the full site so Slack readers can click through."""
+    top-2 branching here like format_weekly_blurb has). Uses Slack's
+    mrkdwn syntax (*bold*, _italic_), not plain text or real Markdown --
+    this is only ever meant to go straight into a Slack message, unlike
+    format_weekly_blurb's output. Title is "Week N" (or "End of Regular
+    Season"/"Bowl Season"/"End of Bowl Season" -- see season_week_label())
+    instead of a date, since a Slack reader cares what week this is, not
+    which calendar day it happened to run. Team lines get a "*" marking
+    the 5 conference-leader auto bids (vs. the 7 at-large teams); the
+    footnote explaining that and the closing link are italicized so they
+    read as asides rather than part of the ranking itself."""
     ranked = sorted(results.items(), key=lambda kv: (-scores[kv[0]], kv[0]))
     ranked_by_score = [(team, scores[team]) for team, _ in ranked]
     leader_teams, at_large_teams = conference_leaders_and_at_large(ranked_by_score, teams, conf_champions=conf_champions)
     leader_names = set(leader_teams)
     selected = leader_names | set(at_large_teams)
 
-    lines = [title or "Power Ratings"]
+    lines = [f"*Belmore Rankings {season} - {week_label}*"]
     for i, (team, r) in enumerate(ranked, start=1):
         if team not in selected:
             continue
         marker = " *" if team in leader_names else ""
         lines.append(f"{i}. {team} ({r['wins']}-{r['losses']}){marker}")
     lines.append("")
-    lines.append("* = conference leader/champion (automatic bid)")
+    lines.append("_* = conference leader/champion (automatic bid)_")
     if link:
-        lines.append(link)
+        lines.append(f"_Full rankings available at {link}_")
     return "\n".join(lines)
 
 
@@ -750,9 +776,9 @@ def main():
     slack_webhook = os.environ.get("SLACK_WEBHOOK_URL")
     if args.year >= TWELVE_TEAM_ERA_START and slack_webhook:
         print("Posting to Slack...")
+        week_label = season_week_label(current_week, stage, conf_champions, game_rows)
         slack_text = format_slack_blurb(
-            results, scores, teams, args.year, conf_champions=conf_champions,
-            title=f"CFB Power Ratings -- {args.year} as of {as_of}", link=SITE_URL,
+            results, scores, teams, args.year, week_label, conf_champions=conf_champions, link=SITE_URL,
         )
         post_to_slack(slack_webhook, slack_text)
 
