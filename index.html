@@ -239,9 +239,14 @@ function renderStandings(current, season, asOf, colors, highlighted) {
 
   // Real committee rankings only exist for part of a season (they start
   // partway through, and stop once the field is picked) -- the column
-  // itself only appears on weeks where at least one team has one.
+  // itself only appears on weeks where at least one team has one. The *
+  // marking an actual playoff team only ever appears once that's a
+  // determined fact too (the true final regular-season snapshot onward),
+  // never a mid-season guess.
   const hasCommitteeRank = current.some(r => r.committee_rank != null);
+  const hasPlayoffField = current.some(r => r.made_playoff != null);
   const committeeLabel = season < 2014 ? 'BCS' : 'CFP';
+  const fieldSize = season < 2014 ? 2 : season < 2024 ? 4 : 12;
 
   const table = document.createElement('table');
   table.innerHTML = `
@@ -263,6 +268,7 @@ function renderStandings(current, season, asOf, colors, highlighted) {
         const rowStyle = isHighlighted && c && HEX_COLOR_RE.test(c.color)
           ? ` style="--team-color:${c.color}"` : '';
         const rowClass = isHighlighted ? ' class="highlight-row"' : '';
+        const committeeCell = r.committee_rank == null ? '' : `${r.committee_rank}${r.made_playoff ? ' *' : ''}`;
         return `
         <tr${rowClass}${rowStyle}>
           <td class="rank">${i + 1}</td>
@@ -271,7 +277,7 @@ function renderStandings(current, season, asOf, colors, highlighted) {
           <td>${r.wins}</td>
           <td>${r.losses}</td>
           <td class="rating">${r.power_score.toFixed(1)}</td>
-          ${hasCommitteeRank ? `<td>${r.committee_rank ?? ''}</td>` : ''}
+          ${hasCommitteeRank ? `<td>${committeeCell}</td>` : ''}
         </tr>
       `;
       }).join('')}
@@ -285,6 +291,13 @@ function renderStandings(current, season, asOf, colors, highlighted) {
     ? 'Highlighted: projected top 4 (if the season ended today).'
     : 'Highlighted: projected 12-team field -- 5 conference leaders (auto bids) + 7 at-large.';
   content.appendChild(note);
+
+  if (hasPlayoffField) {
+    const playoffNote = document.createElement('p');
+    playoffNote.className = 'legend-note';
+    playoffNote.textContent = `* = actually made the real ${fieldSize}-team ${committeeLabel} field.`;
+    content.appendChild(playoffNote);
+  }
 }
 
 // Same "N. Team (W-L) -- score" format as the standalone weekly_blurb.txt

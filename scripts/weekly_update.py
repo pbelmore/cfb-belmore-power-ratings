@@ -16,6 +16,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -32,14 +33,32 @@ WORD_TO_CODE = {v: k for k, v in CODE_TO_WORD.items()}
 
 
 def cfbd_get(path, api_key, **params):
-    resp = requests.get(
-        f"{API_BASE}{path}",
-        headers={"Authorization": f"Bearer {api_key}"},
-        params={k: v for k, v in params.items() if v is not None},
-        timeout=30,
-    )
-    resp.raise_for_status()
-    return resp.json()
+    """A backfill run makes dozens of these calls, and CFBD occasionally
+    returns a transient 502/503 -- retry a few times with backoff before
+    giving up, rather than losing an otherwise-successful multi-season run
+    to a single flaky response."""
+    last_error = None
+    for attempt in range(4):
+        if attempt:
+            time.sleep(2 * attempt)
+        try:
+            resp = requests.get(
+                f"{API_BASE}{path}",
+                headers={"Authorization": f"Bearer {api_key}"},
+                params={k: v for k, v in params.items() if v is not None},
+                timeout=30,
+            )
+            if resp.status_code in (500, 502, 503, 504):
+                last_error = requests.exceptions.HTTPError(f"{resp.status_code} from {path}", response=resp)
+                continue
+            resp.raise_for_status()
+            # Some endpoints return 204 (empty body) rather than [] for a
+            # year with no data -- e.g. /playoffs/cfp/participants for any
+            # pre-2014 year, since the CFP didn't exist yet.
+            return resp.json() if resp.content else []
+        except requests.exceptions.RequestException as exc:
+            last_error = exc
+    raise last_error
 
 
 def fetch_teams(year, api_key):
@@ -158,6 +177,34 @@ def committee_ranks_for_week(rankings_by_week, week):
     return rankings_by_week.get(week + 1) or rankings_by_week.get(week)
 
 
+def fetch_cfp_participants(year, api_key):
+    """The real CFP field for `year`, via CFBD's dedicated
+    /playoffs/cfp/participants endpoint -- {team: bidType}. Naturally
+    empty before that season's selection actually happens (verified: the
+    current not-yet-selected season returns []) and empty for every year
+    before the CFP existed (2010-2013 uses the BCS top-2 instead, see
+    real_playoff_field())."""
+    raw = cfbd_get("/playoffs/cfp/participants", api_key, year=year)
+    return {p["team"]["school"]: p["bidType"] for p in raw}
+
+
+def real_playoff_field(year, cfp_participants, final_committee_ranks):
+    """The set of team names that actually made the real playoff/BCS
+    title game, or None if that isn't determined yet. 2014+: CFP's real
+    field (cfp_participants, empty until selection happens -- so this
+    stays None all season until then, then flips to the real set).
+    2010-2013 (no CFP existed): the top 2 teams in the final BCS
+    Standings -- the BCS title game was always exactly the top 2 by rank,
+    no other selection criteria, so this needs that season's true final
+    ranking (`final_committee_ranks`), not just whatever week is current."""
+    if year < 2014:
+        if not final_committee_ranks:
+            return None
+        ranked = sorted(final_committee_ranks.items(), key=lambda kv: kv[1])
+        return {team for team, _ in ranked[:2]}
+    return set(cfp_participants.keys()) if cfp_participants else None
+
+
 def to_rating_games(game_rows):
     return [
         Game(
@@ -266,7 +313,9 @@ def current_week_number(game_rows):
     return weeks[-1]
 
 
-def build_public_rows(results, scores, teams, season, as_of, stage="regular", committee_ranks=None):
+def build_public_rows(
+    results, scores, teams, season, as_of, stage="regular", committee_ranks=None, playoff_field=None
+):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
     file. Reuses compute_ratings()'s actual math untouched; this only
@@ -274,9 +323,12 @@ def build_public_rows(results, scores, teams, season, as_of, stage="regular", co
     site label the last regular-season snapshot and the last
     postseason-inclusive snapshot as season milestones instead of just
     another week. `committee_ranks` ({team: rank}, already resolved to the
-    right week by the caller via committee_rank_for()) becomes the real
-    BCS/CFP rank shown alongside our own power_score, absent for a team
-    not in that week's top 25 or for weeks no ranking applies to."""
+    right week by the caller via committee_ranks_for_week()) becomes the
+    real BCS/CFP rank shown alongside our own power_score, absent for a
+    team not in that week's top 25 or for weeks no ranking applies to.
+    `playoff_field` (a set of team names, or None if not yet determined --
+    see real_playoff_field()) becomes made_playoff: true/false once known,
+    else null."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
     committee_ranks = committee_ranks or {}
     rows = []
@@ -292,6 +344,7 @@ def build_public_rows(results, scores, teams, season, as_of, stage="regular", co
             "win_pct": r["win_pct"],
             "power_score": round(scores[team], 1),
             "committee_rank": committee_ranks.get(team),
+            "made_playoff": (team in playoff_field) if playoff_field is not None else None,
         })
     return rows
 
@@ -389,8 +442,17 @@ def main():
     committee_ranks = committee_ranks_for_week(rankings_by_week, current_week)
     print(f"  {len(committee_ranks) if committee_ranks else 0} teams ranked this week")
 
+    print("Fetching real playoff field...")
+    cfp_participants = fetch_cfp_participants(args.year, api_key)
+    playoff_field = real_playoff_field(args.year, cfp_participants, committee_ranks)
+    if playoff_field is not None:
+        print(f"  {len(playoff_field)} teams")
+    else:
+        print("  not determined yet")
+
     new_rows = build_public_rows(
-        results, scores, teams, season=args.year, as_of=as_of, stage=stage, committee_ranks=committee_ranks
+        results, scores, teams, season=args.year, as_of=as_of, stage=stage,
+        committee_ranks=committee_ranks, playoff_field=playoff_field,
     )
 
     print("Fetching team colors...")

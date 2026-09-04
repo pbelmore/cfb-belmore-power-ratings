@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 backfill_history.py -- reconstructs week-by-week ratings_history rows for
-past seasons from CFBD, at a cost of 3 API calls per season (teams, games,
-and that season's committee rankings, each once) plus 2 more for any
-season with a prior year on record (to recompute that prior year's raw
-final ratings fresh, for the preseason blend -- see
+past seasons from CFBD, at a cost of 4 API calls per season (teams, games,
+that season's committee rankings, and its real CFP/BCS field, each once)
+plus 2 more for any season with a prior year on record (to recompute that
+prior year's raw final ratings fresh, for the preseason blend -- see
 weekly_update.prior_season_raw_ratings). Every week's cumulative snapshot
 is then built locally by filtering that one game list -- no per-week API
 calls.
@@ -33,11 +33,13 @@ from weekly_update import (
     build_public_rows,
     cfbd_get,
     committee_ranks_for_week,
+    fetch_cfp_participants,
     fetch_committee_rankings,
     fetch_teams,
     load_json,
     normalize_values,
     prior_season_raw_ratings,
+    real_playoff_field,
     write_json,
 )
 
@@ -154,14 +156,33 @@ def main():
         rankings_by_week = fetch_committee_rankings(year, api_key)
         call_count += 1
 
+        # The real playoff field is a fixed, season-level fact (who
+        # actually got picked), not something that varies week to week --
+        # but it should only ever show up on the snapshot(s) where that
+        # fact is actually determined (the true final regular week and
+        # postseason), never on an earlier week where the answer wasn't
+        # known yet. Materializing build_snapshots() up front is what lets
+        # us know which week that is before the per-snapshot loop below.
+        snapshots = list(build_snapshots(game_rows))
+        regular_weeks = [wk for (_, _, wk, stage) in snapshots if stage == "regular"]
+        final_week = regular_weeks[-1] if regular_weeks else None
+        final_committee_ranks = committee_ranks_for_week(rankings_by_week, final_week) if final_week is not None else None
+
+        cfp_participants = fetch_cfp_participants(year, api_key)
+        call_count += 1
+        playoff_field = real_playoff_field(year, cfp_participants, final_committee_ranks)
+
         season_new_rows = []
-        for as_of, cumulative, week, stage in build_snapshots(game_rows):
+        for as_of, cumulative, week, stage in snapshots:
             results = compute_ratings(teams, to_rating_games(cumulative))
             blended_raw = blend_raw_ratings(results, prior_raw, week)
             scores = normalize_values(blended_raw)
             committee_ranks = committee_ranks_for_week(rankings_by_week, week)
+            is_final_snapshot = stage == "postseason" or week == final_week
             season_new_rows.extend(build_public_rows(
-                results, scores, teams, season=year, as_of=as_of, stage=stage, committee_ranks=committee_ranks
+                results, scores, teams, season=year, as_of=as_of, stage=stage,
+                committee_ranks=committee_ranks,
+                playoff_field=playoff_field if is_final_snapshot else None,
             ))
 
         as_ofs_this_run = {(year, r["as_of"]) for r in season_new_rows}
