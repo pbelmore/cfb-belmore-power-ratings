@@ -39,6 +39,7 @@ from weekly_update import (
     load_json,
     normalize_values,
     prior_season_raw_ratings,
+    real_field_projection,
     real_playoff_field,
     write_json,
 )
@@ -157,12 +158,11 @@ def main():
         call_count += 1
 
         # The real playoff field is a fixed, season-level fact (who
-        # actually got picked), not something that varies week to week --
-        # but it should only ever show up on the snapshot(s) where that
-        # fact is actually determined (the true final regular week and
-        # postseason), never on an earlier week where the answer wasn't
-        # known yet. Materializing build_snapshots() up front is what lets
-        # us know which week that is before the per-snapshot loop below.
+        # actually got picked), only knowable at the true final regular
+        # week and postseason. Materializing build_snapshots() up front is
+        # what lets us know which week that is before the per-snapshot
+        # loop below -- every other ranked week instead gets a same-week
+        # projection (real_field_projection()), not the exact answer.
         snapshots = list(build_snapshots(game_rows))
         regular_weeks = [wk for (_, _, wk, stage) in snapshots if stage == "regular"]
         final_week = regular_weeks[-1] if regular_weeks else None
@@ -170,7 +170,7 @@ def main():
 
         cfp_participants = fetch_cfp_participants(year, api_key)
         call_count += 1
-        playoff_field = real_playoff_field(year, cfp_participants, final_committee_ranks)
+        exact_seeds = real_playoff_field(year, cfp_participants, final_committee_ranks)
 
         season_new_rows = []
         for as_of, cumulative, week, stage in snapshots:
@@ -179,10 +179,13 @@ def main():
             scores = normalize_values(blended_raw)
             committee_ranks = committee_ranks_for_week(rankings_by_week, week)
             is_final_snapshot = stage == "postseason" or week == final_week
+            if is_final_snapshot and exact_seeds is not None:
+                playoff_field, playoff_seeds = set(exact_seeds.keys()), exact_seeds
+            else:
+                playoff_field, playoff_seeds = real_field_projection(committee_ranks, teams, year), None
             season_new_rows.extend(build_public_rows(
                 results, scores, teams, season=year, as_of=as_of, stage=stage,
-                committee_ranks=committee_ranks,
-                playoff_field=playoff_field if is_final_snapshot else None,
+                committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,
             ))
 
         as_ofs_this_run = {(year, r["as_of"]) for r in season_new_rows}

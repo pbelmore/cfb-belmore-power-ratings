@@ -179,30 +179,64 @@ def committee_ranks_for_week(rankings_by_week, week):
 
 def fetch_cfp_participants(year, api_key):
     """The real CFP field for `year`, via CFBD's dedicated
-    /playoffs/cfp/participants endpoint -- {team: bidType}. Naturally
-    empty before that season's selection actually happens (verified: the
+    /playoffs/cfp/participants endpoint -- {team: seed}. Naturally empty
+    before that season's selection actually happens (verified: the
     current not-yet-selected season returns []) and empty for every year
     before the CFP existed (2010-2013 uses the BCS top-2 instead, see
     real_playoff_field())."""
     raw = cfbd_get("/playoffs/cfp/participants", api_key, year=year)
-    return {p["team"]["school"]: p["bidType"] for p in raw}
+    return {p["team"]["school"]: p["seed"] for p in raw}
 
 
 def real_playoff_field(year, cfp_participants, final_committee_ranks):
-    """The set of team names that actually made the real playoff/BCS
-    title game, or None if that isn't determined yet. 2014+: CFP's real
-    field (cfp_participants, empty until selection happens -- so this
-    stays None all season until then, then flips to the real set).
-    2010-2013 (no CFP existed): the top 2 teams in the final BCS
-    Standings -- the BCS title game was always exactly the top 2 by rank,
-    no other selection criteria, so this needs that season's true final
-    ranking (`final_committee_ranks`), not just whatever week is current."""
+    """The real playoff/BCS field as {team: seed}, or None if that isn't
+    determined yet. 2014+: CFP's real field (cfp_participants, empty
+    until selection happens -- so this stays None all season until then,
+    then flips to the real seeded field). 2010-2013 (no CFP existed): the
+    top 2 teams in the final BCS Standings, seeded 1 and 2 by that same
+    rank -- the BCS title game was always exactly the top 2, no other
+    selection criteria, so rank IS the seed. Needs that season's true
+    final ranking (`final_committee_ranks`), not just whatever week is
+    current."""
     if year < 2014:
         if not final_committee_ranks:
             return None
-        ranked = sorted(final_committee_ranks.items(), key=lambda kv: kv[1])
+        ranked = sorted(final_committee_ranks.items(), key=lambda kv: kv[1])[:2]
+        return {team: i + 1 for i, (team, _) in enumerate(ranked)}
+    return dict(cfp_participants) if cfp_participants else None
+
+
+def real_field_projection(committee_ranks, teams, season):
+    """"If the real field were picked today," projected from this week's
+    real committee ranking -- the same "conference leaders get automatic
+    bids" mechanic as our own getPlayoffProjection (index.html), just fed
+    CFBD's real ranks instead of our own power_score. "Leader" here means
+    "this week's highest-real-ranked team in that conference", a proxy
+    for the eventual conference champion, since that isn't actually
+    decided until championship week -- so this is necessarily a rougher
+    estimate than real_playoff_field()'s ground truth, and callers should
+    prefer that whenever it's available (see build_snapshots callers).
+    Returns a plain set (no seeds -- those only mean something once the
+    real bracket is set), or None if there's no ranking to project from
+    yet this week."""
+    if not committee_ranks:
+        return None
+    ranked = sorted(committee_ranks.items(), key=lambda kv: kv[1])
+    if season < 2014:
         return {team for team, _ in ranked[:2]}
-    return set(cfp_participants.keys()) if cfp_participants else None
+    if season < 2024:
+        return {team for team, _ in ranked[:4]}
+    conf_of = {t["school"]: t.get("conference") for t in teams}
+    leader_by_conf = {}
+    for team, rank in ranked:
+        conf = conf_of.get(team)
+        if not conf or conf == "FBS Independents":
+            continue
+        leader_by_conf.setdefault(conf, (team, rank))
+    leaders = sorted(leader_by_conf.values(), key=lambda tr: tr[1])[:5]
+    leader_names = {team for team, _ in leaders}
+    at_large = [team for team, _ in ranked if team not in leader_names][:7]
+    return leader_names | set(at_large)
 
 
 def to_rating_games(game_rows):
@@ -314,7 +348,8 @@ def current_week_number(game_rows):
 
 
 def build_public_rows(
-    results, scores, teams, season, as_of, stage="regular", committee_ranks=None, playoff_field=None
+    results, scores, teams, season, as_of, stage="regular",
+    committee_ranks=None, playoff_field=None, playoff_seeds=None,
 ):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
@@ -326,11 +361,17 @@ def build_public_rows(
     right week by the caller via committee_ranks_for_week()) becomes the
     real BCS/CFP rank shown alongside our own power_score, absent for a
     team not in that week's top 25 or for weeks no ranking applies to.
-    `playoff_field` (a set of team names, or None if not yet determined --
-    see real_playoff_field()) becomes made_playoff: true/false once known,
-    else null."""
+    `playoff_field` (a set of team names, or None if not yet determined)
+    becomes made_playoff: true/false once known, else null -- callers pass
+    either the exact field (real_playoff_field(), only known at the true
+    final week) or, for every other ranked week, a same-week projection
+    (real_field_projection()). `playoff_seeds` ({team: seed}) is only ever
+    passed alongside the exact field, giving real bracket position for the
+    dashboard's exact-position-match stat; projected weeks leave it None
+    since a projection's "seed" isn't a real fact yet."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
     committee_ranks = committee_ranks or {}
+    playoff_seeds = playoff_seeds or {}
     rows = []
     for team, r in results.items():
         rows.append({
@@ -345,6 +386,7 @@ def build_public_rows(
             "power_score": round(scores[team], 1),
             "committee_rank": committee_ranks.get(team),
             "made_playoff": (team in playoff_field) if playoff_field is not None else None,
+            "seed": playoff_seeds.get(team),
         })
     return rows
 
@@ -444,15 +486,17 @@ def main():
 
     print("Fetching real playoff field...")
     cfp_participants = fetch_cfp_participants(args.year, api_key)
-    playoff_field = real_playoff_field(args.year, cfp_participants, committee_ranks)
-    if playoff_field is not None:
-        print(f"  {len(playoff_field)} teams")
+    exact_seeds = real_playoff_field(args.year, cfp_participants, committee_ranks)
+    if exact_seeds is not None:
+        playoff_field, playoff_seeds = set(exact_seeds.keys()), exact_seeds
+        print(f"  {len(playoff_field)} teams (real field determined)")
     else:
-        print("  not determined yet")
+        playoff_field, playoff_seeds = real_field_projection(committee_ranks, teams, args.year), None
+        print(f"  {len(playoff_field) if playoff_field else 0} teams (projected -- real field not determined yet)")
 
     new_rows = build_public_rows(
         results, scores, teams, season=args.year, as_of=as_of, stage=stage,
-        committee_ranks=committee_ranks, playoff_field=playoff_field,
+        committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,
     )
 
     print("Fetching team colors...")

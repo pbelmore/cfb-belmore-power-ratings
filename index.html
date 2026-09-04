@@ -240,11 +240,14 @@ function renderStandings(current, season, asOf, colors, highlighted) {
   // Real committee rankings only exist for part of a season (they start
   // partway through, and stop once the field is picked) -- the column
   // itself only appears on weeks where at least one team has one. The *
-  // marking an actual playoff team only ever appears once that's a
-  // determined fact too (the true final regular-season snapshot onward),
-  // never a mid-season guess.
+  // marks a team in the real field, shown from the first ranked week on
+  // -- a same-week projection until the true final week, then the exact
+  // answer. `seed` is only ever populated for that exact/final case, so
+  // checking for it is how we know which one we're looking at, without
+  // needing to thread that state in from the caller.
   const hasCommitteeRank = current.some(r => r.committee_rank != null);
   const hasPlayoffField = current.some(r => r.made_playoff != null);
+  const isExactField = current.some(r => r.seed != null);
   const committeeLabel = season < 2014 ? 'BCS' : 'CFP';
   const fieldSize = season < 2014 ? 2 : season < 2024 ? 4 : 12;
 
@@ -295,7 +298,9 @@ function renderStandings(current, season, asOf, colors, highlighted) {
   if (hasPlayoffField) {
     const playoffNote = document.createElement('p');
     playoffNote.className = 'legend-note';
-    playoffNote.textContent = `* = actually made the real ${fieldSize}-team ${committeeLabel} field.`;
+    playoffNote.textContent = isExactField
+      ? `* = actually made the real ${fieldSize}-team ${committeeLabel} field.`
+      : `* = currently projected to make the real ${fieldSize}-team ${committeeLabel} field, based on this week's committee ranking.`;
     content.appendChild(playoffNote);
   }
 }
