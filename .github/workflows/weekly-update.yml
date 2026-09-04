@@ -8,15 +8,22 @@ on:
         required: false
         default: ""
   schedule:
-    # Wednesdays, not Tuesdays: the CFP committee's rankings air Tuesday
-    # night, so a Tuesday-morning run would race ahead of that week's
-    # ranking and miss it until the following week's run.
+    # Tuesdays through October: no CFP/BCS committee ranking exists yet to
+    # race ahead of (verified against real release history, 2019-2025 --
+    # the first ranking of a season has never come out before very late
+    # October), so pulling a day earlier than November onward just means
+    # fresher data with nothing to lose.
     #
-    # Aug-Jan only (month field: 8-12,1): the season runs roughly late
-    # August through mid-January, so there's nothing new to pull the rest
-    # of the year -- without this, the Action would just keep re-running
-    # against an already-finished season indefinitely each offseason.
-    - cron: "0 13 * 8-12,1 3"   # Wednesdays, Aug-Jan, 9am ET (13:00 UTC; drifts to 8am ET once DST ends in Nov)
+    # Wednesdays from November on: the committee's rankings air Tuesday
+    # night starting that month, so a Tuesday-morning run would race ahead
+    # of that week's ranking and miss it until the following week's run.
+    #
+    # Aug-Jan only: the season runs roughly late August through mid-
+    # January, so there's nothing new to pull the rest of the year --
+    # without this, the Action would just keep re-running against an
+    # already-finished season indefinitely each offseason.
+    - cron: "0 13 * 8-10 2"      # Tuesdays, Aug-Oct, 9am ET (13:00 UTC; drifts to 8am ET once DST ends in Nov)
+    - cron: "0 13 * 11-12,1 3"   # Wednesdays, Nov-Jan, 8am ET (13:00 UTC, DST already ended)
 
 permissions:
   contents: write
