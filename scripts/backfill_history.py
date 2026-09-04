@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
 backfill_history.py -- reconstructs week-by-week ratings_history rows for
-past seasons from CFBD, at a cost of exactly 2 API calls per season (teams
-once, games once). Every week's cumulative snapshot is then built locally
-by filtering that one game list -- no per-week API calls.
+past seasons from CFBD, at a cost of 2 API calls per season (teams once,
+games once) plus 2 more for any season with a prior year on record (to
+recompute that prior year's raw final ratings fresh, for the preseason
+blend -- see weekly_update.prior_season_raw_ratings). Every week's
+cumulative snapshot is then built locally by filtering that one game list
+-- no per-week API calls.
 
 Regular-season weeks are snapshotted 1..max, cumulatively. Postseason games
 (bowls/CFP) are folded into a single final snapshot per season instead of
@@ -25,13 +28,13 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from weekly_update import (
     WORD_TO_CODE,
-    apply_preseason_blend,
+    blend_raw_ratings,
     build_public_rows,
     cfbd_get,
     fetch_teams,
     load_json,
-    normalized_scores,
-    prior_season_final_scores,
+    normalize_values,
+    prior_season_raw_ratings,
     write_json,
 )
 
@@ -120,13 +123,15 @@ def main():
         call_count += 1
         print(f"  {len(teams)} teams, {len(game_rows)} completed games")
 
-        prior_scores = prior_season_final_scores(history, year)
+        prior_raw = prior_season_raw_ratings(history, year, api_key)
+        if prior_raw is not None:
+            call_count += 2
 
         season_new_rows = []
         for as_of, cumulative, week in build_snapshots(game_rows):
             results = compute_ratings(teams, to_rating_games(cumulative))
-            scores = normalized_scores(results)
-            scores = apply_preseason_blend(scores, prior_scores, week)
+            blended_raw = blend_raw_ratings(results, prior_raw, week)
+            scores = normalize_values(blended_raw)
             season_new_rows.extend(build_public_rows(results, scores, teams, season=year, as_of=as_of))
 
         as_ofs_this_run = {(year, r["as_of"]) for r in season_new_rows}

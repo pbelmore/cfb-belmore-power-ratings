@@ -112,20 +112,20 @@ def write_json(path, data):
         f.write("\n")
 
 
-def normalized_scores(results):
-    """Maps each team's raw rating to a 0-100 score, best team in this run's
-    field = 100. This -- not the raw rating or SOS -- is what's ever written
-    to public-facing output (ratings_history.json, the blurb, this script's
-    own console/CI-log output), so the SOS x Win%^2 formula stays private."""
-    ratings = [r["rating"] for r in results.values()]
-    lo, hi = min(ratings), max(ratings)
+def normalize_values(values_by_team):
+    """0-100 rescale, best team = 100. The one place normalization happens --
+    called on (possibly preseason-blended) raw ratings, never on an
+    already-normalized number, so blending twice can't cap the result below
+    100 just because one team is clearly on top of a still-thin field."""
+    values = list(values_by_team.values())
+    lo, hi = min(values), max(values)
     if hi == lo:
-        return {team: 0.0 for team in results}
-    return {team: (r["rating"] - lo) / (hi - lo) * 100 for team, r in results.items()}
+        return {team: 0.0 for team in values_by_team}
+    return {team: (v - lo) / (hi - lo) * 100 for team, v in values_by_team.items()}
 
 
 def preseason_blend_weight(week):
-    """Linear ramp: 50% weight on last season's final score at week 1, down
+    """Linear ramp: 50% weight on last season's final rating at week 1, down
     to 0% (pure current-season) by week 7. week=None/0 (preseason, no games
     yet) gets the full week-1 weight."""
     week = week or 1
@@ -134,27 +134,42 @@ def preseason_blend_weight(week):
     return 0.5 * (7 - week) / 6
 
 
-def prior_season_final_scores(history, season):
-    """team -> power_score from `season - 1`'s last snapshot, or None if that
-    season isn't in history at all (e.g. season is the earliest one tracked)."""
-    prior_rows = [r for r in history if r["season"] == season - 1]
-    if not prior_rows:
+def prior_season_raw_ratings(history, year, api_key):
+    """Recomputes last season's FINAL raw ratings (the actual SOS x Win%^2
+    values, not the normalized power_score) fresh via 2 CFBD calls -- these
+    are never cached or written anywhere, since only the normalized score is
+    supposed to persist. Blending on the raw number, not the normalized one,
+    matters: the normalized score always tops out at 100 for whoever won,
+    regardless of how dominant that team's season actually was, so it's
+    already lost the information a blend should be using.
+
+    Returns None if `year - 1` isn't a season we track at all (gated on our
+    own history, not on whether CFBD happens to have even older data) --
+    that's what keeps the earliest tracked season from blending against
+    anything."""
+    if not any(r["season"] == year - 1 for r in history):
         return None
-    last_as_of = max(r["as_of"] for r in prior_rows)
-    return {r["team"]: r["power_score"] for r in prior_rows if r["as_of"] == last_as_of}
+    prior_teams = fetch_teams(year - 1, api_key)
+    prior_games = fetch_games(year - 1, api_key)
+    if not prior_games:
+        return None
+    prior_results = compute_ratings(prior_teams, to_rating_games(prior_games))
+    return {team: r["rating"] for team, r in prior_results.items()}
 
 
-def apply_preseason_blend(scores, prior_scores, week):
-    """Blends this week's power scores toward last season's final scores.
-    A team missing from prior_scores (new to FBS, say) is left alone."""
-    if not prior_scores:
-        return scores
+def blend_raw_ratings(results, prior_raw_ratings, week):
+    """Blends each team's raw rating toward last season's raw final rating.
+    Returns a plain {team: value} dict of blended raw ratings, still to be
+    normalized afterward. A team missing from prior_raw_ratings (new to
+    FBS, say) is left at its current-season raw rating."""
+    if not prior_raw_ratings:
+        return {team: r["rating"] for team, r in results.items()}
     w = preseason_blend_weight(week)
     if w <= 0:
-        return scores
+        return {team: r["rating"] for team, r in results.items()}
     return {
-        team: round(w * prior_scores[team] + (1 - w) * score, 1) if team in prior_scores else score
-        for team, score in scores.items()
+        team: w * prior_raw_ratings[team] + (1 - w) * r["rating"] if team in prior_raw_ratings else r["rating"]
+        for team, r in results.items()
     }
 
 
@@ -234,9 +249,9 @@ def main():
 
     print("Computing ratings...")
     results = compute_ratings(teams, to_rating_games(game_rows))
-    scores = normalized_scores(results)
-    prior_scores = prior_season_final_scores(history, args.year)
-    scores = apply_preseason_blend(scores, prior_scores, current_week_number(game_rows))
+    prior_raw = prior_season_raw_ratings(history, args.year, api_key)
+    blended_raw = blend_raw_ratings(results, prior_raw, current_week_number(game_rows))
+    scores = normalize_values(blended_raw)
     new_rows = build_public_rows(results, scores, teams, season=args.year, as_of=as_of)
 
     # Replace any existing rows for this (season, as_of) so re-running the
