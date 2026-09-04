@@ -108,11 +108,15 @@ function computeSeasonStats(rows, season) {
     if (ourField[i] && ourField[i] === realField[i]) exactMatches++;
   }
 
+  // Restricted to the real playoff/BCS field only, not every
+  // committee-ranked team -- comparing our overall rank against each
+  // field team's real seed. A perfect field + exact-spot match (e.g.
+  // 2015) naturally lands at 0 here too, since "exact spot" already means
+  // our rank-order among these teams equals their real seed order.
   const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
   const ourRankOf = new Map(overallRanked.map((r, i) => [r.team, i + 1]));
-  const rankDiffs = snapshot
-    .filter(r => r.committee_rank != null)
-    .map(r => Math.abs(ourRankOf.get(r.team) - r.committee_rank));
+  const seedOf = new Map(snapshot.filter(r => r.seed != null).map(r => [r.team, r.seed]));
+  const rankDiffs = realField.map(team => Math.abs(ourRankOf.get(team) - seedOf.get(team)));
 
   return { season, asOf: finalAsOf, fieldSize, fieldHits, exactMatches, rankDiffs };
 }
@@ -172,7 +176,7 @@ function renderTable(statsList) {
 
   const note = document.createElement('p');
   note.className = 'legend-note';
-  note.textContent = 'Evaluated at each season’s final regular-season snapshot only -- the same point the real committee made its selection. "Field" = how many of the real playoff/BCS teams our own projection also had in its field. "Exact spot" = how many landed in the identical seed position. "Avg rank diff" = average |our overall rank − real committee rank| across every team the committee ranked that week.';
+  note.textContent = 'Evaluated at each season’s final regular-season snapshot only -- the same point the real committee made its selection. "Field" = how many of the real playoff/BCS teams our own projection also had in its field. "Exact spot" = how many landed in the identical seed position. "Avg rank diff" = average |our overall rank − real seed|, across just the real playoff/BCS field (not every committee-ranked team) -- a perfect field + exact-spot match lands at 0.';
   content.appendChild(note);
 }
 
@@ -194,7 +198,7 @@ async function main() {
   const seasons = [...new Set(rows.map(r => r.season))].sort((a, b) => a - b);
   const statsList = seasons.map(s => computeSeasonStats(rows, s)).filter(Boolean);
 
-  subtitle.textContent = `How the Belmore power ratings' projected playoff field compares to the real ${statsList.length ? 'BCS/CFP' : ''} selection, season by season.`;
+  subtitle.textContent = `How the Belmore Rankings' projected playoff field compares to the real ${statsList.length ? 'BCS/CFP' : ''} selection, season by season.`;
   renderTable(statsList);
 }
 
