@@ -1,0 +1,558 @@
+{
+  "Air Force": {
+    "color": "#003594",
+    "altColor": "#ffffff"
+  },
+  "Akron": {
+    "color": "#041e42",
+    "altColor": "#a89968"
+  },
+  "Alabama": {
+    "color": "#9e1b32",
+    "altColor": "#ffffff"
+  },
+  "App State": {
+    "color": "#000000",
+    "altColor": "#ffcd00"
+  },
+  "Arizona": {
+    "color": "#cc0033",
+    "altColor": "#003366"
+  },
+  "Arizona State": {
+    "color": "#ffc627",
+    "altColor": "#8c1d40"
+  },
+  "Arkansas": {
+    "color": "#a32136",
+    "altColor": "#ffffff"
+  },
+  "Arkansas State": {
+    "color": "#cc092f",
+    "altColor": "#000000"
+  },
+  "Army": {
+    "color": "#000000",
+    "altColor": "#d3bc8d"
+  },
+  "Auburn": {
+    "color": "#0c2340",
+    "altColor": "#f26522"
+  },
+  "Ball State": {
+    "color": "#ba0c2f",
+    "altColor": "#ffffff"
+  },
+  "Baylor": {
+    "color": "#154734",
+    "altColor": "#ffb81c"
+  },
+  "Boise State": {
+    "color": "#0033a0",
+    "altColor": "#d64309"
+  },
+  "Boston College": {
+    "color": "#8c2232",
+    "altColor": "#dbcca6"
+  },
+  "Bowling Green": {
+    "color": "#fd5000",
+    "altColor": "#4f2c1d"
+  },
+  "Buffalo": {
+    "color": "#005bbb",
+    "altColor": "#ffffff"
+  },
+  "BYU": {
+    "color": "#003da5",
+    "altColor": "#002e5d"
+  },
+  "California": {
+    "color": "#041e42",
+    "altColor": "#ffc72c"
+  },
+  "Central Michigan": {
+    "color": "#6a0032",
+    "altColor": "#ffc82e"
+  },
+  "Charlotte": {
+    "color": "#null",
+    "altColor": "#null"
+  },
+  "Cincinnati": {
+    "color": "#000000",
+    "altColor": "#e00122"
+  },
+  "Clemson": {
+    "color": "#f56600",
+    "altColor": "#522d80"
+  },
+  "Coastal Carolina": {
+    "color": "#006f71",
+    "altColor": "#a27752"
+  },
+  "Colorado": {
+    "color": "#cfb87c",
+    "altColor": "#000000"
+  },
+  "Colorado State": {
+    "color": "#1e4d2b",
+    "altColor": "#c8c372"
+  },
+  "Delaware": {
+    "color": "#00539f",
+    "altColor": "#ffd200"
+  },
+  "Duke": {
+    "color": "#00539b",
+    "altColor": "#ffffff"
+  },
+  "East Carolina": {
+    "color": "#592a8a",
+    "altColor": "#fdc82f"
+  },
+  "Eastern Michigan": {
+    "color": "#046a38",
+    "altColor": "#ffffff"
+  },
+  "Florida": {
+    "color": "#0021a5",
+    "altColor": "#fa4616"
+  },
+  "Florida Atlantic": {
+    "color": "#003366",
+    "altColor": "#cc0000"
+  },
+  "Florida International": {
+    "color": "#091f3f",
+    "altColor": "#c3993f"
+  },
+  "Florida State": {
+    "color": "#782f40",
+    "altColor": "#ceb888"
+  },
+  "Fresno State": {
+    "color": "#c41230",
+    "altColor": "#13284c"
+  },
+  "Georgia": {
+    "color": "#ba0c2f",
+    "altColor": "#2c2a29"
+  },
+  "Georgia Southern": {
+    "color": "#041e42",
+    "altColor": "#ffffff"
+  },
+  "Georgia State": {
+    "color": "#0039a6",
+    "altColor": "#ffffff"
+  },
+  "Georgia Tech": {
+    "color": "#b3a369",
+    "altColor": "#ffffff"
+  },
+  "Hawai'i": {
+    "color": "#024731",
+    "altColor": "#000000"
+  },
+  "Houston": {
+    "color": "#c8102e",
+    "altColor": "#ffffff"
+  },
+  "Idaho": {
+    "color": "#000000",
+    "altColor": "#8c6e4a"
+  },
+  "Illinois": {
+    "color": "#ff5f05",
+    "altColor": "#13294b"
+  },
+  "Indiana": {
+    "color": "#990000",
+    "altColor": "#ffffff"
+  },
+  "Iowa": {
+    "color": "#000000",
+    "altColor": "#ffcd00"
+  },
+  "Iowa State": {
+    "color": "#c8102e",
+    "altColor": "#f1be48"
+  },
+  "Jacksonville State": {
+    "color": "#cc0000",
+    "altColor": "#000000"
+  },
+  "James Madison": {
+    "color": "#450084",
+    "altColor": "#cbb677"
+  },
+  "Kansas": {
+    "color": "#0051ba",
+    "altColor": "#e8000d"
+  },
+  "Kansas State": {
+    "color": "#512888",
+    "altColor": "#ffffff"
+  },
+  "Kennesaw State": {
+    "color": "#fdbb30",
+    "altColor": "#0b1315"
+  },
+  "Kent State": {
+    "color": "#002664",
+    "altColor": "#eaab00"
+  },
+  "Kentucky": {
+    "color": "#0033a0",
+    "altColor": "#ffffff"
+  },
+  "Liberty": {
+    "color": "#0a254e",
+    "altColor": "#b72025"
+  },
+  "Louisiana": {
+    "color": "#ce181e",
+    "altColor": "#000000"
+  },
+  "Louisiana Tech": {
+    "color": "#003087",
+    "altColor": "#cb333b"
+  },
+  "Louisville": {
+    "color": "#c9001f",
+    "altColor": "#000000"
+  },
+  "LSU": {
+    "color": "#461d7c",
+    "altColor": "#fdd023"
+  },
+  "Marshall": {
+    "color": "#00b140",
+    "altColor": "#000000"
+  },
+  "Maryland": {
+    "color": "#ce1126",
+    "altColor": "#ffffff"
+  },
+  "Massachusetts": {
+    "color": "#881c1c",
+    "altColor": "#ffffff"
+  },
+  "Memphis": {
+    "color": "#00498f",
+    "altColor": "#9c9ea1"
+  },
+  "Miami": {
+    "color": "#f47321",
+    "altColor": "#005030"
+  },
+  "Miami (OH)": {
+    "color": "#c41230",
+    "altColor": "#ffffff"
+  },
+  "Michigan": {
+    "color": "#00274c",
+    "altColor": "#ffcb05"
+  },
+  "Michigan State": {
+    "color": "#173f35",
+    "altColor": "#ffffff"
+  },
+  "Middle Tennessee": {
+    "color": "#036eb7",
+    "altColor": "#ffffff"
+  },
+  "Minnesota": {
+    "color": "#7a0019",
+    "altColor": "#ffcc33"
+  },
+  "Mississippi State": {
+    "color": "#5d1725",
+    "altColor": "#c1c6c8"
+  },
+  "Missouri": {
+    "color": "#f1b82d",
+    "altColor": "#000000"
+  },
+  "Missouri State": {
+    "color": "#5e0009",
+    "altColor": "#ffffff"
+  },
+  "Navy": {
+    "color": "#00225b",
+    "altColor": "#b5a67c"
+  },
+  "NC State": {
+    "color": "#cc0000",
+    "altColor": "#ffffff"
+  },
+  "Nebraska": {
+    "color": "#d00000",
+    "altColor": "#ffffff"
+  },
+  "Nevada": {
+    "color": "#041e42",
+    "altColor": "#8a8d8f"
+  },
+  "New Mexico": {
+    "color": "#ba0c2f",
+    "altColor": "#a7a8aa"
+  },
+  "New Mexico State": {
+    "color": "#8c0b42",
+    "altColor": "#ffffff"
+  },
+  "North Carolina": {
+    "color": "#7bafd4",
+    "altColor": "#13294b"
+  },
+  "North Dakota State": {
+    "color": "#00583d",
+    "altColor": "#ffc425"
+  },
+  "Northern Illinois": {
+    "color": "#c8102e",
+    "altColor": "#000000"
+  },
+  "North Texas": {
+    "color": "#00853e",
+    "altColor": "#ffffff"
+  },
+  "Northwestern": {
+    "color": "#582c83",
+    "altColor": "#ffffff"
+  },
+  "Notre Dame": {
+    "color": "#0c2340",
+    "altColor": "#c99700"
+  },
+  "Ohio": {
+    "color": "#024230",
+    "altColor": "#ffffff"
+  },
+  "Ohio State": {
+    "color": "#ba0c2f",
+    "altColor": "#a7b1b7"
+  },
+  "Oklahoma": {
+    "color": "#841617",
+    "altColor": "#ffffff"
+  },
+  "Oklahoma State": {
+    "color": "#fe5c00",
+    "altColor": "#000000"
+  },
+  "Old Dominion": {
+    "color": "#043657",
+    "altColor": "#98c5ea"
+  },
+  "Ole Miss": {
+    "color": "#13294b",
+    "altColor": "#cf142b"
+  },
+  "Oregon": {
+    "color": "#007030",
+    "altColor": "#fee11a"
+  },
+  "Oregon State": {
+    "color": "#dc4405",
+    "altColor": "#000000"
+  },
+  "Penn State": {
+    "color": "#001e44",
+    "altColor": "#ffffff"
+  },
+  "Pittsburgh": {
+    "color": "#003594",
+    "altColor": "#ffb81c"
+  },
+  "Purdue": {
+    "color": "#ceb888",
+    "altColor": "#000000"
+  },
+  "Rice": {
+    "color": "#00205b",
+    "altColor": "#c1c6c8"
+  },
+  "Rutgers": {
+    "color": "#ce0e2d",
+    "altColor": "#ffffff"
+  },
+  "Sacramento State": {
+    "color": "#00573c",
+    "altColor": "#cdb97d"
+  },
+  "Sam Houston": {
+    "color": "#f56423",
+    "altColor": "#ffffff"
+  },
+  "San Diego State": {
+    "color": "#a6192e",
+    "altColor": "#000000"
+  },
+  "San Jos\u00e9 State": {
+    "color": "#0055a2",
+    "altColor": "#e5a823"
+  },
+  "SMU": {
+    "color": "#d70000",
+    "altColor": "#0033a1"
+  },
+  "South Alabama": {
+    "color": "#00205b",
+    "altColor": "#bf0d3e"
+  },
+  "South Carolina": {
+    "color": "#73000a",
+    "altColor": "#000000"
+  },
+  "Southern Miss": {
+    "color": "#ffc72c",
+    "altColor": "#231f20"
+  },
+  "South Florida": {
+    "color": "#006747",
+    "altColor": "#cfc493"
+  },
+  "Stanford": {
+    "color": "#8c1515",
+    "altColor": "#ffffff"
+  },
+  "Syracuse": {
+    "color": "#f76900",
+    "altColor": "#000e54"
+  },
+  "TCU": {
+    "color": "#4d1979",
+    "altColor": "#ffffff"
+  },
+  "Temple": {
+    "color": "#a41e35",
+    "altColor": "#ffffff"
+  },
+  "Tennessee": {
+    "color": "#ff8200",
+    "altColor": "#ffffff"
+  },
+  "Texas": {
+    "color": "#bf5700",
+    "altColor": "#ffffff"
+  },
+  "Texas A&M": {
+    "color": "#500000",
+    "altColor": "#ffffff"
+  },
+  "Texas State": {
+    "color": "#501214",
+    "altColor": "#6a5638"
+  },
+  "Texas Tech": {
+    "color": "#c30020",
+    "altColor": "#000000"
+  },
+  "Toledo": {
+    "color": "#0b2240",
+    "altColor": "#ffcd00"
+  },
+  "Troy": {
+    "color": "#862633",
+    "altColor": "#b1b1b1"
+  },
+  "Tulane": {
+    "color": "#006747",
+    "altColor": "#418fde"
+  },
+  "Tulsa": {
+    "color": "#003595",
+    "altColor": "#d0b787"
+  },
+  "UAB": {
+    "color": "#1a5632",
+    "altColor": "#fdb913"
+  },
+  "UCF": {
+    "color": "#000000",
+    "altColor": "#b4a169"
+  },
+  "UCLA": {
+    "color": "#2774ae",
+    "altColor": "#f2a900"
+  },
+  "UConn": {
+    "color": "#000e2f",
+    "altColor": "#ffffff"
+  },
+  "UL Monroe": {
+    "color": "#840029",
+    "altColor": "#fdb913"
+  },
+  "UNLV": {
+    "color": "#cf0a2c",
+    "altColor": "#cac8c8"
+  },
+  "USC": {
+    "color": "#990000",
+    "altColor": "#ffcc00"
+  },
+  "Utah": {
+    "color": "#be0000",
+    "altColor": "#ffffff"
+  },
+  "Utah State": {
+    "color": "#0f2439",
+    "altColor": "#ffffff"
+  },
+  "UTEP": {
+    "color": "#ff8200",
+    "altColor": "#041e42"
+  },
+  "UTSA": {
+    "color": "#0c2340",
+    "altColor": "#f15a22"
+  },
+  "Vanderbilt": {
+    "color": "#000000",
+    "altColor": "#cfae70"
+  },
+  "Virginia": {
+    "color": "#232d4b",
+    "altColor": "#f84c1e"
+  },
+  "Virginia Tech": {
+    "color": "#861f41",
+    "altColor": "#e87722"
+  },
+  "Wake Forest": {
+    "color": "#ceb888",
+    "altColor": "#2c2a29"
+  },
+  "Washington": {
+    "color": "#33006f",
+    "altColor": "#e8d3a2"
+  },
+  "Washington State": {
+    "color": "#a60f2d",
+    "altColor": "#4d4d4d"
+  },
+  "Western Kentucky": {
+    "color": "#c60c30",
+    "altColor": "#ffffff"
+  },
+  "Western Michigan": {
+    "color": "#532e1f",
+    "altColor": "#f1c500"
+  },
+  "West Virginia": {
+    "color": "#eaaa00",
+    "altColor": "#002855"
+  },
+  "Wisconsin": {
+    "color": "#a00000",
+    "altColor": "#ffffff"
+  },
+  "Wyoming": {
+    "color": "#492f24",
+    "altColor": "#ffc425"
+  }
+}

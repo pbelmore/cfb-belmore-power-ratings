@@ -1,6 +1,7 @@
 [
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-29T16:00:00.000Z",
     "winner": "North Carolina",
@@ -12,6 +13,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-29T19:00:00.000Z",
     "winner": "USC",
@@ -23,6 +25,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-29T19:30:00.000Z",
     "winner": "Virginia",
@@ -34,6 +37,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-29T21:30:00.000Z",
     "winner": "North Dakota State",
@@ -45,6 +49,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-29T22:30:00.000Z",
     "winner": "Eastern Michigan",
@@ -56,6 +61,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-29T23:00:00.000Z",
     "winner": "Florida State",
@@ -67,6 +73,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-29T23:00:00.000Z",
     "winner": "Stanford",
@@ -78,6 +85,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-08-30T02:00:00.000Z",
     "winner": "Memphis",
@@ -89,6 +97,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-09-03T22:00:00.000Z",
     "winner": "Massachusetts",
@@ -100,6 +109,7 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-09-03T23:00:00.000Z",
     "winner": "Delaware",
@@ -111,6 +121,19 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
+    "week": 1,
+    "date": "2026-09-03T23:00:00.000Z",
+    "winner": "Kennesaw State",
+    "winner_pts": 47,
+    "loser": "West Georgia",
+    "loser_pts": 0,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-09-03T23:00:00.000Z",
     "winner": "UCF",
@@ -122,12 +145,49 @@
   },
   {
     "season": 2026,
+    "season_type": "regular",
     "week": 1,
     "date": "2026-09-03T23:00:00.000Z",
     "winner": "Wake Forest",
     "winner_pts": 38,
     "loser": "Akron",
     "loser_pts": 16,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "season_type": "regular",
+    "week": 1,
+    "date": "2026-09-04T00:00:00.000Z",
+    "winner": "Colorado",
+    "winner_pts": 14,
+    "loser": "Georgia Tech",
+    "loser_pts": 13,
+    "location": "away",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "season_type": "regular",
+    "week": 1,
+    "date": "2026-09-04T00:00:00.000Z",
+    "winner": "Minnesota",
+    "winner_pts": 59,
+    "loser": "Eastern Illinois",
+    "loser_pts": 7,
+    "location": "home",
+    "notes": ""
+  },
+  {
+    "season": 2026,
+    "season_type": "regular",
+    "week": 1,
+    "date": "2026-09-04T00:00:00.000Z",
+    "winner": "Missouri",
+    "winner_pts": 54,
+    "loser": "Arkansas-Pine Bluff",
+    "loser_pts": 14,
     "location": "home",
     "notes": ""
   }

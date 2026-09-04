@@ -91,9 +91,20 @@
   }
   tbody tr:nth-child(even) { background: var(--row-alt); }
   tbody tr:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+  tbody tr.highlight-row {
+    border-left: 4px solid var(--team-color, transparent);
+    background: color-mix(in srgb, var(--team-color, transparent) 12%, var(--bg));
+  }
+  tbody tr.highlight-row:nth-child(even) {
+    background: color-mix(in srgb, var(--team-color, transparent) 12%, var(--row-alt));
+  }
+  tbody tr.highlight-row:hover {
+    background: color-mix(in srgb, var(--team-color, transparent) 22%, var(--bg));
+  }
   td.rank { color: var(--muted); font-variant-numeric: tabular-nums; }
   td.rating { font-weight: 600; }
   .status { color: var(--muted); padding: 2rem 0; }
+  .legend-note { color: var(--muted); font-size: 0.78rem; margin: 0.5rem 0 0; }
 
   /* Trend charts */
   .chart-controls { margin-bottom: 0.75rem; }
@@ -197,13 +208,37 @@
 
 <script src="trends.js"></script>
 <script>
-function renderStandings(rows, season, asOf) {
+const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+
+// Projects a playoff field from that week's own ratings -- a running "if it
+// ended today" bracket, not the actual (end-of-season-only) selection.
+// 2010-2023: top 4 overall. 2024+: the 12-team format's 5 highest-rated
+// conference leaders (auto bids -- independents can't have one, since
+// there's no conference championship to win) + the next 7 best overall.
+function getPlayoffProjection(seasonRows, season) {
+  const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
+  if (season < 2024) {
+    return new Set(sorted.slice(0, 4).map(r => r.team));
+  }
+  const leaderByConf = new Map();
+  for (const r of sorted) {
+    if (!r.conference || r.conference === 'FBS Independents') continue;
+    if (!leaderByConf.has(r.conference)) leaderByConf.set(r.conference, r);
+  }
+  const leaders = [...leaderByConf.values()].sort((a, b) => b.power_score - a.power_score).slice(0, 5);
+  const leaderNames = new Set(leaders.map(r => r.team));
+  const atLarge = sorted.filter(r => !leaderNames.has(r.team)).slice(0, 7);
+  return new Set([...leaderNames, ...atLarge.map(r => r.team)]);
+}
+
+function renderStandings(rows, season, asOf, colors) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
   const current = rows
     .filter(r => r.season === season && r.as_of === asOf)
     .sort((a, b) => b.power_score - a.power_score);
+  const highlighted = getPlayoffProjection(current, season);
 
   subtitle.textContent = `${season} season — as of ${asOf}`;
 
@@ -216,33 +251,69 @@ function renderStandings(rows, season, asOf) {
         <th>Conf</th>
         <th>W</th>
         <th>L</th>
-        <th>Win%</th>
         <th>Power</th>
       </tr>
     </thead>
     <tbody>
-      ${current.map((r, i) => `
-        <tr>
+      ${current.map((r, i) => {
+        const isHighlighted = highlighted.has(r.team);
+        const c = colors[r.team];
+        const rowStyle = isHighlighted && c && HEX_COLOR_RE.test(c.color)
+          ? ` style="--team-color:${c.color}"` : '';
+        const rowClass = isHighlighted ? ' class="highlight-row"' : '';
+        return `
+        <tr${rowClass}${rowStyle}>
           <td class="rank">${i + 1}</td>
           <td>${r.team}</td>
           <td>${r.conference ?? ''}</td>
           <td>${r.wins}</td>
           <td>${r.losses}</td>
-          <td>${(r.win_pct * 100).toFixed(1)}%</td>
           <td class="rating">${r.power_score.toFixed(1)}</td>
         </tr>
-      `).join('')}
+      `;
+      }).join('')}
     </tbody>
   `;
   content.replaceChildren(table);
+
+  const note = document.createElement('p');
+  note.className = 'legend-note';
+  note.textContent = season < 2024
+    ? 'Highlighted: projected top 4 (if the season ended today).'
+    : 'Highlighted: projected 12-team field -- 5 conference leaders (auto bids) + 7 at-large.';
+  content.appendChild(note);
 }
 
-function weekOptionLabel(index, total, isCompleteSeason) {
-  if (index === total - 1) return isCompleteSeason ? 'Final' : 'Latest';
-  return `Week ${index + 1}`;
+// Labels a season's as_of snapshots as "Week N", plus two milestones: the
+// last regular-season snapshot and the last snapshot that includes
+// postseason games, so those read as season-defining points rather than
+// just another week. The in-progress season's own latest snapshot (no
+// postseason yet) stays "Latest" rather than claiming to be final.
+function computeWeekLabels(seasonRows, asOfsForSeason, isLatestSeason) {
+  const stageOf = new Map();
+  for (const asOf of asOfsForSeason) {
+    const row = seasonRows.find(r => r.as_of === asOf);
+    stageOf.set(asOf, row?.stage || 'regular');
+  }
+  const regularAsOfs = asOfsForSeason.filter(a => stageOf.get(a) === 'regular');
+  const postAsOfs = asOfsForSeason.filter(a => stageOf.get(a) === 'postseason');
+  const lastRegular = regularAsOfs[regularAsOfs.length - 1];
+  const lastPost = postAsOfs[postAsOfs.length - 1];
+
+  return asOfsForSeason.map(asOf => {
+    if (stageOf.get(asOf) === 'postseason') {
+      return asOf === lastPost ? 'End of Bowl Season' : 'Bowl Season';
+    }
+    const weekNum = regularAsOfs.indexOf(asOf) + 1;
+    if (asOf === lastRegular) {
+      if (postAsOfs.length > 0) return 'End of Regular Season';
+      if (isLatestSeason) return 'Latest';
+    }
+    return `Week ${weekNum}`;
+  });
 }
 
-function setupStandingsControls(rows) {
+function setupStandingsControls(rows, colors) {
   const controls = document.getElementById('standings-controls');
   const seasonSelect = document.getElementById('season-select');
   const weekSelect = document.getElementById('week-select');
@@ -256,10 +327,11 @@ function setupStandingsControls(rows) {
   let asOfsForSeason = [];
 
   function populateWeeks(season, selectAsOf) {
-    asOfsForSeason = [...new Set(rows.filter(r => r.season === season).map(r => r.as_of))].sort();
-    const isCompleteSeason = season !== latestSeason;
+    const seasonRows = rows.filter(r => r.season === season);
+    asOfsForSeason = [...new Set(seasonRows.map(r => r.as_of))].sort();
+    const labels = computeWeekLabels(seasonRows, asOfsForSeason, season === latestSeason);
     weekSelect.replaceChildren(
-      ...asOfsForSeason.map((asOf, i) => new Option(weekOptionLabel(i, asOfsForSeason.length, isCompleteSeason), asOf))
+      ...asOfsForSeason.map((asOf, i) => new Option(labels[i], asOf))
     );
     weekSelect.value = selectAsOf && asOfsForSeason.includes(selectAsOf)
       ? selectAsOf
@@ -274,12 +346,14 @@ function setupStandingsControls(rows) {
 
   function draw() {
     updateNavButtons();
-    renderStandings(rows, Number(seasonSelect.value), weekSelect.value);
+    renderStandings(rows, Number(seasonSelect.value), weekSelect.value, colors);
   }
 
   seasonSelect.addEventListener('change', () => {
-    populateWeeks(Number(seasonSelect.value));
+    const season = Number(seasonSelect.value);
+    populateWeeks(season);
     draw();
+    if (window.renderTrends) window.renderTrends(rows, season);
   });
   weekSelect.addEventListener('change', draw);
   weekPrev.addEventListener('click', () => {
@@ -303,11 +377,15 @@ async function main() {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
-  let rows;
+  let rows, colors;
   try {
-    const res = await fetch('data/ratings_history.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    rows = await res.json();
+    const [historyRes, colorsRes] = await Promise.all([
+      fetch('data/ratings_history.json', { cache: 'no-store' }),
+      fetch('data/team_colors.json', { cache: 'no-store' }),
+    ]);
+    if (!historyRes.ok) throw new Error(`HTTP ${historyRes.status}`);
+    rows = await historyRes.json();
+    colors = colorsRes.ok ? await colorsRes.json() : {};
   } catch (err) {
     subtitle.textContent = '';
     content.innerHTML = `<p class="status">Couldn't load ratings data (${err.message}).</p>`;
@@ -320,7 +398,7 @@ async function main() {
     return;
   }
 
-  const latestSeason = setupStandingsControls(rows);
+  const latestSeason = setupStandingsControls(rows, colors);
 
   if (window.renderTrends) window.renderTrends(rows, latestSeason);
   if (window.renderBlurb) window.renderBlurb();

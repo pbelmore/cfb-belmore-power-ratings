@@ -72,11 +72,12 @@ def fetch_completed_game_rows(year, api_key):
 
 
 def build_snapshots(game_rows):
-    """Yields (as_of_label, cumulative_game_rows, week) -- one per
+    """Yields (as_of_label, cumulative_game_rows, week, stage) -- one per
     regular-season week boundary, plus one final snapshot folding in
     postseason (if any). The final snapshot's week is just "well past 6",
     since postseason week numbers restart at 1 and preseason blending only
-    ever needs to know it's no longer in the first 6 weeks."""
+    ever needs to know it's no longer in the first 6 weeks. `stage` drives
+    the site's "End of Regular Season" / "End of Bowl Season" labels."""
     regular = [r for r in game_rows if r["season_type"] == "regular" and r["week"] is not None]
     postseason = [r for r in game_rows if r["season_type"] != "regular"]
 
@@ -84,12 +85,12 @@ def build_snapshots(game_rows):
     for wk in weeks:
         cumulative = [r for r in regular if r["week"] <= wk]
         as_of = max(r["date"] for r in cumulative if r["date"])[:10]
-        yield as_of, cumulative, wk
+        yield as_of, cumulative, wk, "regular"
 
     if postseason:
         final = regular + postseason
         as_of = max(r["date"] for r in final if r["date"])[:10]
-        yield as_of, final, 99
+        yield as_of, final, 99, "postseason"
 
 
 def to_rating_games(rows):
@@ -128,11 +129,11 @@ def main():
             call_count += 2
 
         season_new_rows = []
-        for as_of, cumulative, week in build_snapshots(game_rows):
+        for as_of, cumulative, week, stage in build_snapshots(game_rows):
             results = compute_ratings(teams, to_rating_games(cumulative))
             blended_raw = blend_raw_ratings(results, prior_raw, week)
             scores = normalize_values(blended_raw)
-            season_new_rows.extend(build_public_rows(results, scores, teams, season=year, as_of=as_of))
+            season_new_rows.extend(build_public_rows(results, scores, teams, season=year, as_of=as_of, stage=stage))
 
         as_ofs_this_run = {(year, r["as_of"]) for r in season_new_rows}
         history = [r for r in history if (r["season"], r["as_of"]) not in as_ofs_this_run]

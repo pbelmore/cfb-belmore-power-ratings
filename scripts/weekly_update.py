@@ -7,6 +7,7 @@ the CFBD API, runs them through ratings_core, and writes:
   data/games.json             one row per completed game
   data/ratings_history.json   long-format, one row per team per run (appended)
   data/weekly_blurb.txt       plain-text top-25, ready to paste into a group chat
+  data/team_colors.json       {team: {color, altColor}} for every team ever seen
 
 Usage:
   CFBD_API_KEY=xxxx python scripts/weekly_update.py --year 2026
@@ -69,6 +70,7 @@ def fetch_games(year, api_key, through_week=None):
 
         games.append({
             "season": g.get("season", year),
+            "season_type": g.get("seasonType"),
             "week": g.get("week"),
             "date": g.get("startDate"),
             "winner": winner,
@@ -83,6 +85,32 @@ def fetch_games(year, api_key, through_week=None):
     # a spurious diff/commit every run even when no game data actually changed.
     games.sort(key=lambda r: (r["date"] or "", r["winner"], r["loser"]))
     return games
+
+
+def fetch_team_colors(api_key, team_names):
+    """CFBD's /teams (no year filter) covers every team it has ever tracked,
+    across all classifications and eras -- one call gets colors for the
+    whole history in one shot. Filtered down to `team_names` so the
+    committed file only carries teams we actually reference."""
+    raw = cfbd_get("/teams", api_key)
+    wanted = set(team_names)
+    colors = {}
+    for t in raw:
+        if t["school"] in wanted and t.get("color"):
+            colors[t["school"]] = {
+                "color": t["color"],
+                "altColor": t.get("alternateColor"),
+            }
+    return colors
+
+
+def current_stage(game_rows):
+    """"postseason" once any completed game this pull is a bowl/CFP game,
+    else "regular". Drives the site's "End of Regular Season" / "End of
+    Bowl Season" labels for the last snapshot of each kind."""
+    if any(g.get("season_type") == "postseason" for g in game_rows):
+        return "postseason"
+    return "regular"
 
 
 def to_rating_games(game_rows):
@@ -178,17 +206,21 @@ def current_week_number(game_rows):
     return max(weeks) if weeks else 1
 
 
-def build_public_rows(results, scores, teams, season, as_of):
+def build_public_rows(results, scores, teams, season, as_of, stage="regular"):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
     file. Reuses compute_ratings()'s actual math untouched; this only
-    changes what gets written."""
+    changes what gets written. `stage` ("regular"/"postseason") lets the
+    site label the last regular-season snapshot and the last
+    postseason-inclusive snapshot as season milestones instead of just
+    another week."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
     rows = []
     for team, r in results.items():
         rows.append({
             "season": season,
             "as_of": as_of,
+            "stage": stage,
             "team": team,
             "conference": conf_of.get(team),
             "wins": r["wins"],
@@ -252,7 +284,14 @@ def main():
     prior_raw = prior_season_raw_ratings(history, args.year, api_key)
     blended_raw = blend_raw_ratings(results, prior_raw, current_week_number(game_rows))
     scores = normalize_values(blended_raw)
-    new_rows = build_public_rows(results, scores, teams, season=args.year, as_of=as_of)
+    stage = current_stage(game_rows)
+    new_rows = build_public_rows(results, scores, teams, season=args.year, as_of=as_of, stage=stage)
+
+    print("Fetching team colors...")
+    all_team_names = {t["school"] for t in teams} | {r["team"] for r in history}
+    colors = fetch_team_colors(api_key, all_team_names)
+    write_json(out_dir / "team_colors.json", colors)
+    print(f"  {len(colors)} teams with colors")
 
     # Replace any existing rows for this (season, as_of) so re-running the
     # same day's snapshot updates it in place instead of duplicating it.
@@ -272,7 +311,10 @@ def main():
     for i, (team, r) in enumerate(top, start=1):
         print(f"  {i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")
 
-    print(f"\nWrote {out_dir}/teams.json, {out_dir}/games.json, {out_dir}/ratings_history.json, {out_dir}/weekly_blurb.txt")
+    print(
+        f"\nWrote {out_dir}/teams.json, {out_dir}/games.json, {out_dir}/ratings_history.json, "
+        f"{out_dir}/weekly_blurb.txt, {out_dir}/team_colors.json"
+    )
 
 
 if __name__ == "__main__":
