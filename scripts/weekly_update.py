@@ -21,7 +21,7 @@ from pathlib import Path
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from ratings_core import Game, build_snapshot_rows, compute_ratings, format_weekly_blurb
+from ratings_core import Game, compute_ratings
 
 API_BASE = "https://api.collegefootballdata.com"
 
@@ -112,6 +112,47 @@ def write_json(path, data):
         f.write("\n")
 
 
+def normalized_scores(results):
+    """Maps each team's raw rating to a 0-100 score, best team in this run's
+    field = 100. This -- not the raw rating or SOS -- is what's ever written
+    to public-facing output (ratings_history.json, the blurb, this script's
+    own console/CI-log output), so the SOS x Win%^2 formula stays private."""
+    ratings = [r["rating"] for r in results.values()]
+    lo, hi = min(ratings), max(ratings)
+    if hi == lo:
+        return {team: 0.0 for team in results}
+    return {team: (r["rating"] - lo) / (hi - lo) * 100 for team, r in results.items()}
+
+
+def build_public_rows(results, scores, teams, season, as_of):
+    """Like ratings_core.build_snapshot_rows(), but persists power_score
+    instead of the raw sos/rating fields -- those never touch a committed
+    file. Reuses compute_ratings()'s actual math untouched; this only
+    changes what gets written."""
+    conf_of = {t["school"]: t.get("conference") for t in teams}
+    rows = []
+    for team, r in results.items():
+        rows.append({
+            "season": season,
+            "as_of": as_of,
+            "team": team,
+            "conference": conf_of.get(team),
+            "wins": r["wins"],
+            "losses": r["losses"],
+            "win_pct": r["win_pct"],
+            "power_score": round(scores[team], 1),
+        })
+    return rows
+
+
+def format_weekly_blurb(results, scores, top_n=25, title=None):
+    ranked = sorted(results.items(), key=lambda kv: kv[1]["rating"], reverse=True)[:top_n]
+    lines = [title or "Power Ratings"]
+    for i, (team, r) in enumerate(ranked, start=1):
+        lines.append(f"{i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")
+    return "\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--year", type=int, required=True)
@@ -148,7 +189,8 @@ def main():
 
     print("Computing ratings...")
     results = compute_ratings(teams, to_rating_games(game_rows))
-    new_rows = build_snapshot_rows(results, teams, season=args.year, as_of=as_of)
+    scores = normalized_scores(results)
+    new_rows = build_public_rows(results, scores, teams, season=args.year, as_of=as_of)
 
     history_path = out_dir / "ratings_history.json"
     history = load_json(history_path, [])
@@ -162,13 +204,13 @@ def main():
     history.sort(key=lambda r: (r["season"], r["as_of"], r["team"]))
     write_json(history_path, history)
 
-    blurb = format_weekly_blurb(results, title=f"CFB Power Ratings -- {args.year} as of {as_of}")
+    blurb = format_weekly_blurb(results, scores, title=f"CFB Power Ratings -- {args.year} as of {as_of}")
     (out_dir / "weekly_blurb.txt").write_text(blurb + "\n")
 
     top = sorted(results.items(), key=lambda kv: kv[1]["rating"], reverse=True)[:5]
     print(f"\nTop 5 as of {as_of}:")
     for i, (team, r) in enumerate(top, start=1):
-        print(f"  {i}. {team} ({r['wins']}-{r['losses']}) -- {r['rating']:.4f}")
+        print(f"  {i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")
 
     print(f"\nWrote {out_dir}/teams.json, {out_dir}/games.json, {out_dir}/ratings_history.json, {out_dir}/weekly_blurb.txt")
 

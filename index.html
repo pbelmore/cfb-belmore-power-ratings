@@ -203,7 +203,7 @@ function renderStandings(rows, season, asOf) {
 
   const current = rows
     .filter(r => r.season === season && r.as_of === asOf)
-    .sort((a, b) => b.rating - a.rating);
+    .sort((a, b) => b.power_score - a.power_score);
 
   subtitle.textContent = `${season} season — as of ${asOf}`;
 
@@ -217,8 +217,7 @@ function renderStandings(rows, season, asOf) {
         <th>W</th>
         <th>L</th>
         <th>Win%</th>
-        <th>SOS</th>
-        <th>Rating</th>
+        <th>Power</th>
       </tr>
     </thead>
     <tbody>
@@ -230,8 +229,7 @@ function renderStandings(rows, season, asOf) {
           <td>${r.wins}</td>
           <td>${r.losses}</td>
           <td>${(r.win_pct * 100).toFixed(1)}%</td>
-          <td>${r.sos.toFixed(4)}</td>
-          <td class="rating">${r.rating.toFixed(4)}</td>
+          <td class="rating">${r.power_score.toFixed(1)}</td>
         </tr>
       `).join('')}
     </tbody>

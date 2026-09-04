@@ -13,11 +13,10 @@
   }
 
   function niceTicks(min, max, count) {
-    // Rating/win%/SOS values here are all small (roughly 0-1), so a fixed
-    // +-1 fallback for a degenerate (all-equal) range -- e.g. everyone at
-    // 0.0000 in week 1 -- produced a nonsensical -1..1 axis. +-0.05 keeps
-    // the fallback in scale with the actual data.
-    if (min === max) { min -= 0.05; max += 0.05; }
+    // Power scores are 0-100. A degenerate (all-equal) range -- e.g. every
+    // team still at 0.0 in week 1 -- needs a small buffer in scale with
+    // that, not a fixed +-1 (which reads as basically zero on this axis).
+    if (min === max) { min -= 5; max += 5; }
     const span = max - min;
     const rawStep = span / count;
     const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
@@ -245,7 +244,7 @@
 
     const seasonRows = rows.filter(r => r.season === latestSeason);
     const latestAsOf = seasonRows.reduce((a, r) => (r.as_of > a ? r.as_of : a), seasonRows[0].as_of);
-    const top = seasonRows.filter(r => r.as_of === latestAsOf).sort((a, b) => b.rating - a.rating)[0];
+    const top = seasonRows.filter(r => r.as_of === latestAsOf).sort((a, b) => b.power_score - a.power_score)[0];
     select.value = top ? top.team : teams[0];
 
     function draw() {
@@ -257,17 +256,17 @@
       const series = [{
         name: String(latestSeason),
         color: 'var(--series-1)',
-        points: Array.from({ length: n }, (_, i) => curr[i]?.rating ?? null),
+        points: Array.from({ length: n }, (_, i) => curr[i] ? curr[i].power_score : null),
       }];
       if (prev.length) {
         series.push({
           name: String(latestSeason - 1),
           color: 'var(--series-2)',
-          points: Array.from({ length: n }, (_, i) => prev[i]?.rating ?? null),
+          points: Array.from({ length: n }, (_, i) => prev[i] ? prev[i].power_score : null),
         });
       }
-      renderLineChart(document.getElementById('team-chart'), { series, xLabels, valueFmt: v => v.toFixed(4) });
-      renderTableView(document.getElementById('team-chart-table'), xLabels, series, v => v.toFixed(4));
+      renderLineChart(document.getElementById('team-chart'), { series, xLabels, valueFmt: v => v.toFixed(1) });
+      renderTableView(document.getElementById('team-chart-table'), xLabels, series, v => v.toFixed(1));
     }
 
     select.addEventListener('change', draw);
@@ -287,7 +286,7 @@
 
     const asOfs = [...new Set(seasonRows.map(r => r.as_of))].sort();
     const latestAsOf = asOfs[asOfs.length - 1];
-    const topRow = seasonRows.filter(r => r.as_of === latestAsOf).sort((a, b) => b.rating - a.rating)[0];
+    const topRow = seasonRows.filter(r => r.as_of === latestAsOf).sort((a, b) => b.power_score - a.power_score)[0];
     select.value = topRow ? topRow.conference : conferences[0];
 
     function draw() {
@@ -295,12 +294,12 @@
       const points = asOfs.map(asOf => {
         const teamRows = seasonRows.filter(r => r.as_of === asOf && r.conference === conf);
         if (!teamRows.length) return null;
-        return teamRows.reduce((sum, r) => sum + r.rating, 0) / teamRows.length;
+        return teamRows.reduce((sum, r) => sum + r.power_score, 0) / teamRows.length;
       });
       const xLabels = weekLabels(asOfs.length);
       const series = [{ name: conf, color: 'var(--series-1)', points }];
-      renderLineChart(document.getElementById('conf-chart'), { series, xLabels, valueFmt: v => v.toFixed(4) });
-      renderTableView(document.getElementById('conf-chart-table'), xLabels, series, v => v.toFixed(4));
+      renderLineChart(document.getElementById('conf-chart'), { series, xLabels, valueFmt: v => v.toFixed(1) });
+      renderTableView(document.getElementById('conf-chart-table'), xLabels, series, v => v.toFixed(1));
     }
 
     select.addEventListener('change', draw);

@@ -337274,9 +337274,9 @@
     "as_of": "2026-09-04",
     "team": "Massachusetts",
     "conference": "Mid-American",
-    "wins": 0,
+    "wins": 1,
     "losses": 0,
-    "win_pct": 0.0,
+    "win_pct": 1.0,
     "power_score": 0.0
   },
   {
@@ -337625,7 +337625,7 @@
     "team": "Rutgers",
     "conference": "Big Ten",
     "wins": 0,
-    "losses": 0,
+    "losses": 1,
     "win_pct": 0.0,
     "power_score": 0.0
   },

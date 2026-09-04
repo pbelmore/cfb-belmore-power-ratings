@@ -1,26 +1,26 @@
 CFB Power Ratings -- 2026 as of 2026-09-04
-1. California (0-0) -- 0.0
-2. Clemson (0-0) -- 0.0
-3. Rutgers (0-0) -- 0.0
-4. Oregon (0-0) -- 0.0
-5. Ole Miss (0-0) -- 0.0
-6. New Mexico State (0-1) -- 0.0
-7. Oregon State (0-0) -- 0.0
-8. Wyoming (0-0) -- 0.0
-9. BYU (0-0) -- 0.0
-10. Ohio (0-0) -- 0.0
-11. UTEP (0-0) -- 0.0
-12. Rice (0-0) -- 0.0
-13. San Diego State (0-0) -- 0.0
-14. Kansas State (0-0) -- 0.0
-15. Florida (0-0) -- 0.0
-16. Central Michigan (0-0) -- 0.0
-17. Coastal Carolina (0-0) -- 0.0
-18. Miami (OH) (0-0) -- 0.0
-19. Penn State (0-0) -- 0.0
-20. UCF (0-0) -- 0.0
-21. Eastern Michigan (1-0) -- 0.0
-22. Utah State (0-0) -- 0.0
-23. Texas State (0-0) -- 0.0
-24. UNLV (0-1) -- 0.0
-25. Wisconsin (0-0) -- 0.0
+1. Colorado (0-0) -- 0.0
+2. UNLV (0-1) -- 0.0
+3. Alabama (0-0) -- 0.0
+4. UCF (0-0) -- 0.0
+5. Middle Tennessee (0-0) -- 0.0
+6. Western Michigan (0-0) -- 0.0
+7. Baylor (0-0) -- 0.0
+8. TCU (0-1) -- 0.0
+9. Texas (0-0) -- 0.0
+10. Auburn (0-0) -- 0.0
+11. Miami (0-0) -- 0.0
+12. Texas State (0-0) -- 0.0
+13. Akron (0-0) -- 0.0
+14. Louisiana (0-0) -- 0.0
+15. Florida International (0-0) -- 0.0
+16. Ohio State (0-0) -- 0.0
+17. Boston College (0-0) -- 0.0
+18. UCLA (0-0) -- 0.0
+19. Ball State (0-0) -- 0.0
+20. Oregon State (0-0) -- 0.0
+21. UAB (0-0) -- 0.0
+22. Syracuse (0-0) -- 0.0
+23. Buffalo (0-0) -- 0.0
+24. East Carolina (0-0) -- 0.0
+25. Cincinnati (0-0) -- 0.0

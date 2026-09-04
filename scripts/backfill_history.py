@@ -23,10 +23,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from weekly_update import WORD_TO_CODE, cfbd_get, fetch_teams, load_json, write_json
+from weekly_update import WORD_TO_CODE, build_public_rows, cfbd_get, fetch_teams, load_json, normalized_scores, write_json
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-from ratings_core import Game, build_snapshot_rows, compute_ratings
+from ratings_core import Game, compute_ratings
 
 
 def fetch_completed_game_rows(year, api_key):
@@ -110,7 +110,8 @@ def main():
         season_new_rows = []
         for as_of, cumulative in build_snapshots(game_rows):
             results = compute_ratings(teams, to_rating_games(cumulative))
-            season_new_rows.extend(build_snapshot_rows(results, teams, season=year, as_of=as_of))
+            scores = normalized_scores(results)
+            season_new_rows.extend(build_public_rows(results, scores, teams, season=year, as_of=as_of))
 
         as_ofs_this_run = {(year, r["as_of"]) for r in season_new_rows}
         history = [r for r in history if (r["season"], r["as_of"]) not in as_ofs_this_run]

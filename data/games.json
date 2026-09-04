@@ -86,5 +86,16 @@
     "loser_pts": 21,
     "location": "away",
     "notes": ""
+  },
+  {
+    "season": 2026,
+    "week": 1,
+    "date": "2026-09-03T22:00:00.000Z",
+    "winner": "Massachusetts",
+    "winner_pts": 37,
+    "loser": "Rutgers",
+    "loser_pts": 21,
+    "location": "away",
+    "notes": ""
   }
 ]
