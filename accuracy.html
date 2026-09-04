@@ -83,7 +83,8 @@ function computeSeasonStats(rows, season) {
   // seed order) and the overall rank map below are derived from this same
   // ordering, rather than each re-sorting the snapshot independently.
   const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
-  const ourField = playoffFieldProjection(overallRanked, season);
+  const confChampions = new Map(snapshot.filter(r => r.conf_champion).map(r => [r.conference, r.team]));
+  const ourField = playoffFieldProjection(overallRanked, season, confChampions);
   const realField = snapshot.filter(r => r.seed != null).sort((a, b) => a.seed - b.seed).map(r => r.team);
   const realSet = new Set(realField);
 

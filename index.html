@@ -231,7 +231,8 @@ function escapeHtml(s) {
 // lives in playoff-format.js, so this page and accuracy.html can't drift.
 function getPlayoffProjection(seasonRows, season) {
   const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
-  return new Set(playoffFieldProjection(sorted, season));
+  const confChampions = new Map(seasonRows.filter(r => r.conf_champion).map(r => [r.conference, r.team]));
+  return new Set(playoffFieldProjection(sorted, season, confChampions));
 }
 
 function renderStandings(current, season, asOf, colors, highlighted) {

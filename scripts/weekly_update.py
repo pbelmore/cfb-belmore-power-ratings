@@ -143,6 +143,21 @@ def current_stage(game_rows):
     return "regular"
 
 
+# CFBD's own raw data for the 2023 season's final ("week 15") Playoff
+# Committee Rankings release ties Florida State and Georgia at rank 5 and
+# skips rank 6 entirely -- verified against the committee's own final
+# rankings announcement (collegefootballplayoff.com, 2023-12-03), which has
+# them distinct: Florida State 5, Georgia 6. Every other rank in that
+# release (1-4, 7-25) matches CFBD's data exactly, so this is a one-off
+# glitch in CFBD's data for this single release, not a real committee tie
+# or a wrong week being read here. Keyed by (year, week, team) so a fix is
+# scoped to the exact release it was observed in.
+KNOWN_RANK_FIXES = {
+    (2023, 15, "Florida State"): 5,
+    (2023, 15, "Georgia"): 6,
+}
+
+
 def fetch_committee_rankings(year, api_key):
     """{cfbd_week: {team: rank}} for that season's real committee rankings
     -- "BCS Standings" pre-2014, "Playoff Committee Rankings" 2014+ -- one
@@ -168,7 +183,12 @@ def fetch_committee_rankings(year, api_key):
             continue
         for poll in entry.get("polls", []):
             if poll["poll"] == poll_name:
-                by_week[entry["week"]] = {r["school"]: r["rank"] for r in poll["ranks"]}
+                ranks = {r["school"]: r["rank"] for r in poll["ranks"]}
+                for team in ranks:
+                    fix = KNOWN_RANK_FIXES.get((year, entry["week"], team))
+                    if fix is not None:
+                        ranks[team] = fix
+                by_week[entry["week"]] = ranks
     return by_week
 
 
@@ -219,33 +239,75 @@ def real_playoff_field(year, cfp_participants, final_committee_ranks):
     return dict(cfp_participants) if cfp_participants else None
 
 
-def conference_leader_field(ranked_teams, teams, leaders=5, at_large=7):
+def conference_champions(game_rows, teams):
+    """{conference: team} for every conference whose championship game has
+    already been played in `game_rows` -- detected via CFBD's `notes`
+    field, which reliably reads "<name> Championship" for these games
+    (verified for the 2024 and 2025 seasons: exactly one such game per
+    conference-with-a-championship in the season's final regular-season
+    week, e.g. "SEC Championship", "Dr Pepper Big 12 Championship"). Keyed
+    by the winner's own conference (from `teams`), not text parsed out of
+    the notes, so sponsor-name/abbreviation quirks in that text don't
+    matter. Empty before championship week is played; only meaningful for
+    the 12-team era's conference-leader auto bids -- see
+    conference_leader_field()."""
+    conf_of = {t["school"]: t.get("conference") for t in teams}
+    champions = {}
+    for g in game_rows:
+        if g.get("season_type") != "regular":
+            continue
+        if "championship" not in (g.get("notes") or "").lower():
+            continue
+        conf = conf_of.get(g["winner"])
+        if conf:
+            champions[conf] = g["winner"]
+    return champions
+
+
+def conference_leader_field(ranked_teams, teams, leaders=5, at_large=7, conf_champions=None):
     """The 12-team format's "5 conference-leader auto bids + 7 at-large"
     selection rule, shared by every playoff-field projection in this
     module (real_field_projection fed committee ranks, playoff_projection
     fed our own scores). `ranked_teams` is [(team, value)] already sorted
-    best-first -- "leader" means the best-ranked/best-scored team in that
-    conference among `ranked_teams`; independents are excluded from auto
-    bids since there's no conference championship to win one.
+    best-first; independents are excluded from auto bids since there's no
+    conference championship to win one.
 
-    Each conference's entry in `leader_by_conf` is set once, on the first
-    (i.e. best) team from that conference encountered while scanning
-    `ranked_teams` in best-first order -- so the dict's insertion order is
-    already the conferences' leaders sorted best-first, and no separate
-    re-sort of `leader_by_conf` is needed before taking the top `leaders`."""
+    `conf_champions` ({conference: team}, from conference_champions())
+    overrides the "best-ranked/-scored team in that conference" stand-in
+    with the actual championship-game winner for any conference whose
+    title game has already been played -- the two aren't always the same
+    team (e.g. Clemson beating a higher-ranked SMU for the 2024 ACC title,
+    then correctly holding the ACC's auto bid over SMU). A conference
+    whose title game hasn't been played yet (or that has none) still falls
+    back to the rank-based stand-in -- the only option before that
+    conference's champion is actually decided.
+
+    The 5 auto-bid conferences are chosen by their leader's own rank
+    (best-first), not by whichever team first put that conference on the
+    board while scanning `ranked_teams` -- those can differ once
+    `conf_champions` swaps in a champion who isn't that conference's
+    highest-ranked team."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
-    leader_by_conf = {}
+    conf_champions = conf_champions or {}
+    rank_of = {team: i for i, (team, _) in enumerate(ranked_teams)}
+
+    conf_leader = {}
     for team, _ in ranked_teams:
         conf = conf_of.get(team)
-        if not conf or conf == "FBS Independents":
+        if not conf or conf == "FBS Independents" or conf in conf_leader:
             continue
-        leader_by_conf.setdefault(conf, team)
-    leader_names = set(list(leader_by_conf.values())[:leaders])
+        conf_leader[conf] = team
+    for conf, champ in conf_champions.items():
+        if conf in conf_leader and champ in rank_of:
+            conf_leader[conf] = champ
+
+    ordered_leaders = sorted(conf_leader.values(), key=lambda t: rank_of[t])
+    leader_names = set(ordered_leaders[:leaders])
     at_large_teams = [team for team, _ in ranked_teams if team not in leader_names][:at_large]
     return leader_names | set(at_large_teams)
 
 
-def playoff_field_from_ranked(ranked_teams, teams, season):
+def playoff_field_from_ranked(ranked_teams, teams, season, conf_champions=None):
     """The full "who's in" rule for `season`, given `ranked_teams` already
     sorted best-first: top-2 pre-CFP (BCS), top-4 old-CFP, else the 12-team
     conference-leader + at-large field. Shared by real_field_projection
@@ -255,26 +317,27 @@ def playoff_field_from_ranked(ranked_teams, teams, season):
         return {team for team, _ in ranked_teams[:2]}
     if season < TWELVE_TEAM_ERA_START:
         return {team for team, _ in ranked_teams[:4]}
-    return conference_leader_field(ranked_teams, teams)
+    return conference_leader_field(ranked_teams, teams, conf_champions=conf_champions)
 
 
-def real_field_projection(committee_ranks, teams, season):
+def real_field_projection(committee_ranks, teams, season, conf_champions=None):
     """"If the real field were picked today," projected from this week's
     real committee ranking -- the same "conference leaders get automatic
     bids" mechanic as our own getPlayoffProjection (index.html), just fed
     CFBD's real ranks instead of our own power_score. "Leader" here means
-    "this week's highest-real-ranked team in that conference", a proxy
-    for the eventual conference champion, since that isn't actually
-    decided until championship week -- so this is necessarily a rougher
-    estimate than real_playoff_field()'s ground truth, and callers should
-    prefer that whenever it's available (see build_snapshots callers).
-    Returns a plain set (no seeds -- those only mean something once the
-    real bracket is set), or None if there's no ranking to project from
-    yet this week."""
+    "this week's highest-real-ranked team in that conference" unless
+    `conf_champions` (from conference_champions()) already knows the real
+    champion for it, a proxy for the eventual conference champion before
+    that's decided -- so absent `conf_champions`, this is necessarily a
+    rougher estimate than real_playoff_field()'s ground truth, and callers
+    should prefer that whenever it's available (see build_snapshots
+    callers). Returns a plain set (no seeds -- those only mean something
+    once the real bracket is set), or None if there's no ranking to
+    project from yet this week."""
     if not committee_ranks:
         return None
     ranked = sorted(committee_ranks.items(), key=lambda kv: kv[1])
-    return playoff_field_from_ranked(ranked, teams, season)
+    return playoff_field_from_ranked(ranked, teams, season, conf_champions=conf_champions)
 
 
 def to_rating_games(game_rows):
@@ -443,7 +506,7 @@ def current_week_number(game_rows):
 
 def build_public_rows(
     results, scores, teams, season, as_of, stage="regular",
-    committee_ranks=None, playoff_field=None, playoff_seeds=None,
+    committee_ranks=None, playoff_field=None, playoff_seeds=None, conf_champions=None,
 ):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
@@ -462,10 +525,18 @@ def build_public_rows(
     (real_field_projection()). `playoff_seeds` ({team: seed}) is only ever
     passed alongside the exact field, giving real bracket position for the
     dashboard's exact-position-match stat; projected weeks leave it None
-    since a projection's "seed" isn't a real fact yet."""
+    since a projection's "seed" isn't a real fact yet. `conf_champions`
+    ({conference: team}, from conference_champions()) becomes each row's
+    `conf_champion` flag -- true only for that snapshot's actual
+    conference-championship-game winner, false otherwise (always a known
+    fact once game data is in, never null) -- so the client-side "our
+    projection" logic (index.html/accuracy.html) can apply the same
+    real-champion override as conference_leader_field() without needing
+    game data of its own."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
     committee_ranks = committee_ranks or {}
     playoff_seeds = playoff_seeds or {}
+    champion_teams = set((conf_champions or {}).values())
     rows = []
     for team, r in results.items():
         rows.append({
@@ -481,11 +552,12 @@ def build_public_rows(
             "committee_rank": committee_ranks.get(team),
             "made_playoff": (team in playoff_field) if playoff_field is not None else None,
             "seed": playoff_seeds.get(team),
+            "conf_champion": team in champion_teams,
         })
     return rows
 
 
-def playoff_projection(scores, teams, season):
+def playoff_projection(scores, teams, season, conf_champions=None):
     """Mirrors index.html's getPlayoffProjection: a running "if it ended
     today" field from that snapshot's own scores, not the actual selection.
     2010-2013 (BCS): top 2. 2014-2023 (old CFP): top 4. 2024+: the 12-team
@@ -503,10 +575,10 @@ def playoff_projection(scores, teams, season):
     # next, disagreeing with the deterministically-sorted JSON the JS-side
     # projections (index.html/accuracy.html) read back.
     ranked = sorted(scores.items(), key=lambda kv: (-kv[1], kv[0]))
-    return playoff_field_from_ranked(ranked, teams, season)
+    return playoff_field_from_ranked(ranked, teams, season, conf_champions=conf_champions)
 
 
-def format_weekly_blurb(results, scores, teams, season, title=None):
+def format_weekly_blurb(results, scores, teams, season, title=None, conf_champions=None):
     # Rank by the same (possibly blended) scores being displayed -- sorting
     # by raw rating instead would let the blend reorder teams without the
     # printed rank agreeing with the printed number. Team name as a
@@ -520,7 +592,7 @@ def format_weekly_blurb(results, scores, teams, season, title=None):
         # From 2024 on, just the projected playoff field -- true rank
         # number kept, so an auto-bid conference champ ranked outside the
         # top 12 overall still shows its real position (e.g. 1-10, 14, 16).
-        selected = playoff_projection(scores, teams, season)
+        selected = playoff_projection(scores, teams, season, conf_champions=conf_champions)
     lines = [title or "Power Ratings"]
     for i, (team, r) in enumerate(ranked, start=1):
         if team not in selected:
@@ -575,6 +647,7 @@ def main():
     blended_raw = blend_raw_ratings(results, prior_raw, current_week)
     scores = normalize_values(blended_raw)
     stage = current_stage(game_rows)
+    conf_champions = conference_champions(game_rows, teams)
 
     print("Fetching committee rankings...")
     rankings_by_week = fetch_committee_rankings(args.year, api_key)
@@ -598,12 +671,13 @@ def main():
         playoff_field, playoff_seeds = set(exact_seeds.keys()), exact_seeds
         print(f"  {len(playoff_field)} teams (real field determined)")
     else:
-        playoff_field, playoff_seeds = real_field_projection(committee_ranks, teams, args.year), None
+        playoff_field, playoff_seeds = real_field_projection(committee_ranks, teams, args.year, conf_champions=conf_champions), None
         print(f"  {len(playoff_field) if playoff_field else 0} teams (projected -- real field not determined yet)")
 
     new_rows = build_public_rows(
         results, scores, teams, season=args.year, as_of=as_of, stage=stage,
         committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,
+        conf_champions=conf_champions,
     )
 
     print("Fetching team colors...")
@@ -615,7 +689,10 @@ def main():
     history = merge_history_rows(history, new_rows)
     write_json(history_path, history)
 
-    blurb = format_weekly_blurb(results, scores, teams, args.year, title=f"CFB Power Ratings -- {args.year} as of {as_of}")
+    blurb = format_weekly_blurb(
+        results, scores, teams, args.year, title=f"CFB Power Ratings -- {args.year} as of {as_of}",
+        conf_champions=conf_champions,
+    )
     (out_dir / "weekly_blurb.txt").write_text(blurb + "\n")
 
     top = sorted(results.items(), key=lambda kv: (-scores[kv[0]], kv[0]))[:5]

@@ -33,6 +33,7 @@ from weekly_update import (
     blend_raw_ratings,
     build_public_rows,
     committee_ranks_for_week,
+    conference_champions,
     fetch_cfp_participants,
     fetch_committee_rankings,
     fetch_games,
@@ -157,6 +158,7 @@ def main():
             results = compute_ratings(teams, to_rating_games(cumulative))
             blended_raw = blend_raw_ratings(results, prior_raw, week)
             scores = normalize_values(blended_raw)
+            conf_champs = conference_champions(cumulative, teams)
             # The postseason snapshot's `week` is the 99 sentinel, which
             # committee_ranks_for_week() can never resolve (no week 100/99
             # ranking exists) -- it belongs to the true final regular week's
@@ -166,10 +168,11 @@ def main():
             if is_final_snapshot and exact_seeds is not None:
                 playoff_field, playoff_seeds = set(exact_seeds.keys()), exact_seeds
             else:
-                playoff_field, playoff_seeds = real_field_projection(committee_ranks, teams, year), None
+                playoff_field, playoff_seeds = real_field_projection(committee_ranks, teams, year, conf_champions=conf_champs), None
             season_new_rows.extend(build_public_rows(
                 results, scores, teams, season=year, as_of=as_of, stage=stage,
                 committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,
+                conf_champions=conf_champs,
             ))
 
         snapshot_count = len({r["as_of"] for r in season_new_rows})
