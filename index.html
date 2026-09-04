@@ -380,15 +380,20 @@ function setupStandingsControls(rows, colors) {
 
   let asOfsForSeason = [];
 
-  function populateWeeks(season, selectAsOf) {
+  function populateWeeks(season, preferredLabel) {
     const seasonRows = rows.filter(r => r.season === season);
     asOfsForSeason = [...new Set(seasonRows.map(r => r.as_of))].sort();
     const labels = computeWeekLabels(seasonRows, asOfsForSeason, season === latestSeason);
     weekSelect.replaceChildren(
       ...asOfsForSeason.map((asOf, i) => new Option(labels[i], asOf))
     );
-    weekSelect.value = selectAsOf && asOfsForSeason.includes(selectAsOf)
-      ? selectAsOf
+    // Match by label ("Week 10"), not as_of -- the dates themselves don't
+    // carry across seasons, but the week position should when switching
+    // seasons. Falls back to the last week if the new season doesn't have
+    // a week with that same label (e.g. it ended earlier).
+    const matchIdx = preferredLabel != null ? labels.indexOf(preferredLabel) : -1;
+    weekSelect.value = matchIdx !== -1
+      ? asOfsForSeason[matchIdx]
       : asOfsForSeason[asOfsForSeason.length - 1];
   }
 
@@ -412,7 +417,8 @@ function setupStandingsControls(rows, colors) {
   }
 
   seasonSelect.addEventListener('change', () => {
-    populateWeeks(Number(seasonSelect.value));
+    const currentLabel = weekSelect.options[weekSelect.selectedIndex]?.text;
+    populateWeeks(Number(seasonSelect.value), currentLabel);
     draw();
   });
   weekSelect.addEventListener('change', draw);
