@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranking Accuracy</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666666;
+    --border: #e0e0e0;
+    --row-alt: #f7f7f7;
+    --accent: #b3121b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --fg: #eaeaea;
+      --muted: #9a9a9a;
+      --border: #2c2f34;
+      --row-alt: #1b1e23;
+      --accent: #ff6b6b;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
+  .subtitle { color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; }
+  .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--accent); text-decoration: none; }
+  .back-link:hover { text-decoration: underline; }
+  .status { color: var(--muted); padding: 2rem 0; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { padding: 0.5rem 0.6rem; text-align: right; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th {
+    border-bottom: 2px solid var(--border);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+  }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  tbody tr.summary-row {
+    font-weight: 600;
+    border-top: 2px solid var(--border);
+  }
+  td.format { color: var(--muted); font-size: 0.8rem; }
+  .legend-note { color: var(--muted); font-size: 0.78rem; margin: 1rem 0 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">&larr; Back to standings</a>
+  <h1>Ranking Accuracy</h1>
+  <p class="subtitle" id="subtitle">Loading&hellip;</p>
+  <div id="content"></div>
+</div>
+
+<script>
+// Mirrors index.html's getPlayoffProjection -- our own power-score-based
+// projected field, ordered (position 0 = our #1 seed) so it can be
+// compared position-for-position against the real field's seed order.
+function orderedProjection(seasonRows, season) {
+  const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
+  if (season < 2024) {
+    const fieldSize = season < 2014 ? 2 : 4;
+    return sorted.slice(0, fieldSize).map(r => r.team);
+  }
+  const leaderByConf = new Map();
+  for (const r of sorted) {
+    if (!r.conference || r.conference === 'FBS Independents') continue;
+    if (!leaderByConf.has(r.conference)) leaderByConf.set(r.conference, r);
+  }
+  const leaders = [...leaderByConf.values()].sort((a, b) => b.power_score - a.power_score).slice(0, 5);
+  const leaderNames = new Set(leaders.map(r => r.team));
+  const atLarge = sorted.filter(r => !leaderNames.has(r.team)).slice(0, 7);
+  return [...leaders.map(r => r.team), ...atLarge.map(r => r.team)];
+}
+
+// One season's comparison, evaluated at the true final regular-season
+// snapshot only (never postseason, never a mid-season projection) -- the
+// same point in time the real committee actually made their selection.
+function computeSeasonStats(rows, season) {
+  const seasonRows = rows.filter(r => r.season === season);
+  const finalAsOf = seasonRows.find(r => r.stage === 'regular' && r.seed != null)?.as_of;
+  if (!finalAsOf) return null;
+  const snapshot = seasonRows.filter(r => r.as_of === finalAsOf);
+
+  const fieldSize = season < 2014 ? 2 : season < 2024 ? 4 : 12;
+  const ourField = orderedProjection(snapshot, season);
+  const realField = snapshot.filter(r => r.seed != null).sort((a, b) => a.seed - b.seed).map(r => r.team);
+  const realSet = new Set(realField);
+
+  const fieldHits = ourField.filter(t => realSet.has(t)).length;
+
+  let exactMatches = 0;
+  for (let i = 0; i < fieldSize; i++) {
+    if (ourField[i] && ourField[i] === realField[i]) exactMatches++;
+  }
+
+  const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
+  const ourRankOf = new Map(overallRanked.map((r, i) => [r.team, i + 1]));
+  const rankDiffs = snapshot
+    .filter(r => r.committee_rank != null)
+    .map(r => Math.abs(ourRankOf.get(r.team) - r.committee_rank));
+
+  return { season, asOf: finalAsOf, fieldSize, fieldHits, exactMatches, rankDiffs };
+}
+
+function fmtPct(hits, total) {
+  return `${hits}/${total} (${Math.round((hits / total) * 100)}%)`;
+}
+
+function avg(nums) {
+  return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : null;
+}
+
+function renderTable(statsList) {
+  const content = document.getElementById('content');
+
+  if (!statsList.length) {
+    content.innerHTML = '<p class="status">No seasons with a determined real field yet.</p>';
+    return;
+  }
+
+  const allDiffs = statsList.flatMap(s => s.rankDiffs);
+  const totalFieldHits = statsList.reduce((a, s) => a + s.fieldHits, 0);
+  const totalFieldSize = statsList.reduce((a, s) => a + s.fieldSize, 0);
+  const totalExact = statsList.reduce((a, s) => a + s.exactMatches, 0);
+
+  const table = document.createElement('table');
+  table.innerHTML = `
+    <thead>
+      <tr>
+        <th>Season</th>
+        <th>Format</th>
+        <th>Field</th>
+        <th>Exact spot</th>
+        <th>Avg rank diff</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${statsList.map(s => `
+        <tr>
+          <td>${s.season}</td>
+          <td class="format">${s.fieldSize}-team</td>
+          <td>${fmtPct(s.fieldHits, s.fieldSize)}</td>
+          <td>${fmtPct(s.exactMatches, s.fieldSize)}</td>
+          <td>${avg(s.rankDiffs)?.toFixed(1) ?? '—'}</td>
+        </tr>
+      `).join('')}
+      <tr class="summary-row">
+        <td>All-time</td>
+        <td class="format"></td>
+        <td>${fmtPct(totalFieldHits, totalFieldSize)}</td>
+        <td>${fmtPct(totalExact, totalFieldSize)}</td>
+        <td>${avg(allDiffs)?.toFixed(1) ?? '—'}</td>
+      </tr>
+    </tbody>
+  `;
+  content.replaceChildren(table);
+
+  const note = document.createElement('p');
+  note.className = 'legend-note';
+  note.textContent = 'Evaluated at each season’s final regular-season snapshot only -- the same point the real committee made its selection. "Field" = how many of the real playoff/BCS teams our own projection also had in its field. "Exact spot" = how many landed in the identical seed position. "Avg rank diff" = average |our overall rank − real committee rank| across every team the committee ranked that week.';
+  content.appendChild(note);
+}
+
+async function main() {
+  const content = document.getElementById('content');
+  const subtitle = document.getElementById('subtitle');
+
+  let rows;
+  try {
+    const res = await fetch('data/ratings_history.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    rows = await res.json();
+  } catch (err) {
+    subtitle.textContent = '';
+    content.innerHTML = `<p class="status">Couldn't load ratings data (${err.message}).</p>`;
+    return;
+  }
+
+  const seasons = [...new Set(rows.map(r => r.season))].sort((a, b) => a - b);
+  const statsList = seasons.map(s => computeSeasonStats(rows, s)).filter(Boolean);
+
+  subtitle.textContent = `How the Belmore power ratings' projected playoff field compares to the real ${statsList.length ? 'BCS/CFP' : ''} selection, season by season.`;
+  renderTable(statsList);
+}
+
+main();
+</script>
+</body>
+</html>

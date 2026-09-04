@@ -43,7 +43,15 @@
   .wrap { max-width: 720px; margin: 0 auto; }
   h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
   h2 { font-size: 1.05rem; margin: 0 0 0.75rem; }
-  .subtitle { color: var(--muted); margin: 0 0 1.5rem; font-size: 0.9rem; }
+  .subtitle { color: var(--muted); margin: 0 0 0.5rem; font-size: 0.9rem; }
+  .accuracy-link {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .accuracy-link:hover { text-decoration: underline; }
   .standings-controls {
     display: flex;
     align-items: center;
@@ -171,6 +179,7 @@
 <div class="wrap">
   <h1>CFB Power Ratings</h1>
   <p class="subtitle" id="subtitle">Loading&hellip;</p>
+  <a class="accuracy-link" href="accuracy.html">How accurate is this ranking? &rarr;</a>
   <div class="standings-controls" id="standings-controls" hidden>
     <select id="season-select" aria-label="Select season"></select>
     <div class="week-nav">
