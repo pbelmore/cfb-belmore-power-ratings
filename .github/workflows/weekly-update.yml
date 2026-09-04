@@ -11,7 +11,12 @@ on:
     # Wednesdays, not Tuesdays: the CFP committee's rankings air Tuesday
     # night, so a Tuesday-morning run would race ahead of that week's
     # ranking and miss it until the following week's run.
-    - cron: "0 13 * * 3"   # Wednesdays, 9am ET (13:00 UTC; drifts to 8am ET once DST ends in Nov)
+    #
+    # Aug-Jan only (month field: 8-12,1): the season runs roughly late
+    # August through mid-January, so there's nothing new to pull the rest
+    # of the year -- without this, the Action would just keep re-running
+    # against an already-finished season indefinitely each offseason.
+    - cron: "0 13 * 8-12,1 3"   # Wednesdays, Aug-Jan, 9am ET (13:00 UTC; drifts to 8am ET once DST ends in Nov)
 
 permissions:
   contents: write

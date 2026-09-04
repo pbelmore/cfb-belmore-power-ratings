@@ -394,13 +394,17 @@ def build_public_rows(
 def playoff_projection(scores, teams, season):
     """Mirrors index.html's getPlayoffProjection: a running "if it ended
     today" field from that snapshot's own scores, not the actual selection.
-    2010-2023: top 4. 2024+: the 12-team format's 5 highest-scored
-    conference leaders (auto bids -- independents can't have one, no
-    conference championship to win) + the next 7 best overall."""
+    2010-2013 (BCS): top 2. 2014-2023 (old CFP): top 4. 2024+: the 12-team
+    format's 5 highest-scored conference leaders (auto bids -- independents
+    can't have one, no conference championship to win) + the next 7 best
+    overall. (Currently only ever called for season >= 2024 -- see
+    format_weekly_blurb's own top-10 branch for the pre-2024 blurb -- but
+    kept correct for every era rather than leaving dead-but-wrong code.)"""
     conf_of = {t["school"]: t.get("conference") for t in teams}
     ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
     if season < 2024:
-        return {team for team, _ in ranked[:4]}
+        field_size = 2 if season < 2014 else 4
+        return {team for team, _ in ranked[:field_size]}
     leader_by_conf = {}
     for team, score in ranked:
         conf = conf_of.get(team)

@@ -221,13 +221,15 @@ const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 
 // Projects a playoff field from that week's own ratings -- a running "if it
 // ended today" bracket, not the actual (end-of-season-only) selection.
-// 2010-2023: top 4 overall. 2024+: the 12-team format's 5 highest-rated
-// conference leaders (auto bids -- independents can't have one, since
-// there's no conference championship to win) + the next 7 best overall.
+// 2010-2013 (BCS): top 2. 2014-2023 (old CFP): top 4. 2024+: the 12-team
+// format's 5 highest-rated conference leaders (auto bids -- independents
+// can't have one, since there's no conference championship to win) + the
+// next 7 best overall.
 function getPlayoffProjection(seasonRows, season) {
   const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
   if (season < 2024) {
-    return new Set(sorted.slice(0, 4).map(r => r.team));
+    const fieldSize = season < 2014 ? 2 : 4;
+    return new Set(sorted.slice(0, fieldSize).map(r => r.team));
   }
   const leaderByConf = new Map();
   for (const r of sorted) {
@@ -300,7 +302,7 @@ function renderStandings(current, season, asOf, colors, highlighted) {
   const note = document.createElement('p');
   note.className = 'legend-note';
   note.textContent = season < 2024
-    ? 'Highlighted: projected top 4 (if the season ended today).'
+    ? `Highlighted: projected top ${fieldSize} (if the season ended today).`
     : 'Highlighted: projected 12-team field -- 5 conference leaders (auto bids) + 7 at-large.';
   content.appendChild(note);
 
