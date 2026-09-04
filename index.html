@@ -44,6 +44,35 @@
   h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
   h2 { font-size: 1.05rem; margin: 0 0 0.75rem; }
   .subtitle { color: var(--muted); margin: 0 0 1.5rem; font-size: 0.9rem; }
+  .standings-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+  .standings-controls select {
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .standings-controls button {
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  .standings-controls button:hover:not(:disabled) { background: var(--row-alt); }
+  .standings-controls button:disabled { opacity: 0.4; cursor: default; }
+  .standings-controls .week-nav { display: flex; align-items: center; gap: 0.35rem; }
   section.card {
     margin-top: 2rem;
     padding-top: 1.5rem;
@@ -131,6 +160,14 @@
 <div class="wrap">
   <h1>CFB Power Ratings</h1>
   <p class="subtitle" id="subtitle">Loading&hellip;</p>
+  <div class="standings-controls" id="standings-controls" hidden>
+    <select id="season-select" aria-label="Select season"></select>
+    <div class="week-nav">
+      <button type="button" id="week-prev" aria-label="Previous week">&larr;</button>
+      <select id="week-select" aria-label="Select week"></select>
+      <button type="button" id="week-next" aria-label="Next week">&rarr;</button>
+    </div>
+  </div>
   <div id="content"></div>
 
   <section class="card" id="team-trend-card" hidden>
@@ -160,35 +197,15 @@
 
 <script src="trends.js"></script>
 <script>
-async function main() {
+function renderStandings(rows, season, asOf) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
-  let rows;
-  try {
-    const res = await fetch('data/ratings_history.json', { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    rows = await res.json();
-  } catch (err) {
-    subtitle.textContent = '';
-    content.innerHTML = `<p class="status">Couldn't load ratings data (${err.message}).</p>`;
-    return;
-  }
-
-  if (!rows.length) {
-    subtitle.textContent = '';
-    content.innerHTML = '<p class="status">No data yet.</p>';
-    return;
-  }
-
-  const latestSeason = Math.max(...rows.map(r => r.season));
-  const seasonRows = rows.filter(r => r.season === latestSeason);
-  const latestAsOf = seasonRows.reduce((a, b) => (b.as_of > a ? b.as_of : a), seasonRows[0].as_of);
-  const current = seasonRows
-    .filter(r => r.as_of === latestAsOf)
+  const current = rows
+    .filter(r => r.season === season && r.as_of === asOf)
     .sort((a, b) => b.rating - a.rating);
 
-  subtitle.textContent = `${latestSeason} season — as of ${latestAsOf}`;
+  subtitle.textContent = `${season} season — as of ${asOf}`;
 
   const table = document.createElement('table');
   table.innerHTML = `
@@ -219,7 +236,93 @@ async function main() {
       `).join('')}
     </tbody>
   `;
-  content.appendChild(table);
+  content.replaceChildren(table);
+}
+
+function weekOptionLabel(index, total, isCompleteSeason) {
+  if (index === total - 1) return isCompleteSeason ? 'Final' : 'Latest';
+  return `Week ${index + 1}`;
+}
+
+function setupStandingsControls(rows) {
+  const controls = document.getElementById('standings-controls');
+  const seasonSelect = document.getElementById('season-select');
+  const weekSelect = document.getElementById('week-select');
+  const weekPrev = document.getElementById('week-prev');
+  const weekNext = document.getElementById('week-next');
+
+  const seasons = [...new Set(rows.map(r => r.season))].sort((a, b) => b - a);
+  const latestSeason = seasons[0];
+  seasonSelect.replaceChildren(...seasons.map(s => new Option(String(s), String(s))));
+
+  let asOfsForSeason = [];
+
+  function populateWeeks(season, selectAsOf) {
+    asOfsForSeason = [...new Set(rows.filter(r => r.season === season).map(r => r.as_of))].sort();
+    const isCompleteSeason = season !== latestSeason;
+    weekSelect.replaceChildren(
+      ...asOfsForSeason.map((asOf, i) => new Option(weekOptionLabel(i, asOfsForSeason.length, isCompleteSeason), asOf))
+    );
+    weekSelect.value = selectAsOf && asOfsForSeason.includes(selectAsOf)
+      ? selectAsOf
+      : asOfsForSeason[asOfsForSeason.length - 1];
+  }
+
+  function updateNavButtons() {
+    const idx = asOfsForSeason.indexOf(weekSelect.value);
+    weekPrev.disabled = idx <= 0;
+    weekNext.disabled = idx === -1 || idx >= asOfsForSeason.length - 1;
+  }
+
+  function draw() {
+    updateNavButtons();
+    renderStandings(rows, Number(seasonSelect.value), weekSelect.value);
+  }
+
+  seasonSelect.addEventListener('change', () => {
+    populateWeeks(Number(seasonSelect.value));
+    draw();
+  });
+  weekSelect.addEventListener('change', draw);
+  weekPrev.addEventListener('click', () => {
+    const idx = asOfsForSeason.indexOf(weekSelect.value);
+    if (idx > 0) { weekSelect.value = asOfsForSeason[idx - 1]; draw(); }
+  });
+  weekNext.addEventListener('click', () => {
+    const idx = asOfsForSeason.indexOf(weekSelect.value);
+    if (idx !== -1 && idx < asOfsForSeason.length - 1) { weekSelect.value = asOfsForSeason[idx + 1]; draw(); }
+  });
+
+  seasonSelect.value = String(latestSeason);
+  populateWeeks(latestSeason);
+  controls.hidden = false;
+  draw();
+
+  return latestSeason;
+}
+
+async function main() {
+  const content = document.getElementById('content');
+  const subtitle = document.getElementById('subtitle');
+
+  let rows;
+  try {
+    const res = await fetch('data/ratings_history.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    rows = await res.json();
+  } catch (err) {
+    subtitle.textContent = '';
+    content.innerHTML = `<p class="status">Couldn't load ratings data (${err.message}).</p>`;
+    return;
+  }
+
+  if (!rows.length) {
+    subtitle.textContent = '';
+    content.innerHTML = '<p class="status">No data yet.</p>';
+    return;
+  }
+
+  const latestSeason = setupStandingsControls(rows);
 
   if (window.renderTrends) window.renderTrends(rows, latestSeason);
   if (window.renderBlurb) window.renderBlurb();
