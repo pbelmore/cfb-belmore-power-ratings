@@ -231,13 +231,10 @@ function getPlayoffProjection(seasonRows, season) {
   return new Set([...leaderNames, ...atLarge.map(r => r.team)]);
 }
 
-function renderStandings(rows, season, asOf, colors) {
+function renderStandings(current, season, asOf, colors) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
-  const current = rows
-    .filter(r => r.season === season && r.as_of === asOf)
-    .sort((a, b) => b.power_score - a.power_score);
   const highlighted = getPlayoffProjection(current, season);
 
   subtitle.textContent = `${season} season — as of ${asOf}`;
@@ -282,6 +279,22 @@ function renderStandings(rows, season, asOf, colors) {
     ? 'Highlighted: projected top 4 (if the season ended today).'
     : 'Highlighted: projected 12-team field -- 5 conference leaders (auto bids) + 7 at-large.';
   content.appendChild(note);
+}
+
+// Same "N. Team (W-L) -- score" format as the standalone weekly_blurb.txt
+// the pipeline writes, but computed here for whichever week is currently
+// selected -- that file only ever holds the latest live run's snapshot.
+let currentBlurbText = '';
+
+function renderBlurbCard(current, season, asOf) {
+  const card = document.getElementById('blurb-card');
+  const lines = [`CFB Power Ratings -- ${season} as of ${asOf}`];
+  current.slice(0, 25).forEach((r, i) => {
+    lines.push(`${i + 1}. ${r.team} (${r.wins}-${r.losses}) -- ${r.power_score.toFixed(1)}`);
+  });
+  currentBlurbText = lines.join('\n');
+  document.getElementById('blurb-text').textContent = currentBlurbText;
+  card.hidden = false;
 }
 
 // Labels a season's as_of snapshots as "Week N", plus two milestones: the
@@ -346,14 +359,19 @@ function setupStandingsControls(rows, colors) {
 
   function draw() {
     updateNavButtons();
-    renderStandings(rows, Number(seasonSelect.value), weekSelect.value, colors);
+    const season = Number(seasonSelect.value);
+    const asOf = weekSelect.value;
+    const current = rows
+      .filter(r => r.season === season && r.as_of === asOf)
+      .sort((a, b) => b.power_score - a.power_score);
+    renderStandings(current, season, asOf, colors);
+    renderBlurbCard(current, season, asOf);
+    if (window.renderTrends) window.renderTrends(rows, season, asOf);
   }
 
   seasonSelect.addEventListener('change', () => {
-    const season = Number(seasonSelect.value);
-    populateWeeks(season);
+    populateWeeks(Number(seasonSelect.value));
     draw();
-    if (window.renderTrends) window.renderTrends(rows, season);
   });
   weekSelect.addEventListener('change', draw);
   weekPrev.addEventListener('click', () => {
@@ -398,10 +416,15 @@ async function main() {
     return;
   }
 
-  const latestSeason = setupStandingsControls(rows, colors);
+  document.getElementById('blurb-copy').addEventListener('click', async (e) => {
+    await navigator.clipboard.writeText(currentBlurbText);
+    const btn = e.currentTarget;
+    const old = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = old; }, 1500);
+  });
 
-  if (window.renderTrends) window.renderTrends(rows, latestSeason);
-  if (window.renderBlurb) window.renderBlurb();
+  setupStandingsControls(rows, colors);
 }
 
 main();

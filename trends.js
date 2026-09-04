@@ -228,39 +228,49 @@
     return index;
   }
 
+  // Plain "Wk N" for every point -- no special-cased "Final" label. The
+  // charts truncate to whatever week is selected, so the last visible
+  // point isn't necessarily the season's actual end; the standings
+  // dropdown already carries the "End of Regular Season" / "End of Bowl
+  // Season" / "Latest" labeling for that.
   function weekLabels(n) {
-    return Array.from({ length: n }, (_, i) => (i === n - 1 ? 'Final' : `Wk ${i + 1}`));
+    return Array.from({ length: n }, (_, i) => `Wk ${i + 1}`);
   }
 
-  function renderTeamTrend(rows, latestSeason) {
+  function renderTeamTrend(rows, season, upToAsOf) {
     const card = document.getElementById('team-trend-card');
     const bySeasonTeam = buildSeasonTeamIndex(rows);
-    const teams = Object.keys(bySeasonTeam[latestSeason] || {}).sort();
+    const teams = Object.keys(bySeasonTeam[season] || {}).sort();
     if (!teams.length) return;
     card.hidden = false;
 
     const select = document.getElementById('team-select');
+    const priorSelection = select.dataset.season === String(season) ? select.value : null;
     select.replaceChildren(...teams.map(t => new Option(t, t)));
+    select.dataset.season = String(season);
 
-    const seasonRows = rows.filter(r => r.season === latestSeason);
-    const latestAsOf = seasonRows.reduce((a, r) => (r.as_of > a ? r.as_of : a), seasonRows[0].as_of);
-    const top = seasonRows.filter(r => r.as_of === latestAsOf).sort((a, b) => b.power_score - a.power_score)[0];
-    select.value = top ? top.team : teams[0];
+    const seasonRows = rows.filter(r => r.season === season && r.as_of === upToAsOf);
+    const top = seasonRows.sort((a, b) => b.power_score - a.power_score)[0];
+    select.value = priorSelection && teams.includes(priorSelection) ? priorSelection : (top ? top.team : teams[0]);
 
     function draw() {
       const team = select.value;
-      const curr = bySeasonTeam[latestSeason]?.[team] || [];
-      const prev = bySeasonTeam[latestSeason - 1]?.[team] || [];
+      // Truncated to the currently selected week -- this season's line
+      // stops there rather than running through the full season, so the
+      // chart matches whatever the standings table is showing. Last
+      // season's comparison line stays complete; it's already history.
+      const curr = (bySeasonTeam[season]?.[team] || []).filter(r => r.as_of <= upToAsOf);
+      const prev = bySeasonTeam[season - 1]?.[team] || [];
       const n = Math.max(curr.length, prev.length);
       const xLabels = weekLabels(n);
       const series = [{
-        name: String(latestSeason),
+        name: String(season),
         color: 'var(--series-1)',
         points: Array.from({ length: n }, (_, i) => curr[i] ? curr[i].power_score : null),
       }];
       if (prev.length) {
         series.push({
-          name: String(latestSeason - 1),
+          name: String(season - 1),
           color: 'var(--series-2)',
           points: Array.from({ length: n }, (_, i) => prev[i] ? prev[i].power_score : null),
         });
@@ -269,28 +279,31 @@
       renderTableView(document.getElementById('team-chart-table'), xLabels, series, v => v.toFixed(1));
     }
 
-    select.addEventListener('change', draw);
+    select.onchange = draw;
     draw();
-    window.addEventListener('resize', debounce(draw));
+    currentTeamDraw = draw;
   }
 
-  function renderConferenceTrend(rows, latestSeason) {
+  function renderConferenceTrend(rows, season, upToAsOf) {
     const card = document.getElementById('conf-trend-card');
-    const seasonRows = rows.filter(r => r.season === latestSeason);
+    const seasonRows = rows.filter(r => r.season === season);
     const conferences = [...new Set(seasonRows.map(r => r.conference).filter(Boolean))].sort();
     if (!conferences.length) return;
     card.hidden = false;
 
     const select = document.getElementById('conf-select');
+    const priorSelection = select.dataset.season === String(season) ? select.value : null;
     select.replaceChildren(...conferences.map(c => new Option(c, c)));
+    select.dataset.season = String(season);
 
-    const asOfs = [...new Set(seasonRows.map(r => r.as_of))].sort();
-    const latestAsOf = asOfs[asOfs.length - 1];
-    const topRow = seasonRows.filter(r => r.as_of === latestAsOf).sort((a, b) => b.power_score - a.power_score)[0];
-    select.value = topRow ? topRow.conference : conferences[0];
+    const topRow = seasonRows.filter(r => r.as_of === upToAsOf).sort((a, b) => b.power_score - a.power_score)[0];
+    select.value = priorSelection && conferences.includes(priorSelection) ? priorSelection : (topRow ? topRow.conference : conferences[0]);
 
     function draw() {
       const conf = select.value;
+      // Same truncation as the team chart -- only weeks through the
+      // selected one.
+      const asOfs = [...new Set(seasonRows.map(r => r.as_of))].sort().filter(a => a <= upToAsOf);
       const points = asOfs.map(asOf => {
         const teamRows = seasonRows.filter(r => r.as_of === asOf && r.conference === conf);
         if (!teamRows.length) return null;
@@ -302,9 +315,9 @@
       renderTableView(document.getElementById('conf-chart-table'), xLabels, series, v => v.toFixed(1));
     }
 
-    select.addEventListener('change', draw);
+    select.onchange = draw;
     draw();
-    window.addEventListener('resize', debounce(draw));
+    currentConfDraw = draw;
   }
 
   function debounce(fn, ms = 150) {
@@ -315,29 +328,20 @@
     };
   }
 
-  window.renderTrends = function (rows, latestSeason) {
-    renderTeamTrend(rows, latestSeason);
-    renderConferenceTrend(rows, latestSeason);
-  };
+  // renderTeamTrend/renderConferenceTrend now run on every week change, not
+  // just once per season -- attaching a resize listener inside them (the
+  // old approach) would stack up a new stale listener on every click, each
+  // redrawing whatever week/team was current when it was attached. One
+  // listener here, always calling whichever `draw` closure is current.
+  let currentTeamDraw = null;
+  let currentConfDraw = null;
+  window.addEventListener('resize', debounce(() => {
+    currentTeamDraw?.();
+    currentConfDraw?.();
+  }));
 
-  window.renderBlurb = async function () {
-    const card = document.getElementById('blurb-card');
-    try {
-      const res = await fetch('data/weekly_blurb.txt', { cache: 'no-store' });
-      if (!res.ok) throw new Error('not found');
-      const text = await res.text();
-      if (!text.trim()) throw new Error('empty');
-      document.getElementById('blurb-text').textContent = text;
-      card.hidden = false;
-      document.getElementById('blurb-copy').addEventListener('click', async (e) => {
-        await navigator.clipboard.writeText(text);
-        const btn = e.currentTarget;
-        const old = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => { btn.textContent = old; }, 1500);
-      });
-    } catch {
-      card.hidden = true;
-    }
+  window.renderTrends = function (rows, season, upToAsOf) {
+    renderTeamTrend(rows, season, upToAsOf);
+    renderConferenceTrend(rows, season, upToAsOf);
   };
 })();
