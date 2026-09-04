@@ -214,7 +214,18 @@
     container.appendChild(details);
   }
 
+  // Cached by `rows` array identity -- `rows` is fetched once by index.html
+  // and reused by reference for the rest of the page's life, but this
+  // index gets rebuilt (a full group+sort of the entire history, not just
+  // the current season) on every week/season/resize redraw without this.
+  // As history grows toward hundreds of thousands of rows, that turns a
+  // cheap redraw into an increasingly expensive full-dataset rebuild whose
+  // result never actually changes for the page's lifetime.
+  let cachedRows = null;
+  let cachedIndex = null;
+
   function buildSeasonTeamIndex(rows) {
+    if (rows === cachedRows) return cachedIndex;
     const index = {};
     for (const r of rows) {
       (index[r.season] ??= {});
@@ -225,6 +236,8 @@
         index[season][team].sort((a, b) => (a.as_of < b.as_of ? -1 : a.as_of > b.as_of ? 1 : 0));
       }
     }
+    cachedRows = rows;
+    cachedIndex = index;
     return index;
   }
 

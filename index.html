@@ -215,31 +215,23 @@
   </section>
 </div>
 
+<script src="playoff-format.js"></script>
 <script src="trends.js"></script>
 <script>
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+const HTML_ESCAPE_RE = /[&<>"']/g;
+const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+function escapeHtml(s) {
+  return String(s).replace(HTML_ESCAPE_RE, c => HTML_ESCAPES[c]);
+}
 
 // Projects a playoff field from that week's own ratings -- a running "if it
 // ended today" bracket, not the actual (end-of-season-only) selection.
-// 2010-2013 (BCS): top 2. 2014-2023 (old CFP): top 4. 2024+: the 12-team
-// format's 5 highest-rated conference leaders (auto bids -- independents
-// can't have one, since there's no conference championship to win) + the
-// next 7 best overall.
+// Shared selection rule (era cutoffs, conference-leader + at-large logic)
+// lives in playoff-format.js, so this page and accuracy.html can't drift.
 function getPlayoffProjection(seasonRows, season) {
   const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
-  if (season < 2024) {
-    const fieldSize = season < 2014 ? 2 : 4;
-    return new Set(sorted.slice(0, fieldSize).map(r => r.team));
-  }
-  const leaderByConf = new Map();
-  for (const r of sorted) {
-    if (!r.conference || r.conference === 'FBS Independents') continue;
-    if (!leaderByConf.has(r.conference)) leaderByConf.set(r.conference, r);
-  }
-  const leaders = [...leaderByConf.values()].sort((a, b) => b.power_score - a.power_score).slice(0, 5);
-  const leaderNames = new Set(leaders.map(r => r.team));
-  const atLarge = sorted.filter(r => !leaderNames.has(r.team)).slice(0, 7);
-  return new Set([...leaderNames, ...atLarge.map(r => r.team)]);
+  return new Set(playoffFieldProjection(sorted, season));
 }
 
 function renderStandings(current, season, asOf, colors, highlighted) {
@@ -259,8 +251,8 @@ function renderStandings(current, season, asOf, colors, highlighted) {
   const hasCommitteeRank = current.some(r => r.committee_rank != null);
   const hasPlayoffField = current.some(r => r.made_playoff != null);
   const isExactField = current.some(r => r.seed != null);
-  const committeeLabel = season < 2014 ? 'BCS' : 'CFP';
-  const fieldSize = season < 2014 ? 2 : season < 2024 ? 4 : 12;
+  const committeeLabel = season < CFP_ERA_START ? 'BCS' : 'CFP';
+  const fieldSize = season < CFP_ERA_START ? 2 : season < TWELVE_TEAM_ERA_START ? 4 : 12;
 
   const table = document.createElement('table');
   table.innerHTML = `
@@ -286,8 +278,8 @@ function renderStandings(current, season, asOf, colors, highlighted) {
         return `
         <tr${rowClass}${rowStyle}>
           <td class="rank">${i + 1}</td>
-          <td>${r.team}</td>
-          <td>${r.conference ?? ''}</td>
+          <td>${escapeHtml(r.team)}</td>
+          <td>${escapeHtml(r.conference ?? '')}</td>
           <td>${r.wins}</td>
           <td>${r.losses}</td>
           <td class="rating">${r.power_score.toFixed(1)}</td>
@@ -344,10 +336,14 @@ function renderBlurbCard(current, season, asOf, highlighted) {
 // just another week. The in-progress season's own latest snapshot (no
 // postseason yet) stays "Latest" rather than claiming to be final.
 function computeWeekLabels(seasonRows, asOfsForSeason, isLatestSeason) {
+  // One pass over seasonRows (not one .find() per as_of) to build the
+  // as_of -> stage map -- .find() per as_of was an O(weeks x teams) scan.
   const stageOf = new Map();
+  for (const r of seasonRows) {
+    if (!stageOf.has(r.as_of)) stageOf.set(r.as_of, r.stage || 'regular');
+  }
   for (const asOf of asOfsForSeason) {
-    const row = seasonRows.find(r => r.as_of === asOf);
-    stageOf.set(asOf, row?.stage || 'regular');
+    if (!stageOf.has(asOf)) stageOf.set(asOf, 'regular');
   }
   const regularAsOfs = asOfsForSeason.filter(a => stageOf.get(a) === 'regular');
   const postAsOfs = asOfsForSeason.filter(a => stageOf.get(a) === 'postseason');
@@ -374,14 +370,23 @@ function setupStandingsControls(rows, colors) {
   const weekPrev = document.getElementById('week-prev');
   const weekNext = document.getElementById('week-next');
 
-  const seasons = [...new Set(rows.map(r => r.season))].sort((a, b) => b - a);
+  // Grouped once up front instead of re-filtering the full (and, as history
+  // grows, potentially very large) `rows` array on every season/week
+  // change -- draw()/populateWeeks() only ever need one season's rows.
+  const rowsBySeason = new Map();
+  for (const r of rows) {
+    if (!rowsBySeason.has(r.season)) rowsBySeason.set(r.season, []);
+    rowsBySeason.get(r.season).push(r);
+  }
+
+  const seasons = [...rowsBySeason.keys()].sort((a, b) => b - a);
   const latestSeason = seasons[0];
   seasonSelect.replaceChildren(...seasons.map(s => new Option(String(s), String(s))));
 
   let asOfsForSeason = [];
 
   function populateWeeks(season, preferredLabel) {
-    const seasonRows = rows.filter(r => r.season === season);
+    const seasonRows = rowsBySeason.get(season) || [];
     asOfsForSeason = [...new Set(seasonRows.map(r => r.as_of))].sort();
     const labels = computeWeekLabels(seasonRows, asOfsForSeason, season === latestSeason);
     weekSelect.replaceChildren(
@@ -407,8 +412,8 @@ function setupStandingsControls(rows, colors) {
     updateNavButtons();
     const season = Number(seasonSelect.value);
     const asOf = weekSelect.value;
-    const current = rows
-      .filter(r => r.season === season && r.as_of === asOf)
+    const current = (rowsBySeason.get(season) || [])
+      .filter(r => r.as_of === asOf)
       .sort((a, b) => b.power_score - a.power_score);
     const highlighted = getPlayoffProjection(current, season);
     renderStandings(current, season, asOf, colors, highlighted);
@@ -443,19 +448,29 @@ async function main() {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
-  let rows, colors;
+  let rows;
   try {
-    const [historyRes, colorsRes] = await Promise.all([
-      fetch('data/ratings_history.json', { cache: 'no-store' }),
-      fetch('data/team_colors.json', { cache: 'no-store' }),
-    ]);
+    const historyRes = await fetch('data/ratings_history.json', { cache: 'no-store' });
     if (!historyRes.ok) throw new Error(`HTTP ${historyRes.status}`);
     rows = await historyRes.json();
-    colors = colorsRes.ok ? await colorsRes.json() : {};
   } catch (err) {
     subtitle.textContent = '';
     content.innerHTML = `<p class="status">Couldn't load ratings data (${err.message}).</p>`;
     return;
+  }
+
+  // Colors are cosmetic (highlight-row team accent) -- a failure fetching
+  // this file shouldn't take down the whole page the way a failure on the
+  // required ratings_history.json above does, so it's fetched and handled
+  // separately rather than in the same Promise.all/try as the required
+  // fetch (which would otherwise fail the page for a colors-only network
+  // hiccup even though the ratings data loaded fine).
+  let colors = {};
+  try {
+    const colorsRes = await fetch('data/team_colors.json', { cache: 'no-store' });
+    if (colorsRes.ok) colors = await colorsRes.json();
+  } catch {
+    // Missing colors just means no accent highlighting -- not fatal.
   }
 
   if (!rows.length) {

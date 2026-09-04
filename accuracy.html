@@ -66,27 +66,8 @@
   <div id="content"></div>
 </div>
 
+<script src="playoff-format.js"></script>
 <script>
-// Mirrors index.html's getPlayoffProjection -- our own power-score-based
-// projected field, ordered (position 0 = our #1 seed) so it can be
-// compared position-for-position against the real field's seed order.
-function orderedProjection(seasonRows, season) {
-  const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
-  if (season < 2024) {
-    const fieldSize = season < 2014 ? 2 : 4;
-    return sorted.slice(0, fieldSize).map(r => r.team);
-  }
-  const leaderByConf = new Map();
-  for (const r of sorted) {
-    if (!r.conference || r.conference === 'FBS Independents') continue;
-    if (!leaderByConf.has(r.conference)) leaderByConf.set(r.conference, r);
-  }
-  const leaders = [...leaderByConf.values()].sort((a, b) => b.power_score - a.power_score).slice(0, 5);
-  const leaderNames = new Set(leaders.map(r => r.team));
-  const atLarge = sorted.filter(r => !leaderNames.has(r.team)).slice(0, 7);
-  return [...leaders.map(r => r.team), ...atLarge.map(r => r.team)];
-}
-
 // One season's comparison, evaluated at the true final regular-season
 // snapshot only (never postseason, never a mid-season projection) -- the
 // same point in time the real committee actually made their selection.
@@ -96,8 +77,13 @@ function computeSeasonStats(rows, season) {
   if (!finalAsOf) return null;
   const snapshot = seasonRows.filter(r => r.as_of === finalAsOf);
 
-  const fieldSize = season < 2014 ? 2 : season < 2024 ? 4 : 12;
-  const ourField = orderedProjection(snapshot, season);
+  const fieldSize = season < CFP_ERA_START ? 2 : season < TWELVE_TEAM_ERA_START ? 4 : 12;
+  // Sorted once -- both the projected field (position 0 = our #1 seed, so
+  // it can be compared position-for-position against the real field's
+  // seed order) and the overall rank map below are derived from this same
+  // ordering, rather than each re-sorting the snapshot independently.
+  const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
+  const ourField = playoffFieldProjection(overallRanked, season);
   const realField = snapshot.filter(r => r.seed != null).sort((a, b) => a.seed - b.seed).map(r => r.team);
   const realSet = new Set(realField);
 
@@ -113,7 +99,6 @@ function computeSeasonStats(rows, season) {
   // field team's real seed. A perfect field + exact-spot match (e.g.
   // 2015) naturally lands at 0 here too, since "exact spot" already means
   // our rank-order among these teams equals their real seed order.
-  const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
   const ourRankOf = new Map(overallRanked.map((r, i) => [r.team, i + 1]));
   const seedOf = new Map(snapshot.filter(r => r.seed != null).map(r => [r.team, r.seed]));
   const rankDiffs = realField.map(team => Math.abs(ourRankOf.get(team) - seedOf.get(team)));

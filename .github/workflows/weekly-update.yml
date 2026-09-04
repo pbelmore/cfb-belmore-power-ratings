@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       year:
-        description: "Season year to pull"
+        description: "Season year to pull (blank = auto-detect from today's date)"
         required: false
-        default: "2026"
+        default: ""
   schedule:
     # Wednesdays, not Tuesdays: the CFP committee's rankings air Tuesday
     # night, so a Tuesday-morning run would race ahead of that week's
@@ -21,6 +21,15 @@ on:
 permissions:
   contents: write
 
+# Serializes overlapping runs (a manual dispatch landing mid-cron-run, or a
+# retriggered re-run) instead of letting two jobs fetch/write/push at once,
+# where the second job's `git push` would be rejected non-fast-forward and
+# its freshly-pulled data silently dropped. `cancel-in-progress: false`
+# queues the newer run rather than killing an in-flight one mid-API-pull.
+concurrency:
+  group: weekly-ratings-update
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -33,10 +42,43 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      - name: Determine season year
+        id: season
+        env:
+          # Routed through an env var, never interpolated straight into a
+          # run: script -- a `${{ github.event.inputs.year }}` splice there
+          # would let a workflow_dispatch caller inject arbitrary shell
+          # commands into a runner holding `contents: write` and the CFBD
+          # API key.
+          INPUT_YEAR: ${{ github.event.inputs.year }}
+        run: |
+          if [ -n "$INPUT_YEAR" ]; then
+            case "$INPUT_YEAR" in
+              ''|*[!0-9]*)
+                echo "::error::year input must be a plain number, got: $INPUT_YEAR"
+                exit 1
+                ;;
+            esac
+            echo "year=$INPUT_YEAR" >> "$GITHUB_OUTPUT"
+          else
+            # No input (always true on the schedule trigger, which has no
+            # workflow_dispatch inputs) -- derive the season from today's
+            # date instead of a fixed year, so this keeps working every
+            # season without a manual edit. The season the cron is
+            # currently updating is this calendar year, except in January,
+            # when it's still last calendar year's season winding down.
+            if [ "$(date -u +%m)" = "01" ]; then
+              echo "year=$(( $(date -u +%Y) - 1 ))" >> "$GITHUB_OUTPUT"
+            else
+              echo "year=$(date -u +%Y)" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
       - name: Run weekly update
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
-        run: python scripts/weekly_update.py --year ${{ github.event.inputs.year || '2026' }}
+          SEASON_YEAR: ${{ steps.season.outputs.year }}
+        run: python scripts/weekly_update.py --year "$SEASON_YEAR"
 
       - name: Commit and push updated data
         run: |
