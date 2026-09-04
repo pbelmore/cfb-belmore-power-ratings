@@ -231,11 +231,9 @@ function getPlayoffProjection(seasonRows, season) {
   return new Set([...leaderNames, ...atLarge.map(r => r.team)]);
 }
 
-function renderStandings(current, season, asOf, colors) {
+function renderStandings(current, season, asOf, colors, highlighted) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
-
-  const highlighted = getPlayoffProjection(current, season);
 
   subtitle.textContent = `${season} season — as of ${asOf}`;
 
@@ -286,10 +284,16 @@ function renderStandings(current, season, asOf, colors) {
 // selected -- that file only ever holds the latest live run's snapshot.
 let currentBlurbText = '';
 
-function renderBlurbCard(current, season, asOf) {
+function renderBlurbCard(current, season, asOf, highlighted) {
   const card = document.getElementById('blurb-card');
+  // Pre-2024: top 10, matching what actually got posted back then.
+  // 2024+: just the projected playoff field, true rank number kept -- an
+  // auto-bid conference champ ranked outside the top 12 overall still
+  // shows its real position (e.g. 1-10, 14, 16), not a renumbered 1-12.
   const lines = [`CFB Power Ratings -- ${season} as of ${asOf}`];
-  current.slice(0, 25).forEach((r, i) => {
+  current.forEach((r, i) => {
+    const include = season < 2024 ? i < 10 : highlighted.has(r.team);
+    if (!include) return;
     lines.push(`${i + 1}. ${r.team} (${r.wins}-${r.losses}) -- ${r.power_score.toFixed(1)}`);
   });
   currentBlurbText = lines.join('\n');
@@ -364,8 +368,9 @@ function setupStandingsControls(rows, colors) {
     const current = rows
       .filter(r => r.season === season && r.as_of === asOf)
       .sort((a, b) => b.power_score - a.power_score);
-    renderStandings(current, season, asOf, colors);
-    renderBlurbCard(current, season, asOf);
+    const highlighted = getPlayoffProjection(current, season);
+    renderStandings(current, season, asOf, colors, highlighted);
+    renderBlurbCard(current, season, asOf, highlighted);
     if (window.renderTrends) window.renderTrends(rows, season, asOf);
   }
 

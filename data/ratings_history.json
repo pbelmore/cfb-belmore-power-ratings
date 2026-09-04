@@ -369022,9 +369022,9 @@
     "stage": "regular",
     "team": "Buffalo",
     "conference": "Mid-American",
-    "wins": 0,
+    "wins": 1,
     "losses": 0,
-    "win_pct": 0.0,
+    "win_pct": 1.0,
     "power_score": 13.1
   },
   {
@@ -369286,9 +369286,9 @@
     "stage": "regular",
     "team": "Illinois",
     "conference": "Big Ten",
-    "wins": 0,
+    "wins": 1,
     "losses": 0,
-    "win_pct": 0.0,
+    "win_pct": 1.0,
     "power_score": 46.0
   },
   {
@@ -370123,7 +370123,7 @@
     "team": "UAB",
     "conference": "American Athletic",
     "wins": 0,
-    "losses": 0,
+    "losses": 1,
     "win_pct": 0.0,
     "power_score": 10.5
   },
@@ -370221,9 +370221,9 @@
     "stage": "regular",
     "team": "Utah",
     "conference": "Big 12",
-    "wins": 0,
+    "wins": 1,
     "losses": 0,
-    "win_pct": 0.0,
+    "win_pct": 1.0,
     "power_score": 58.2
   },
   {

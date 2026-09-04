@@ -231,13 +231,45 @@ def build_public_rows(results, scores, teams, season, as_of, stage="regular"):
     return rows
 
 
-def format_weekly_blurb(results, scores, top_n=25, title=None):
+def playoff_projection(scores, teams, season):
+    """Mirrors index.html's getPlayoffProjection: a running "if it ended
+    today" field from that snapshot's own scores, not the actual selection.
+    2010-2023: top 4. 2024+: the 12-team format's 5 highest-scored
+    conference leaders (auto bids -- independents can't have one, no
+    conference championship to win) + the next 7 best overall."""
+    conf_of = {t["school"]: t.get("conference") for t in teams}
+    ranked = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)
+    if season < 2024:
+        return {team for team, _ in ranked[:4]}
+    leader_by_conf = {}
+    for team, score in ranked:
+        conf = conf_of.get(team)
+        if not conf or conf == "FBS Independents":
+            continue
+        leader_by_conf.setdefault(conf, (team, score))
+    leaders = sorted(leader_by_conf.values(), key=lambda ts: ts[1], reverse=True)[:5]
+    leader_names = {team for team, _ in leaders}
+    at_large = [team for team, _ in ranked if team not in leader_names][:7]
+    return leader_names | set(at_large)
+
+
+def format_weekly_blurb(results, scores, teams, season, title=None):
     # Rank by the same (possibly blended) scores being displayed -- sorting
     # by raw rating instead would let the blend reorder teams without the
     # printed rank agreeing with the printed number.
-    ranked = sorted(results.items(), key=lambda kv: scores[kv[0]], reverse=True)[:top_n]
+    ranked = sorted(results.items(), key=lambda kv: scores[kv[0]], reverse=True)
+    if season < 2024:
+        # What actually got posted pre-2024: top 10, not a full top 25.
+        selected = {team for team, _ in ranked[:10]}
+    else:
+        # From 2024 on, just the projected playoff field -- true rank
+        # number kept, so an auto-bid conference champ ranked outside the
+        # top 12 overall still shows its real position (e.g. 1-10, 14, 16).
+        selected = playoff_projection(scores, teams, season)
     lines = [title or "Power Ratings"]
     for i, (team, r) in enumerate(ranked, start=1):
+        if team not in selected:
+            continue
         lines.append(f"{i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")
     return "\n".join(lines)
 
@@ -303,7 +335,7 @@ def main():
     history.sort(key=lambda r: (r["season"], r["as_of"], r["team"]))
     write_json(history_path, history)
 
-    blurb = format_weekly_blurb(results, scores, title=f"CFB Power Ratings -- {args.year} as of {as_of}")
+    blurb = format_weekly_blurb(results, scores, teams, args.year, title=f"CFB Power Ratings -- {args.year} as of {as_of}")
     (out_dir / "weekly_blurb.txt").write_text(blurb + "\n")
 
     top = sorted(results.items(), key=lambda kv: scores[kv[0]], reverse=True)[:5]
