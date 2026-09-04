@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
 backfill_history.py -- reconstructs week-by-week ratings_history rows for
-past seasons from CFBD, at a cost of 2 API calls per season (teams once,
-games once) plus 2 more for any season with a prior year on record (to
-recompute that prior year's raw final ratings fresh, for the preseason
-blend -- see weekly_update.prior_season_raw_ratings). Every week's
-cumulative snapshot is then built locally by filtering that one game list
--- no per-week API calls.
+past seasons from CFBD, at a cost of 3 API calls per season (teams, games,
+and that season's committee rankings, each once) plus 2 more for any
+season with a prior year on record (to recompute that prior year's raw
+final ratings fresh, for the preseason blend -- see
+weekly_update.prior_season_raw_ratings). Every week's cumulative snapshot
+is then built locally by filtering that one game list -- no per-week API
+calls.
 
 Regular-season weeks are snapshotted 1..max, cumulatively. Postseason games
 (bowls/CFP) are folded into a single final snapshot per season instead of
@@ -31,6 +32,8 @@ from weekly_update import (
     blend_raw_ratings,
     build_public_rows,
     cfbd_get,
+    committee_ranks_for_week,
+    fetch_committee_rankings,
     fetch_teams,
     load_json,
     normalize_values,
@@ -71,19 +74,39 @@ def fetch_completed_game_rows(year, api_key):
     return rows
 
 
+def _is_army_navy_only(games):
+    return bool(games) and all({g["winner"], g["loser"]} == {"Army", "Navy"} for g in games)
+
+
 def build_snapshots(game_rows):
     """Yields (as_of_label, cumulative_game_rows, week, stage) -- one per
     regular-season week boundary, plus one final snapshot folding in
     postseason (if any). The final snapshot's week is just "well past 6",
     since postseason week numbers restart at 1 and preseason blending only
     ever needs to know it's no longer in the first 6 weeks. `stage` drives
-    the site's "End of Regular Season" / "End of Bowl Season" labels."""
+    the site's "End of Regular Season" / "End of Bowl Season" labels.
+
+    Army-Navy is played the week after conference championships nearly
+    every season, and CFBD tags it with its own trailing week number --
+    left alone, that becomes the "last regular week" instead of the actual
+    championship week, throwing off both the "End of Regular Season" label
+    and the committee-rankings week alignment (the real selection ranking
+    is tagged championship-week + 1, not Army-Navy-week + 1). Folded into
+    the championship week's snapshot instead -- it's still a real result,
+    just not its own milestone."""
     regular = [r for r in game_rows if r["season_type"] == "regular" and r["week"] is not None]
     postseason = [r for r in game_rows if r["season_type"] != "regular"]
 
     weeks = sorted({r["week"] for r in regular})
+    trailing_extra = []
+    while len(weeks) > 1 and _is_army_navy_only([r for r in regular if r["week"] == weeks[-1]]):
+        trailing_extra = [r for r in regular if r["week"] == weeks[-1]] + trailing_extra
+        weeks.pop()
+
     for wk in weeks:
         cumulative = [r for r in regular if r["week"] <= wk]
+        if wk == weeks[-1]:
+            cumulative = cumulative + trailing_extra
         as_of = max(r["date"] for r in cumulative if r["date"])[:10]
         yield as_of, cumulative, wk, "regular"
 
@@ -128,12 +151,18 @@ def main():
         if prior_raw is not None:
             call_count += 2
 
+        rankings_by_week = fetch_committee_rankings(year, api_key)
+        call_count += 1
+
         season_new_rows = []
         for as_of, cumulative, week, stage in build_snapshots(game_rows):
             results = compute_ratings(teams, to_rating_games(cumulative))
             blended_raw = blend_raw_ratings(results, prior_raw, week)
             scores = normalize_values(blended_raw)
-            season_new_rows.extend(build_public_rows(results, scores, teams, season=year, as_of=as_of, stage=stage))
+            committee_ranks = committee_ranks_for_week(rankings_by_week, week)
+            season_new_rows.extend(build_public_rows(
+                results, scores, teams, season=year, as_of=as_of, stage=stage, committee_ranks=committee_ranks
+            ))
 
         as_ofs_this_run = {(year, r["as_of"]) for r in season_new_rows}
         history = [r for r in history if (r["season"], r["as_of"]) not in as_ofs_this_run]

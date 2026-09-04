@@ -113,6 +113,51 @@ def current_stage(game_rows):
     return "regular"
 
 
+def fetch_committee_rankings(year, api_key):
+    """{cfbd_week: {team: rank}} for that season's real committee rankings
+    -- "BCS Standings" pre-2014, "Playoff Committee Rankings" 2014+ -- one
+    call for the whole season (CFBD returns every week at once when `week`
+    is omitted).
+
+    IMPORTANT: CFBD's own "week N" label on a ranking release always
+    reflects results through week (N-1)'s games, not week N's -- verified
+    against real game dates for both eras (e.g. the 2024 "week 11" CFP
+    ranking was announced Nov 5, before week 11's games even started, so it
+    reflects week 10's results; same lag pattern holds for 2010's BCS
+    Standings). So a snapshot as-of week N should look up week (N + 1)
+    here, not week N: `rankings_by_week.get(week + 1)`. That naturally
+    returns nothing for a week before rankings start (early season), and
+    for postseason snapshots (week=99 sentinel -- no week 100 ranking will
+    ever exist, since the committee's job -- the actual selection -- ends
+    once the field is picked)."""
+    poll_name = "BCS Standings" if year < 2014 else "Playoff Committee Rankings"
+    raw = cfbd_get("/rankings", api_key, year=year)
+    by_week = {}
+    for entry in raw:
+        if entry.get("seasonType") != "regular":
+            continue
+        for poll in entry.get("polls", []):
+            if poll["poll"] == poll_name:
+                by_week[entry["week"]] = {r["school"]: r["rank"] for r in poll["ranks"]}
+    return by_week
+
+
+def committee_ranks_for_week(rankings_by_week, week):
+    """The real committee ranking for an as-of-week-`week` snapshot: week
+    (week + 1) in CFBD's own numbering (see fetch_committee_rankings()),
+    falling back to week `week` itself if that's not available. That
+    fallback matters for at least one real season: 2020's pandemic-
+    compressed schedule had conference championships and the CFP selection
+    announcement land in the same week, so CFBD tagged the final/selection
+    ranking with that same week number instead of the usual +1 (verified:
+    its "week 16" ranking is exactly the real final four -- Alabama, Notre
+    Dame, Clemson, Ohio State -- with no "week 17" release at all that
+    season)."""
+    if week is None:
+        return None
+    return rankings_by_week.get(week + 1) or rankings_by_week.get(week)
+
+
 def to_rating_games(game_rows):
     return [
         Game(
@@ -202,19 +247,38 @@ def blend_raw_ratings(results, prior_raw_ratings, week):
 
 
 def current_week_number(game_rows):
-    weeks = [g["week"] for g in game_rows if g.get("week") is not None]
-    return max(weeks) if weeks else 1
+    """Highest completed week number, excluding a trailing Army-Navy-only
+    week -- it's played the week after conference championships nearly
+    every season, and CFBD tags it with its own week number, which would
+    otherwise throw off both the preseason-blend weight (harmless, already
+    0 by then) and the committee-rankings lookup (not harmless: the real
+    selection ranking is tagged championship-week + 1, not
+    Army-Navy-week + 1)."""
+    weeks = sorted({g["week"] for g in game_rows if g.get("week") is not None})
+    if not weeks:
+        return 1
+    while len(weeks) > 1:
+        last_week_games = [g for g in game_rows if g.get("week") == weeks[-1]]
+        if all({g["winner"], g["loser"]} == {"Army", "Navy"} for g in last_week_games):
+            weeks.pop()
+        else:
+            break
+    return weeks[-1]
 
 
-def build_public_rows(results, scores, teams, season, as_of, stage="regular"):
+def build_public_rows(results, scores, teams, season, as_of, stage="regular", committee_ranks=None):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
     file. Reuses compute_ratings()'s actual math untouched; this only
     changes what gets written. `stage` ("regular"/"postseason") lets the
     site label the last regular-season snapshot and the last
     postseason-inclusive snapshot as season milestones instead of just
-    another week."""
+    another week. `committee_ranks` ({team: rank}, already resolved to the
+    right week by the caller via committee_rank_for()) becomes the real
+    BCS/CFP rank shown alongside our own power_score, absent for a team
+    not in that week's top 25 or for weeks no ranking applies to."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
+    committee_ranks = committee_ranks or {}
     rows = []
     for team, r in results.items():
         rows.append({
@@ -227,6 +291,7 @@ def build_public_rows(results, scores, teams, season, as_of, stage="regular"):
             "losses": r["losses"],
             "win_pct": r["win_pct"],
             "power_score": round(scores[team], 1),
+            "committee_rank": committee_ranks.get(team),
         })
     return rows
 
@@ -314,10 +379,19 @@ def main():
     print("Computing ratings...")
     results = compute_ratings(teams, to_rating_games(game_rows))
     prior_raw = prior_season_raw_ratings(history, args.year, api_key)
-    blended_raw = blend_raw_ratings(results, prior_raw, current_week_number(game_rows))
+    current_week = current_week_number(game_rows)
+    blended_raw = blend_raw_ratings(results, prior_raw, current_week)
     scores = normalize_values(blended_raw)
     stage = current_stage(game_rows)
-    new_rows = build_public_rows(results, scores, teams, season=args.year, as_of=as_of, stage=stage)
+
+    print("Fetching committee rankings...")
+    rankings_by_week = fetch_committee_rankings(args.year, api_key)
+    committee_ranks = committee_ranks_for_week(rankings_by_week, current_week)
+    print(f"  {len(committee_ranks) if committee_ranks else 0} teams ranked this week")
+
+    new_rows = build_public_rows(
+        results, scores, teams, season=args.year, as_of=as_of, stage=stage, committee_ranks=committee_ranks
+    )
 
     print("Fetching team colors...")
     all_team_names = {t["school"] for t in teams} | {r["team"] for r in history}

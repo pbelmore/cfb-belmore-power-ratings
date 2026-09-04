@@ -237,6 +237,12 @@ function renderStandings(current, season, asOf, colors, highlighted) {
 
   subtitle.textContent = `${season} season — as of ${asOf}`;
 
+  // Real committee rankings only exist for part of a season (they start
+  // partway through, and stop once the field is picked) -- the column
+  // itself only appears on weeks where at least one team has one.
+  const hasCommitteeRank = current.some(r => r.committee_rank != null);
+  const committeeLabel = season < 2014 ? 'BCS' : 'CFP';
+
   const table = document.createElement('table');
   table.innerHTML = `
     <thead>
@@ -247,6 +253,7 @@ function renderStandings(current, season, asOf, colors, highlighted) {
         <th>W</th>
         <th>L</th>
         <th>Power</th>
+        ${hasCommitteeRank ? `<th>${committeeLabel}</th>` : ''}
       </tr>
     </thead>
     <tbody>
@@ -264,6 +271,7 @@ function renderStandings(current, season, asOf, colors, highlighted) {
           <td>${r.wins}</td>
           <td>${r.losses}</td>
           <td class="rating">${r.power_score.toFixed(1)}</td>
+          ${hasCommitteeRank ? `<td>${r.committee_rank ?? ''}</td>` : ''}
         </tr>
       `;
       }).join('')}
