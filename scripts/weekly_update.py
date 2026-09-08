@@ -665,7 +665,13 @@ def format_slack_blurb(results, scores, teams, season, week_label, conf_champion
     lines.append("")
     lines.append("_* = conference leader/champion (automatic bid)_")
     if link:
-        lines.append(f"_Full rankings available at {link}_")
+        # Wrapped in Slack's <url> link syntax, not left as a bare URL --
+        # Slack's auto-linker treats "_" as a valid URL character, so a
+        # bare URL immediately followed by the closing "_" for italics
+        # swallows it into the link (breaking the link and leaving the
+        # italics unclosed). The explicit <...> unambiguously ends the URL
+        # at the ">", so the closing "_" lands outside it.
+        lines.append(f"_Full rankings available at <{link}>_")
     return "\n".join(lines)
 
 
