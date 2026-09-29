@@ -216,11 +216,13 @@
   </section>
 </div>
 
-<!-- ?v= busts GitHub Pages' 10-minute browser cache: bump it whenever
-     playoff-format.js changes alongside this page, or a returning visitor
-     can get the new page with the old script (and a blank table). -->
-<script src="playoff-format.js?v=2026-09-29"></script>
-<script src="trends.js"></script>
+<!-- ?v= busts GitHub Pages' 10-minute browser cache: bump it (here and in
+     accuracy.html, same value on every script) whenever a .js file
+     changes, or a returning visitor can get the new page with the old
+     script (and a blank table). The check-script-versions workflow fails
+     a push that changes a .js file without bumping it. -->
+<script src="playoff-format.js?v=2026-09-29.2"></script>
+<script src="trends.js?v=2026-09-29.2"></script>
 <script>
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 const HTML_ESCAPE_RE = /[&<>"']/g;
@@ -229,22 +231,14 @@ function escapeHtml(s) {
   return String(s).replace(HTML_ESCAPE_RE, c => HTML_ESCAPES[c]);
 }
 
-// Projects a playoff field from that week's own ratings -- a running "if it
-// ended today" bracket, not the actual (end-of-season-only) selection.
-// Shared selection rule (era cutoffs, conference-leader + at-large logic)
-// lives in playoff-format.js, so this page and accuracy.html can't drift.
-function getPlayoffProjection(seasonRows, season, confChampions) {
-  const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
-  return new Set(playoffFieldProjection(sorted, season, confChampions));
-}
-
 // `confFilter` ('' = all) only narrows which rows the table shows -- rank
 // numbers stay each team's true overall rank (so the top Big Ten team at #5
 // still reads 5), and `highlighted`/the legend notes are still computed by
 // the caller from the full, unfiltered week. `confLeaders` (a Set of team
-// names, empty before 2024) gets a "*" after the team name -- every
-// conference's current leader, not just the ones holding a projected
-// auto bid.
+// names, empty before 2024) gets a "†" after the team name -- every
+// conference's current leader, not just the ones holding a projected auto
+// bid. Deliberately not "*", which the CFP column already uses; the Slack
+// post marks the same teams with the same "†".
 function renderStandings(current, season, asOf, colors, highlighted, confFilter, confLeaders) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
@@ -263,7 +257,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
   const hasPlayoffField = current.some(r => r.made_playoff != null);
   const isExactField = current.some(r => r.seed != null);
   const committeeLabel = season < CFP_ERA_START ? 'BCS' : 'CFP';
-  const fieldSize = season < CFP_ERA_START ? 2 : season < TWELVE_TEAM_ERA_START ? 4 : 12;
+  const fieldSize = fieldSizeFor(season);
   const shown = current
     .map((r, i) => ({ r, rank: i + 1 }))
     .filter(({ r }) => !confFilter || r.conference === confFilter);
@@ -292,7 +286,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
         return `
         <tr${rowClass}${rowStyle}>
           <td class="rank">${rank}</td>
-          <td>${escapeHtml(r.team)}${confLeaders.has(r.team) ? ' *' : ''}</td>
+          <td>${escapeHtml(r.team)}${confLeaders.has(r.team) ? ' †' : ''}</td>
           <td>${escapeHtml(r.conference ?? '')}</td>
           <td>${r.wins}</td>
           <td>${r.losses}</td>
@@ -317,7 +311,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
   if (confLeaders.size) {
     const leaderNote = document.createElement('p');
     leaderNote.className = 'legend-note';
-    leaderNote.textContent = '* after a team = its conference\'s current leader (highest-rated team in the conference, or the actual champion once the title game is played).';
+    leaderNote.textContent = '† after a team = its conference\'s current leader (highest-rated team in the conference, or the actual champion once the title game is played).';
     content.appendChild(leaderNote);
   }
 
@@ -344,7 +338,7 @@ function renderBlurbCard(current, season, asOf, highlighted) {
   // shows its real position (e.g. 1-10, 14, 16), not a renumbered 1-12.
   const lines = [`CFB Power Ratings -- ${season} as of ${asOf}`];
   current.forEach((r, i) => {
-    const include = season < 2024 ? i < 10 : highlighted.has(r.team);
+    const include = season < TWELVE_TEAM_ERA_START ? i < 10 : highlighted.has(r.team);
     if (!include) return;
     lines.push(`${i + 1}. ${r.team} (${r.wins}-${r.losses})`);
   });
@@ -445,22 +439,38 @@ function setupStandingsControls(rows, colors) {
     confFilter.value = confs.includes(previous) ? previous : '';
   }
 
+  // What the conference filter needs to re-render the table on its own --
+  // everything draw() computes for the selected week, none of which
+  // depends on the filter.
+  let shownWeek = null;
+
+  function renderShownWeek() {
+    const { current, season, asOf, highlighted, confLeaders } = shownWeek;
+    renderStandings(current, season, asOf, colors, highlighted, confFilter.value, confLeaders);
+  }
+
   function draw() {
     updateNavButtons();
     const season = Number(seasonSelect.value);
     const asOf = weekSelect.value;
+    // Sorted best-first once here -- the projection, leaders, table ranks,
+    // and blurb all read this same order.
     const current = (rowsBySeason.get(season) || [])
       .filter(r => r.as_of === asOf)
       .sort((a, b) => b.power_score - a.power_score);
     populateConfFilter(current);
-    const confChampions = new Map(current.filter(r => r.conf_champion).map(r => [r.conference, r.team]));
-    const highlighted = getPlayoffProjection(current, season, confChampions);
+    const confChampions = confChampionsFromRows(current);
+    // A running "if it ended today" field from this week's own ratings, not
+    // the actual (end-of-season-only) selection -- the shared rule lives in
+    // playoff-format.js, so this page and accuracy.html can't drift.
+    const highlighted = new Set(playoffFieldProjection(current, season, confChampions));
     // 12-team era only -- conference leaders only matter to the field from
     // 2024 on (and only 2023+ rows carry real conf_champion data anyway).
     const confLeaders = season >= TWELVE_TEAM_ERA_START
       ? new Set(conferenceLeaders(current, confChampions).values())
       : new Set();
-    renderStandings(current, season, asOf, colors, highlighted, confFilter.value, confLeaders);
+    shownWeek = { current, season, asOf, highlighted, confLeaders };
+    renderShownWeek();
     renderBlurbCard(current, season, asOf, highlighted);
     if (window.renderTrends) window.renderTrends(rows, season, asOf);
   }
@@ -471,7 +481,7 @@ function setupStandingsControls(rows, colors) {
     draw();
   });
   weekSelect.addEventListener('change', draw);
-  confFilter.addEventListener('change', draw);
+  confFilter.addEventListener('change', renderShownWeek);
   weekPrev.addEventListener('click', () => {
     const idx = asOfsForSeason.indexOf(weekSelect.value);
     if (idx > 0) { weekSelect.value = asOfsForSeason[idx - 1]; draw(); }
@@ -495,7 +505,10 @@ async function main() {
 
   let rows;
   try {
-    const historyRes = await fetch('data/ratings_history.json', { cache: 'no-store' });
+    // 'no-cache', not 'no-store': still always checks for this week's data,
+    // but an unchanged file comes back as a tiny 304 instead of a full
+    // multi-megabyte re-download on every visit.
+    const historyRes = await fetch('data/ratings_history.json', { cache: 'no-cache' });
     if (!historyRes.ok) throw new Error(`HTTP ${historyRes.status}`);
     rows = await historyRes.json();
   } catch (err) {
@@ -512,7 +525,7 @@ async function main() {
   // hiccup even though the ratings data loaded fine).
   let colors = {};
   try {
-    const colorsRes = await fetch('data/team_colors.json', { cache: 'no-store' });
+    const colorsRes = await fetch('data/team_colors.json', { cache: 'no-cache' });
     if (colorsRes.ok) colors = await colorsRes.json();
   } catch {
     // Missing colors just means no accent highlighting -- not fatal.

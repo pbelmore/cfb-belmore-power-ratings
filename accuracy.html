@@ -67,7 +67,7 @@
 </div>
 
 <!-- ?v= must match index.html's -- see the note there. -->
-<script src="playoff-format.js?v=2026-09-29"></script>
+<script src="playoff-format.js?v=2026-09-29.2"></script>
 <script>
 // One season's comparison, evaluated at the true final regular-season
 // snapshot only (never postseason, never a mid-season projection) -- the
@@ -78,13 +78,15 @@ function computeSeasonStats(rows, season) {
   if (!finalAsOf) return null;
   const snapshot = seasonRows.filter(r => r.as_of === finalAsOf);
 
-  const fieldSize = season < CFP_ERA_START ? 2 : season < TWELVE_TEAM_ERA_START ? 4 : 12;
-  // Sorted once -- both the projected field (position 0 = our #1 seed, so
-  // it can be compared position-for-position against the real field's
-  // seed order) and the overall rank map below are derived from this same
-  // ordering, rather than each re-sorting the snapshot independently.
+  const fieldSize = fieldSizeFor(season);
+  // Sorted once -- both the projected field (returned in projected seed
+  // order, position 0 = our #1 seed, following that season's real seeding
+  // rule -- see playoffFieldProjection -- so it can be compared
+  // position-for-position against the real field's seed order) and the
+  // overall rank map below are derived from this same ordering, rather
+  // than each re-sorting the snapshot independently.
   const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
-  const confChampions = new Map(snapshot.filter(r => r.conf_champion).map(r => [r.conference, r.team]));
+  const confChampions = confChampionsFromRows(snapshot);
   const ourField = playoffFieldProjection(overallRanked, season, confChampions);
   const realField = snapshot.filter(r => r.seed != null).sort((a, b) => a.seed - b.seed).map(r => r.team);
   const realSet = new Set(realField);
@@ -173,7 +175,7 @@ async function main() {
 
   let rows;
   try {
-    const res = await fetch('data/ratings_history.json', { cache: 'no-store' });
+    const res = await fetch('data/ratings_history.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     rows = await res.json();
   } catch (err) {

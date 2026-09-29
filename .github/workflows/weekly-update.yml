@@ -27,8 +27,8 @@ on:
     # scheduled triggers are best-effort and occasionally get dropped
     # outright (happened 2026-09-29 -- no run was created at all). The
     # 17:23 firing is a backup that exits early via the "already ran
-    # today" check below if the 13:23 one succeeded, so it never posts to
-    # Slack twice. Minute 23 rather than :00 because the top of the hour
+    # today" check below if the 13:23 one succeeded, and Slack is only
+    # posted after the data push succeeds, so it never posts twice. Minute 23 rather than :00 because the top of the hour
     # is GitHub's peak scheduling load, when drops are most likely.
     - cron: "23 13,17 * 8-10 2"      # Tuesdays, Aug-Oct, ~9:23am ET + 1:23pm ET backup (EDT)
     - cron: "23 13,17 * 11-12,1 3"   # Wednesdays, Nov-Jan, ~8:23am ET + 12:23pm ET backup (EST)
@@ -51,29 +51,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Sync to the latest commit
+        # checkout gives the commit that was current when this run was
+        # *triggered*. A run queued behind another by `concurrency` (e.g.
+        # the backup cron waiting on a delayed first run) would otherwise
+        # start from before that run's push -- missing today's snapshot in
+        # the guard below, and then failing its own push.
+        run: git pull --ff-only origin "$GITHUB_REF_NAME"
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Skip if today's update already ran
-        id: guard
-        # Scheduled runs only -- a manual workflow_dispatch always runs.
-        # The backup cron firing lands here and stops if the earlier one
-        # already wrote today's snapshot, so a normal week gets exactly
-        # one pull, one commit, and one Slack post.
-        if: github.event_name == 'schedule'
-        run: |
-          if python -c "import json, sys, datetime; today = datetime.datetime.now(datetime.timezone.utc).date().isoformat(); sys.exit(0 if any(r['as_of'] == today for r in json.load(open('data/ratings_history.json'))) else 1)"; then
-            echo "Today's snapshot already exists -- skipping."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - if: steps.guard.outputs.skip != 'true'
-        run: pip install -r requirements.txt
-
       - name: Determine season year
         id: season
-        if: steps.guard.outputs.skip != 'true'
         env:
           # Routed through an env var, never interpolated straight into a
           # run: script -- a `${{ github.event.inputs.year }}` splice there
@@ -104,17 +95,34 @@ jobs:
             fi
           fi
 
+      - name: Skip if today's update already ran
+        id: guard
+        # Scheduled runs only -- a manual workflow_dispatch always runs.
+        # The backup cron firing lands here and stops if the earlier one
+        # already wrote today's snapshot for this season, so a normal week
+        # gets exactly one pull, one commit, and one Slack post. Matched on
+        # season too, so a same-day manual re-pull of some other season
+        # doesn't make the scheduled current-season run skip.
+        if: github.event_name == 'schedule'
+        env:
+          SEASON_YEAR: ${{ steps.season.outputs.year }}
+        run: |
+          if python -c "import json, os, sys, datetime; today = datetime.datetime.now(datetime.timezone.utc).date().isoformat(); season = int(os.environ['SEASON_YEAR']); sys.exit(0 if any(r['season'] == season and r['as_of'] == today for r in json.load(open('data/ratings_history.json'))) else 1)"; then
+            echo "Today's $SEASON_YEAR snapshot already exists -- skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.guard.outputs.skip != 'true'
+        run: pip install -r requirements.txt
+
       - name: Run weekly update
         if: steps.guard.outputs.skip != 'true'
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
           SEASON_YEAR: ${{ steps.season.outputs.year }}
-          # Optional -- weekly_update.py only posts when this is set AND
-          # the season is 2024+ (the 12-team format Slack posting was
-          # never built for older eras, since we'll never run this
-          # against one again).
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-        run: python scripts/weekly_update.py --year "$SEASON_YEAR"
+        # Only writes the Slack message (2024+ seasons) -- the "Post to
+        # Slack" step below sends it once the data is safely pushed.
+        run: python scripts/weekly_update.py --year "$SEASON_YEAR" --slack-message-out "$RUNNER_TEMP/slack_message.txt"
 
       - name: Commit and push updated data
         if: steps.guard.outputs.skip != 'true'
@@ -123,4 +131,28 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add data/teams.json data/games.json data/ratings_history.json data/weekly_blurb.txt data/team_colors.json
           git diff --staged --quiet || git commit -m "Weekly update $(date -u +%F)"
+          # Rebased onto anything pushed to the branch mid-run (e.g. a code
+          # change) rather than failing non-fast-forward and dropping this
+          # week's data -- the bot only ever touches data/, so this can't
+          # conflict with a code push.
+          git pull --rebase origin "$GITHUB_REF_NAME"
           git push
+
+      - name: Post to Slack
+        # Last, and only once the push above succeeded: a Slack failure
+        # can't block the site's data update, and a failed push can't leave
+        # behind a Slack post that the backup cron run would then repeat. A
+        # failure here still marks the run failed (so it gets noticed), but
+        # the backup run won't retry it -- today's snapshot is already in.
+        if: steps.guard.outputs.skip != 'true'
+        env:
+          # Optional -- unset just skips posting.
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          message="$RUNNER_TEMP/slack_message.txt"
+          if [ -z "$SLACK_WEBHOOK_URL" ] || [ ! -s "$message" ]; then
+            echo "No Slack webhook configured, or no message for this season -- skipping."
+            exit 0
+          fi
+          jq -Rs '{text: .}' "$message" \
+            | curl -sS --fail-with-body --max-time 15 -H 'Content-Type: application/json' --data @- "$SLACK_WEBHOOK_URL"

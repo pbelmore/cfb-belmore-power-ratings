@@ -1,0 +1,40 @@
+name: Check script versions
+
+# index.html and accuracy.html load the site's .js files with a ?v= cache
+# buster (GitHub Pages lets browsers cache them for 10 minutes). Forgetting
+# to bump it after a script change can pair a new page with an old cached
+# script and render a blank table, so this fails the push instead of
+# relying on remembering. Data-only pushes (the weekly bot) never trigger it.
+on:
+  push:
+    paths: ["*.js", "*.html"]
+  pull_request:
+    paths: ["*.js", "*.html"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Same ?v= everywhere, bumped whenever a script changes
+        env:
+          BEFORE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          versions=$(grep -ho '\.js?v=[^"]*' index.html accuracy.html | sed 's/.*?v=//' | sort -u)
+          if [ "$(printf '%s\n' "$versions" | wc -l)" -ne 1 ]; then
+            echo "::error::index.html and accuracy.html must load every script with the same ?v= -- found: $(echo $versions)"
+            exit 1
+          fi
+          # No usable "before" commit on a branch's first push -- nothing to diff against.
+          if ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            exit 0
+          fi
+          if ! git diff --quiet "$BEFORE" HEAD -- '*.js'; then
+            if ! git diff "$BEFORE" HEAD -- index.html | grep -q '^+.*\.js?v='; then
+              echo "::error::A .js file changed but its ?v= in index.html/accuracy.html wasn't bumped."
+              exit 1
+            fi
+          fi
