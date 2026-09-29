@@ -216,7 +216,10 @@
   </section>
 </div>
 
-<script src="playoff-format.js"></script>
+<!-- ?v= busts GitHub Pages' 10-minute browser cache: bump it whenever
+     playoff-format.js changes alongside this page, or a returning visitor
+     can get the new page with the old script (and a blank table). -->
+<script src="playoff-format.js?v=2026-09-29"></script>
 <script src="trends.js"></script>
 <script>
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
@@ -230,17 +233,19 @@ function escapeHtml(s) {
 // ended today" bracket, not the actual (end-of-season-only) selection.
 // Shared selection rule (era cutoffs, conference-leader + at-large logic)
 // lives in playoff-format.js, so this page and accuracy.html can't drift.
-function getPlayoffProjection(seasonRows, season) {
+function getPlayoffProjection(seasonRows, season, confChampions) {
   const sorted = [...seasonRows].sort((a, b) => b.power_score - a.power_score);
-  const confChampions = new Map(seasonRows.filter(r => r.conf_champion).map(r => [r.conference, r.team]));
   return new Set(playoffFieldProjection(sorted, season, confChampions));
 }
 
 // `confFilter` ('' = all) only narrows which rows the table shows -- rank
 // numbers stay each team's true overall rank (so the top Big Ten team at #5
 // still reads 5), and `highlighted`/the legend notes are still computed by
-// the caller from the full, unfiltered week.
-function renderStandings(current, season, asOf, colors, highlighted, confFilter) {
+// the caller from the full, unfiltered week. `confLeaders` (a Set of team
+// names, empty before 2024) gets a "*" after the team name -- every
+// conference's current leader, not just the ones holding a projected
+// auto bid.
+function renderStandings(current, season, asOf, colors, highlighted, confFilter, confLeaders) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
@@ -287,7 +292,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter)
         return `
         <tr${rowClass}${rowStyle}>
           <td class="rank">${rank}</td>
-          <td>${escapeHtml(r.team)}</td>
+          <td>${escapeHtml(r.team)}${confLeaders.has(r.team) ? ' *' : ''}</td>
           <td>${escapeHtml(r.conference ?? '')}</td>
           <td>${r.wins}</td>
           <td>${r.losses}</td>
@@ -302,17 +307,26 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter)
 
   const note = document.createElement('p');
   note.className = 'legend-note';
-  note.textContent = season < 2024
+  note.textContent = season < TWELVE_TEAM_ERA_START
     ? `Highlighted: projected top ${fieldSize} (if the season ended today).`
-    : 'Highlighted: projected 12-team field -- 5 conference leaders (auto bids) + 7 at-large.';
+    : season < P4_AUTO_BID_ERA_START
+      ? 'Highlighted: projected 12-team field -- 5 conference leaders (auto bids) + 7 at-large.'
+      : 'Highlighted: projected 12-team field -- 4 Power Four leaders + the top Group of Six leader (auto bids), Notre Dame if top 12, and the rest at-large.';
   content.appendChild(note);
+
+  if (confLeaders.size) {
+    const leaderNote = document.createElement('p');
+    leaderNote.className = 'legend-note';
+    leaderNote.textContent = '* after a team = its conference\'s current leader (highest-rated team in the conference, or the actual champion once the title game is played).';
+    content.appendChild(leaderNote);
+  }
 
   if (hasPlayoffField) {
     const playoffNote = document.createElement('p');
     playoffNote.className = 'legend-note';
     playoffNote.textContent = isExactField
-      ? `* = actually made the real ${fieldSize}-team ${committeeLabel} field.`
-      : `* = currently projected to make the real ${fieldSize}-team ${committeeLabel} field, based on this week's committee ranking.`;
+      ? `* in the ${committeeLabel} column = actually made the real ${fieldSize}-team ${committeeLabel} field.`
+      : `* in the ${committeeLabel} column = currently projected to make the real ${fieldSize}-team ${committeeLabel} field, based on this week's committee ranking.`;
     content.appendChild(playoffNote);
   }
 }
@@ -439,8 +453,14 @@ function setupStandingsControls(rows, colors) {
       .filter(r => r.as_of === asOf)
       .sort((a, b) => b.power_score - a.power_score);
     populateConfFilter(current);
-    const highlighted = getPlayoffProjection(current, season);
-    renderStandings(current, season, asOf, colors, highlighted, confFilter.value);
+    const confChampions = new Map(current.filter(r => r.conf_champion).map(r => [r.conference, r.team]));
+    const highlighted = getPlayoffProjection(current, season, confChampions);
+    // 12-team era only -- conference leaders only matter to the field from
+    // 2024 on (and only 2023+ rows carry real conf_champion data anyway).
+    const confLeaders = season >= TWELVE_TEAM_ERA_START
+      ? new Set(conferenceLeaders(current, confChampions).values())
+      : new Set();
+    renderStandings(current, season, asOf, colors, highlighted, confFilter.value, confLeaders);
     renderBlurbCard(current, season, asOf, highlighted);
     if (window.renderTrends) window.renderTrends(rows, season, asOf);
   }

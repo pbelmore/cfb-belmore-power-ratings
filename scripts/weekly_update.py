@@ -37,8 +37,16 @@ WORD_TO_CODE = {v: k for k, v in CODE_TO_WORD.items()}
 # instead of the BCS's top-2-by-standings title game.
 # TWELVE_TEAM_ERA_START: first season of the 12-team format (5 conference-
 # leader auto bids + 7 at-large) instead of the old flat top-4.
+# P4_AUTO_BID_ERA_START: first season of the 2026+ 12-team rules -- all four
+# Power Four champions get auto bids regardless of rank (plus the single
+# highest-ranked Group of Six champion), replacing 2024-2025's "five
+# highest-ranked conference champions", and Notre Dame is guaranteed a bid
+# if it finishes in the top 12 (NOTRE_DAME_TOP_N).
 CFP_ERA_START = 2014
 TWELVE_TEAM_ERA_START = 2024
+P4_AUTO_BID_ERA_START = 2026
+POWER_FOUR = {"ACC", "Big Ten", "Big 12", "SEC"}
+NOTRE_DAME_TOP_N = 12
 
 
 def cfbd_get(path, api_key, **params):
@@ -285,37 +293,22 @@ def conference_champions(game_rows, teams):
     return champions
 
 
-def conference_leaders_and_at_large(ranked_teams, teams, leaders=5, at_large=7, conf_champions=None):
-    """The 12-team format's "5 conference-leader auto bids + 7 at-large"
-    selection rule, shared by every playoff-field projection in this
-    module (real_field_projection fed committee ranks, playoff_projection
-    fed our own scores). `ranked_teams` is [(team, value)] already sorted
-    best-first; independents are excluded from auto bids since there's no
-    conference championship to win one. Returns (leader_teams,
-    at_large_teams) as two separate ordered lists (best-first) rather than
-    one merged set, so a caller that needs to tell a conference-leader auto
-    bid apart from an at-large team (e.g. format_slack_blurb's "*") doesn't
-    have to re-derive it -- conference_leader_field() below is just this
-    with the two unioned, for callers that only need the combined field.
+def conference_leaders(ranked_teams, teams, conf_champions=None):
+    """{conference: leader} for every conference with a team in
+    `ranked_teams` ([(team, value)], already sorted best-first) -- the
+    best-ranked/-scored team in that conference, independents excluded
+    since there's no conference championship to win.
 
     `conf_champions` ({conference: team}, from conference_champions())
-    overrides the "best-ranked/-scored team in that conference" stand-in
-    with the actual championship-game winner for any conference whose
-    title game has already been played -- the two aren't always the same
-    team (e.g. Clemson beating a higher-ranked SMU for the 2024 ACC title,
-    then correctly holding the ACC's auto bid over SMU). A conference
-    whose title game hasn't been played yet (or that has none) still falls
-    back to the rank-based stand-in -- the only option before that
-    conference's champion is actually decided.
-
-    The 5 auto-bid conferences are chosen by their leader's own rank
-    (best-first), not by whichever team first put that conference on the
-    board while scanning `ranked_teams` -- those can differ once
-    `conf_champions` swaps in a champion who isn't that conference's
-    highest-ranked team."""
+    overrides that stand-in with the actual championship-game winner for
+    any conference whose title game has already been played -- the two
+    aren't always the same team (e.g. Clemson beating a higher-ranked SMU
+    for the 2024 ACC title). A conference whose title game hasn't been
+    played yet (or that has none) keeps the rank-based stand-in -- the
+    only option before that conference's champion is actually decided."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
     conf_champions = conf_champions or {}
-    rank_of = {team: i for i, (team, _) in enumerate(ranked_teams)}
+    ranked_names = {team for team, _ in ranked_teams}
 
     conf_leader = {}
     for team, _ in ranked_teams:
@@ -324,21 +317,57 @@ def conference_leaders_and_at_large(ranked_teams, teams, leaders=5, at_large=7, 
             continue
         conf_leader[conf] = team
     for conf, champ in conf_champions.items():
-        if conf in conf_leader and champ in rank_of:
+        if conf in conf_leader and champ in ranked_names:
             conf_leader[conf] = champ
-
-    ordered_leaders = sorted(conf_leader.values(), key=lambda t: rank_of[t])
-    leader_teams = ordered_leaders[:leaders]
-    leader_names = set(leader_teams)
-    at_large_teams = [team for team, _ in ranked_teams if team not in leader_names][:at_large]
-    return leader_teams, at_large_teams
+    return conf_leader
 
 
-def conference_leader_field(ranked_teams, teams, leaders=5, at_large=7, conf_champions=None):
+def conference_leaders_and_at_large(ranked_teams, teams, season, conf_champions=None):
+    """The 12-team format's selection rule, shared by every playoff-field
+    projection in this module (real_field_projection fed committee ranks,
+    playoff_projection fed our own scores). `ranked_teams` is [(team,
+    value)] already sorted best-first. Returns (leader_teams,
+    at_large_teams) as two separate lists (each best-first) rather than one
+    merged set, so a caller that needs to tell a conference-leader auto bid
+    apart from an at-large team (e.g. format_slack_blurb's "*") doesn't
+    have to re-derive it -- conference_leader_field() below is just this
+    with the two unioned, for callers that only need the combined field.
+
+    2024-2025: the 5 highest-ranked conference leaders + the next 7 best.
+    2026+ (P4_AUTO_BID_ERA_START): every Power Four leader regardless of
+    rank + the single highest-ranked Group of Six leader, plus Notre Dame
+    if it's inside the top NOTRE_DAME_TOP_N (listed with the at-large
+    teams -- it's a guaranteed bid, not a conference leader), with the
+    best remaining teams filling the field out to 12.
+
+    Auto bids are chosen by each leader's own rank, not by whichever team
+    first put that conference on the board while scanning `ranked_teams`
+    -- those can differ once `conf_champions` swaps in a champion who
+    isn't that conference's highest-ranked team."""
+    rank_of = {team: i for i, (team, _) in enumerate(ranked_teams)}
+    conf_leader = conference_leaders(ranked_teams, teams, conf_champions)
+
+    if season >= P4_AUTO_BID_ERA_START:
+        power_four = [t for c, t in conf_leader.items() if c in POWER_FOUR]
+        group_of_six = sorted((t for c, t in conf_leader.items() if c not in POWER_FOUR), key=rank_of.get)[:1]
+        leader_teams = sorted(power_four + group_of_six, key=rank_of.get)
+        guaranteed = ["Notre Dame"] if rank_of.get("Notre Dame", NOTRE_DAME_TOP_N) < NOTRE_DAME_TOP_N else []
+        at_large_slots = 12 - len(leader_teams) - len(guaranteed)
+    else:
+        leader_teams = sorted(conf_leader.values(), key=rank_of.get)[:5]
+        guaranteed = []
+        at_large_slots = 7
+
+    taken = set(leader_teams) | set(guaranteed)
+    at_large_teams = guaranteed + [team for team, _ in ranked_teams if team not in taken][:at_large_slots]
+    return leader_teams, sorted(at_large_teams, key=rank_of.get)
+
+
+def conference_leader_field(ranked_teams, teams, season, conf_champions=None):
     """The 12-team field as a single set -- see
     conference_leaders_and_at_large() for the leader/at-large split."""
     leader_teams, at_large_teams = conference_leaders_and_at_large(
-        ranked_teams, teams, leaders=leaders, at_large=at_large, conf_champions=conf_champions,
+        ranked_teams, teams, season, conf_champions=conf_champions,
     )
     return set(leader_teams) | set(at_large_teams)
 
@@ -353,7 +382,7 @@ def playoff_field_from_ranked(ranked_teams, teams, season, conf_champions=None):
         return {team for team, _ in ranked_teams[:2]}
     if season < TWELVE_TEAM_ERA_START:
         return {team for team, _ in ranked_teams[:4]}
-    return conference_leader_field(ranked_teams, teams, conf_champions=conf_champions)
+    return conference_leader_field(ranked_teams, teams, season, conf_champions=conf_champions)
 
 
 def real_field_projection(committee_ranks, teams, season, conf_champions=None):
@@ -652,7 +681,7 @@ def format_slack_blurb(results, scores, teams, season, week_label, conf_champion
     read as asides rather than part of the ranking itself."""
     ranked = sorted(results.items(), key=lambda kv: (-scores[kv[0]], kv[0]))
     ranked_by_score = [(team, scores[team]) for team, _ in ranked]
-    leader_teams, at_large_teams = conference_leaders_and_at_large(ranked_by_score, teams, conf_champions=conf_champions)
+    leader_teams, at_large_teams = conference_leaders_and_at_large(ranked_by_score, teams, season, conf_champions=conf_champions)
     leader_names = set(leader_teams)
     selected = leader_names | set(at_large_teams)
 
