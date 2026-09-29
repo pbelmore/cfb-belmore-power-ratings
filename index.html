@@ -187,6 +187,7 @@
       <select id="week-select" aria-label="Select week"></select>
       <button type="button" id="week-next" aria-label="Next week">&rarr;</button>
     </div>
+    <select id="conf-filter" aria-label="Filter by conference"></select>
   </div>
   <div id="content"></div>
 
@@ -235,7 +236,11 @@ function getPlayoffProjection(seasonRows, season) {
   return new Set(playoffFieldProjection(sorted, season, confChampions));
 }
 
-function renderStandings(current, season, asOf, colors, highlighted) {
+// `confFilter` ('' = all) only narrows which rows the table shows -- rank
+// numbers stay each team's true overall rank (so the top Big Ten team at #5
+// still reads 5), and `highlighted`/the legend notes are still computed by
+// the caller from the full, unfiltered week.
+function renderStandings(current, season, asOf, colors, highlighted, confFilter) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
@@ -254,6 +259,9 @@ function renderStandings(current, season, asOf, colors, highlighted) {
   const isExactField = current.some(r => r.seed != null);
   const committeeLabel = season < CFP_ERA_START ? 'BCS' : 'CFP';
   const fieldSize = season < CFP_ERA_START ? 2 : season < TWELVE_TEAM_ERA_START ? 4 : 12;
+  const shown = current
+    .map((r, i) => ({ r, rank: i + 1 }))
+    .filter(({ r }) => !confFilter || r.conference === confFilter);
 
   const table = document.createElement('table');
   table.innerHTML = `
@@ -269,7 +277,7 @@ function renderStandings(current, season, asOf, colors, highlighted) {
       </tr>
     </thead>
     <tbody>
-      ${current.map((r, i) => {
+      ${shown.map(({ r, rank }) => {
         const isHighlighted = highlighted.has(r.team);
         const c = colors[r.team];
         const rowStyle = isHighlighted && c && HEX_COLOR_RE.test(c.color)
@@ -278,7 +286,7 @@ function renderStandings(current, season, asOf, colors, highlighted) {
         const committeeCell = r.committee_rank == null ? '' : `${r.committee_rank}${r.made_playoff ? ' *' : ''}`;
         return `
         <tr${rowClass}${rowStyle}>
-          <td class="rank">${i + 1}</td>
+          <td class="rank">${rank}</td>
           <td>${escapeHtml(r.team)}</td>
           <td>${escapeHtml(r.conference ?? '')}</td>
           <td>${r.wins}</td>
@@ -370,6 +378,7 @@ function setupStandingsControls(rows, colors) {
   const weekSelect = document.getElementById('week-select');
   const weekPrev = document.getElementById('week-prev');
   const weekNext = document.getElementById('week-next');
+  const confFilter = document.getElementById('conf-filter');
 
   // Grouped once up front instead of re-filtering the full (and, as history
   // grows, potentially very large) `rows` array on every season/week
@@ -409,6 +418,19 @@ function setupStandingsControls(rows, colors) {
     weekNext.disabled = idx === -1 || idx >= asOfsForSeason.length - 1;
   }
 
+  // Rebuilt from the week being shown, since conference membership changes
+  // across seasons (e.g. the Pac-12 disappearing). Keeps the current pick
+  // when that conference still exists, else falls back to "All".
+  function populateConfFilter(current) {
+    const previous = confFilter.value;
+    const confs = [...new Set(current.map(r => r.conference).filter(Boolean))].sort();
+    confFilter.replaceChildren(
+      new Option('All conferences', ''),
+      ...confs.map(c => new Option(c, c))
+    );
+    confFilter.value = confs.includes(previous) ? previous : '';
+  }
+
   function draw() {
     updateNavButtons();
     const season = Number(seasonSelect.value);
@@ -416,8 +438,9 @@ function setupStandingsControls(rows, colors) {
     const current = (rowsBySeason.get(season) || [])
       .filter(r => r.as_of === asOf)
       .sort((a, b) => b.power_score - a.power_score);
+    populateConfFilter(current);
     const highlighted = getPlayoffProjection(current, season);
-    renderStandings(current, season, asOf, colors, highlighted);
+    renderStandings(current, season, asOf, colors, highlighted, confFilter.value);
     renderBlurbCard(current, season, asOf, highlighted);
     if (window.renderTrends) window.renderTrends(rows, season, asOf);
   }
@@ -428,6 +451,7 @@ function setupStandingsControls(rows, colors) {
     draw();
   });
   weekSelect.addEventListener('change', draw);
+  confFilter.addEventListener('change', draw);
   weekPrev.addEventListener('click', () => {
     const idx = asOfsForSeason.indexOf(weekSelect.value);
     if (idx > 0) { weekSelect.value = asOfsForSeason[idx - 1]; draw(); }
