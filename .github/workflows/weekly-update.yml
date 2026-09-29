@@ -22,8 +22,16 @@ on:
     # January, so there's nothing new to pull the rest of the year --
     # without this, the Action would just keep re-running against an
     # already-finished season indefinitely each offseason.
-    - cron: "0 13 * 8-10 2"      # Tuesdays, Aug-Oct, 9am ET (13:00 UTC; drifts to 8am ET once DST ends in Nov)
-    - cron: "0 13 * 11-12,1 3"   # Wednesdays, Nov-Jan, 8am ET (13:00 UTC, DST already ended)
+    #
+    # Two firings per day (13:23 and 17:23 UTC), not one: GitHub's
+    # scheduled triggers are best-effort and occasionally get dropped
+    # outright (happened 2026-09-29 -- no run was created at all). The
+    # 17:23 firing is a backup that exits early via the "already ran
+    # today" check below if the 13:23 one succeeded, so it never posts to
+    # Slack twice. Minute 23 rather than :00 because the top of the hour
+    # is GitHub's peak scheduling load, when drops are most likely.
+    - cron: "23 13,17 * 8-10 2"      # Tuesdays, Aug-Oct, ~9:23am ET + 1:23pm ET backup (EDT)
+    - cron: "23 13,17 * 11-12,1 3"   # Wednesdays, Nov-Jan, ~8:23am ET + 12:23pm ET backup (EST)
 
 permissions:
   contents: write
@@ -47,10 +55,25 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install -r requirements.txt
+      - name: Skip if today's update already ran
+        id: guard
+        # Scheduled runs only -- a manual workflow_dispatch always runs.
+        # The backup cron firing lands here and stops if the earlier one
+        # already wrote today's snapshot, so a normal week gets exactly
+        # one pull, one commit, and one Slack post.
+        if: github.event_name == 'schedule'
+        run: |
+          if python -c "import json, sys, datetime; today = datetime.datetime.now(datetime.timezone.utc).date().isoformat(); sys.exit(0 if any(r['as_of'] == today for r in json.load(open('data/ratings_history.json'))) else 1)"; then
+            echo "Today's snapshot already exists -- skipping."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.guard.outputs.skip != 'true'
+        run: pip install -r requirements.txt
 
       - name: Determine season year
         id: season
+        if: steps.guard.outputs.skip != 'true'
         env:
           # Routed through an env var, never interpolated straight into a
           # run: script -- a `${{ github.event.inputs.year }}` splice there
@@ -82,6 +105,7 @@ jobs:
           fi
 
       - name: Run weekly update
+        if: steps.guard.outputs.skip != 'true'
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
           SEASON_YEAR: ${{ steps.season.outputs.year }}
@@ -93,6 +117,7 @@ jobs:
         run: python scripts/weekly_update.py --year "$SEASON_YEAR"
 
       - name: Commit and push updated data
+        if: steps.guard.outputs.skip != 'true'
         run: |
           git config user.name "ratings-bot"
           git config user.email "actions@users.noreply.github.com"
