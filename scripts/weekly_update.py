@@ -685,10 +685,10 @@ def format_slack_blurb(results, scores, teams, season, week_label, conf_champion
     format_weekly_blurb's output. Title is "Week N" (or "End of Regular
     Season"/"Bowl Season"/"End of Bowl Season" -- see season_week_label())
     instead of a date, since a Slack reader cares what week this is, not
-    which calendar day it happened to run. Team lines get a "†" marking
+    which calendar day it happened to run. Team lines get a "*" marking
     each conference's current leader -- the same teams, and the same
-    marker, as the site's standings table (never "*", which the site uses
-    for the CFP column and Slack uses for bold); the footnote explaining
+    marker, as the site's standings table (whose CFP column uses "†"
+    instead); the footnote explaining
     that and the closing link are italicized so they read as asides rather
     than part of the ranking itself."""
     ranked = rank_by_public_score(results, scores)
@@ -701,10 +701,10 @@ def format_slack_blurb(results, scores, teams, season, week_label, conf_champion
     for i, (team, r) in enumerate(ranked, start=1):
         if team not in selected:
             continue
-        marker = " †" if team in leaders else ""
+        marker = " *" if team in leaders else ""
         lines.append(f"{i}. {team} ({r['wins']}-{r['losses']}){marker}")
     lines.append("")
-    lines.append("_† = conference leader (or champion, once the title game is played)_")
+    lines.append("_* = conference leader (or champion, once the title game is played)_")
     if link:
         # Wrapped in Slack's <url> link syntax, not left as a bare URL --
         # Slack's auto-linker treats "_" as a valid URL character, so a

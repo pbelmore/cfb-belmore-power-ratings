@@ -235,10 +235,10 @@ function escapeHtml(s) {
 // numbers stay each team's true overall rank (so the top Big Ten team at #5
 // still reads 5), and `highlighted`/the legend notes are still computed by
 // the caller from the full, unfiltered week. `confLeaders` (a Set of team
-// names, empty before 2024) gets a "†" after the team name -- every
+// names, empty before 2024) gets a "*" after the team name -- every
 // conference's current leader, not just the ones holding a projected auto
-// bid. Deliberately not "*", which the CFP column already uses; the Slack
-// post marks the same teams with the same "†".
+// bid. The Slack post marks the same teams with the same "*"; the CFP
+// column uses "†" instead so the two never share a marker.
 function renderStandings(current, season, asOf, colors, highlighted, confFilter, confLeaders) {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
@@ -247,7 +247,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
 
   // Real committee rankings only exist for part of a season (they start
   // partway through, and stop once the field is picked) -- the column
-  // itself only appears on weeks where at least one team has one. The *
+  // itself only appears on weeks where at least one team has one. The †
   // marks a team in the real field, shown from the first ranked week on
   // -- a same-week projection until the true final week, then the exact
   // answer. `seed` is only ever populated for that exact/final case, so
@@ -282,11 +282,11 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
         const rowStyle = isHighlighted && c && HEX_COLOR_RE.test(c.color)
           ? ` style="--team-color:${c.color}"` : '';
         const rowClass = isHighlighted ? ' class="highlight-row"' : '';
-        const committeeCell = r.committee_rank == null ? '' : `${r.committee_rank}${r.made_playoff ? ' *' : ''}`;
+        const committeeCell = r.committee_rank == null ? '' : `${r.committee_rank}${r.made_playoff ? ' †' : ''}`;
         return `
         <tr${rowClass}${rowStyle}>
           <td class="rank">${rank}</td>
-          <td>${escapeHtml(r.team)}${confLeaders.has(r.team) ? ' †' : ''}</td>
+          <td>${escapeHtml(r.team)}${confLeaders.has(r.team) ? ' *' : ''}</td>
           <td>${escapeHtml(r.conference ?? '')}</td>
           <td>${r.wins}</td>
           <td>${r.losses}</td>
@@ -311,7 +311,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
   if (confLeaders.size) {
     const leaderNote = document.createElement('p');
     leaderNote.className = 'legend-note';
-    leaderNote.textContent = '† after a team = its conference\'s current leader (highest-rated team in the conference, or the actual champion once the title game is played).';
+    leaderNote.textContent = '* after a team = its conference\'s current leader (highest-rated team in the conference, or the actual champion once the title game is played).';
     content.appendChild(leaderNote);
   }
 
@@ -319,8 +319,8 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
     const playoffNote = document.createElement('p');
     playoffNote.className = 'legend-note';
     playoffNote.textContent = isExactField
-      ? `* in the ${committeeLabel} column = actually made the real ${fieldSize}-team ${committeeLabel} field.`
-      : `* in the ${committeeLabel} column = currently projected to make the real ${fieldSize}-team ${committeeLabel} field, based on this week's committee ranking.`;
+      ? `† in the ${committeeLabel} column = actually made the real ${fieldSize}-team ${committeeLabel} field.`
+      : `† in the ${committeeLabel} column = currently projected to make the real ${fieldSize}-team ${committeeLabel} field, based on this week's committee ranking.`;
     content.appendChild(playoffNote);
   }
 }
