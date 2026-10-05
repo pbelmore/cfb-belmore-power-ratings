@@ -7,31 +7,33 @@ on:
         description: "Season year to pull (blank = auto-detect from today's date)"
         required: false
         default: ""
+      mode:
+        description: "weekly = full ratings update + Slack post; cfp = just add the latest CFP ranks"
+        type: choice
+        options: [weekly, cfp]
+        default: weekly
   schedule:
-    # Tuesdays through October: no CFP/BCS committee ranking exists yet to
-    # race ahead of (verified against real release history, 2019-2025 --
-    # the first ranking of a season has never come out before very late
-    # October), so pulling a day earlier than November onward just means
-    # fresher data with nothing to lose.
+    # Two kinds of run (see "Determine run mode" below):
     #
-    # Wednesdays from November on: the committee's rankings air Tuesday
-    # night starting that month, so a Tuesday-morning run would race ahead
-    # of that week's ranking and miss it until the following week's run.
+    # Weekly rankings -- Sun/Mon/Tue mornings, going out the morning after
+    # the week's last game. Sunday and Monday only proceed once every game
+    # in the current week is final (so a Monday-night game holds the week
+    # until Tuesday); Tuesday proceeds regardless, so a cancelled game can't
+    # hold it up forever. All three skip if no game has finished since the
+    # last snapshot, so each week gets exactly one update and Slack post.
     #
-    # Aug-Jan only: the season runs roughly late August through mid-
-    # January, so there's nothing new to pull the rest of the year --
-    # without this, the Action would just keep re-running against an
-    # already-finished season indefinitely each offseason.
+    # CFP ranks -- Wednesday mornings, Nov-Dec: the committee's ranking airs
+    # Tuesday night, after the weekly run is already out, so this adds it
+    # to that week's existing snapshot (no new snapshot, no Slack post).
     #
-    # Two firings per day (13:23 and 17:23 UTC), not one: GitHub's
-    # scheduled triggers are best-effort and occasionally get dropped
-    # outright (happened 2026-09-29 -- no run was created at all). The
-    # 17:23 firing is a backup that exits early via the "already ran
-    # today" check below if the 13:23 one succeeded, and Slack is only
-    # posted after the data push succeeds, so it never posts twice. Minute 23 rather than :00 because the top of the hour
-    # is GitHub's peak scheduling load, when drops are most likely.
-    - cron: "23 13,17 * 8-10 2"      # Tuesdays, Aug-Oct, ~9:23am ET + 1:23pm ET backup (EDT)
-    - cron: "23 13,17 * 11-12,1 3"   # Wednesdays, Nov-Jan, ~8:23am ET + 12:23pm ET backup (EST)
+    # Aug-Jan only: nothing new to pull the rest of the year. Two firings
+    # per day (13:23 and 17:23 UTC): GitHub's scheduled triggers are
+    # best-effort and occasionally get dropped outright (happened
+    # 2026-09-29), and the second firing is a no-op if the first one
+    # worked. Minute 23 rather than :00 because the top of the hour is
+    # GitHub's peak scheduling load, when drops are most likely.
+    - cron: "23 13,17 * 8-12,1 0,1,2"   # Sun/Mon/Tue, Aug-Jan: weekly rankings (~9:23am ET in EDT, 8:23am in EST)
+    - cron: "23 13,17 * 11,12 3"        # Wed, Nov-Dec: CFP ranks
 
 permissions:
   contents: write
@@ -55,8 +57,9 @@ jobs:
         # checkout gives the commit that was current when this run was
         # *triggered*. A run queued behind another by `concurrency` (e.g.
         # the backup cron waiting on a delayed first run) would otherwise
-        # start from before that run's push -- missing today's snapshot in
-        # the guard below, and then failing its own push.
+        # start from before that run's push -- comparing against stale
+        # games.json in --skip-if-no-new-games, and then failing its own
+        # push.
         run: git pull --ff-only origin "$GITHUB_REF_NAME"
 
       - uses: actions/setup-python@v5
@@ -95,42 +98,50 @@ jobs:
             fi
           fi
 
-      - name: Skip if today's update already ran
-        id: guard
-        # Scheduled runs only -- a manual workflow_dispatch always runs.
-        # The backup cron firing lands here and stops if the earlier one
-        # already wrote today's snapshot for this season, so a normal week
-        # gets exactly one pull, one commit, and one Slack post. Matched on
-        # season too, so a same-day manual re-pull of some other season
-        # doesn't make the scheduled current-season run skip.
-        if: github.event_name == 'schedule'
+      - name: Determine run mode
+        id: mode
         env:
-          SEASON_YEAR: ${{ steps.season.outputs.year }}
+          # Via env var, not a ${{ }} splice, for the same injection reason
+          # as INPUT_YEAR above; only the two known values map to anything.
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_MODE: ${{ github.event.inputs.mode }}
         run: |
-          if python -c "import json, os, sys, datetime; today = datetime.datetime.now(datetime.timezone.utc).date().isoformat(); season = int(os.environ['SEASON_YEAR']); sys.exit(0 if any(r['season'] == season and r['as_of'] == today for r in json.load(open('data/ratings_history.json'))) else 1)"; then
-            echo "Today's $SEASON_YEAR snapshot already exists -- skipping."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            # Manual runs always go through -- no skip checks.
+            case "$INPUT_MODE" in
+              cfp) echo "flags=--cfp-ranks-only" >> "$GITHUB_OUTPUT"; echo "label=CFP ranks update" >> "$GITHUB_OUTPUT" ;;
+              *)   echo "flags=" >> "$GITHUB_OUTPUT"; echo "label=Weekly update" >> "$GITHUB_OUTPUT" ;;
+            esac
+          else
+            # Day of week (UTC; same calendar day as ET at 13:23/17:23).
+            case "$(date -u +%u)" in
+              3)   echo "flags=--cfp-ranks-only" >> "$GITHUB_OUTPUT"; echo "label=CFP ranks update" >> "$GITHUB_OUTPUT" ;;
+              7|1) echo "flags=--skip-if-no-new-games --require-complete-week" >> "$GITHUB_OUTPUT"; echo "label=Weekly update" >> "$GITHUB_OUTPUT" ;;
+              *)   echo "flags=--skip-if-no-new-games" >> "$GITHUB_OUTPUT"; echo "label=Weekly update" >> "$GITHUB_OUTPUT" ;;
+            esac
           fi
 
-      - if: steps.guard.outputs.skip != 'true'
-        run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt
 
-      - name: Run weekly update
-        if: steps.guard.outputs.skip != 'true'
+      - name: Run update
         env:
           CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
           SEASON_YEAR: ${{ steps.season.outputs.year }}
-        # Only writes the Slack message (2024+ seasons) -- the "Post to
-        # Slack" step below sends it once the data is safely pushed.
-        run: python scripts/weekly_update.py --year "$SEASON_YEAR" --slack-message-out "$RUNNER_TEMP/slack_message.txt"
+          RUN_FLAGS: ${{ steps.mode.outputs.flags }}
+        # Only writes the Slack message (weekly runs, 2024+ seasons) -- the
+        # "Post to Slack" step below sends it once the data is safely
+        # pushed. A skipped run writes nothing, so there's nothing to post.
+        # $RUN_FLAGS is deliberately unquoted: it's zero or more flags.
+        run: python scripts/weekly_update.py --year "$SEASON_YEAR" --slack-message-out "$RUNNER_TEMP/slack_message.txt" $RUN_FLAGS
 
       - name: Commit and push updated data
-        if: steps.guard.outputs.skip != 'true'
+        env:
+          COMMIT_LABEL: ${{ steps.mode.outputs.label }}
         run: |
           git config user.name "ratings-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/teams.json data/games.json data/ratings_history.json data/weekly_blurb.txt data/team_colors.json
-          git diff --staged --quiet || git commit -m "Weekly update $(date -u +%F)"
+          git diff --staged --quiet || git commit -m "$COMMIT_LABEL $(date -u +%F)"
           # Rebased onto anything pushed to the branch mid-run (e.g. a code
           # change) rather than failing non-fast-forward and dropping this
           # week's data -- the bot only ever touches data/, so this can't
@@ -143,8 +154,8 @@ jobs:
         # can't block the site's data update, and a failed push can't leave
         # behind a Slack post that the backup cron run would then repeat. A
         # failure here still marks the run failed (so it gets noticed), but
-        # the backup run won't retry it -- today's snapshot is already in.
-        if: steps.guard.outputs.skip != 'true'
+        # the backup run won't retry it -- this week's snapshot is already
+        # in, so --skip-if-no-new-games stops it.
         env:
           # Optional -- unset just skips posting.
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
