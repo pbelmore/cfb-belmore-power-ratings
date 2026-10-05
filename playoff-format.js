@@ -25,30 +25,15 @@ function fieldSizeFor(season) {
   return season < CFP_ERA_START ? 2 : season < TWELVE_TEAM_ERA_START ? 4 : 12;
 }
 
-// Map of conference -> actual championship-game winner, from one
-// snapshot's rows (`conf_champion` -- see conference_champions() in
-// weekly_update.py). Empty until title games are played.
-function confChampionsFromRows(rows) {
-  return new Map(rows.filter(r => r.conf_champion).map(r => [r.conference, r.team]));
-}
-
-// Map of conference -> its current leader: the best-ranked/-scored team in
-// that conference (rankedTeams is row-like objects with `.team` and
-// `.conference`, already sorted best-first), independents excluded since
-// there's no conference championship to win. confChampions (optional, a Map
-// of conference -> team, see confChampionsFromRows()) is the actual
-// championship-game winner for any conference whose title game has already
-// been played this snapshot -- it overrides the rank-based stand-in, since
-// the two aren't always the same team (e.g. Clemson beating a higher-ranked
-// SMU for the 2024 ACC title).
-function conferenceLeaders(rankedTeams, confChampions) {
-  const confLeader = new Map();
-  for (const r of rankedTeams) {
-    if (!r.conference || r.conference === 'FBS Independents') continue;
-    if (!confLeader.has(r.conference)) confLeader.set(r.conference, r.team);
-  }
-  for (const [conf, champ] of confChampions || []) confLeader.set(conf, champ);
-  return confLeader;
+// Map of conference -> its current leader, from one snapshot's rows: the
+// team flagged `conf_leader` -- first in the conference standings
+// (conference win %, then conference wins, head-to-head, then our rating),
+// or the actual champion once its title game is played. Worked out in
+// Python (conference_leaders() in weekly_update.py), since this page has no
+// game results to compute standings or head-to-head from. Only 2024+ rows
+// carry the flag -- the only seasons that use leaders.
+function conferenceLeaders(rows) {
+  return new Map(rows.filter(r => r.conf_leader).map(r => [r.conference, r.team]));
 }
 
 // Returns the projected field for `season` in projected seed order
@@ -57,7 +42,7 @@ function conferenceLeaders(rankedTeams, confChampions) {
 // next 7 best. 2026+: every Power Four leader regardless of rank + the
 // single highest-ranked Group of Six leader, plus Notre Dame if it's inside
 // the top 12, with the best remaining teams filling out 12.
-function playoffFieldProjection(rankedTeams, season, confChampions) {
+function playoffFieldProjection(rankedTeams, season) {
   if (season < TWELVE_TEAM_ERA_START) {
     return rankedTeams.slice(0, fieldSizeFor(season)).map(r => r.team);
   }
@@ -67,11 +52,10 @@ function playoffFieldProjection(rankedTeams, season, confChampions) {
   const rankOf = new Map(rankedTeams.map((r, i) => [r.team, i]));
   const rankKey = t => rankOf.has(t) ? rankOf.get(t) : rankedTeams.length;
   const byRank = (a, b) => rankKey(a) - rankKey(b) || (a < b ? -1 : a > b ? 1 : 0);
-  const confLeader = conferenceLeaders(rankedTeams, confChampions);
+  const confLeader = conferenceLeaders(rankedTeams);
 
-  // Auto bids go by each leader's own rank, not by conference-discovery
-  // order -- those can differ once a real champion replaces a
-  // higher-ranked stand-in from the same conference.
+  // Auto bids go by each leader's own rank -- the standings leader isn't
+  // necessarily its conference's highest-ranked team.
   let autoBids, guaranteed = [];
   if (season >= P4_AUTO_BID_ERA_START) {
     const entries = [...confLeader];

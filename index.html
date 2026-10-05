@@ -221,8 +221,8 @@
      changes, or a returning visitor can get the new page with the old
      script (and a blank table). The check-script-versions workflow fails
      a push that changes a .js file without bumping it. -->
-<script src="playoff-format.js?v=2026-09-29.2"></script>
-<script src="trends.js?v=2026-09-29.2"></script>
+<script src="playoff-format.js?v=2026-10-06"></script>
+<script src="trends.js?v=2026-10-06"></script>
 <script>
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 const HTML_ESCAPE_RE = /[&<>"']/g;
@@ -311,7 +311,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
   if (confLeaders.size) {
     const leaderNote = document.createElement('p');
     leaderNote.className = 'legend-note';
-    leaderNote.textContent = '* after a team = its conference\'s current leader (highest-rated team in the conference, or the actual champion once the title game is played).';
+    leaderNote.textContent = '* after a team = first in its conference standings (ties broken by conference wins, then head-to-head, then rating), or the actual champion once the title game is played.';
     content.appendChild(leaderNote);
   }
 
@@ -459,15 +459,14 @@ function setupStandingsControls(rows, colors) {
       .filter(r => r.as_of === asOf)
       .sort((a, b) => b.power_score - a.power_score);
     populateConfFilter(current);
-    const confChampions = confChampionsFromRows(current);
     // A running "if it ended today" field from this week's own ratings, not
     // the actual (end-of-season-only) selection -- the shared rule lives in
     // playoff-format.js, so this page and accuracy.html can't drift.
-    const highlighted = new Set(playoffFieldProjection(current, season, confChampions));
+    const highlighted = new Set(playoffFieldProjection(current, season));
     // 12-team era only -- conference leaders only matter to the field from
-    // 2024 on (and only 2023+ rows carry real conf_champion data anyway).
+    // 2024 on (and only 2024+ rows carry the conf_leader flag anyway).
     const confLeaders = season >= TWELVE_TEAM_ERA_START
-      ? new Set(conferenceLeaders(current, confChampions).values())
+      ? new Set(conferenceLeaders(current).values())
       : new Set();
     shownWeek = { current, season, asOf, highlighted, confLeaders };
     renderShownWeek();

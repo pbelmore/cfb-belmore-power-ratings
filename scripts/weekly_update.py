@@ -130,6 +130,10 @@ def parse_games(raw, year, through_week=None):
             "loser_pts": loser_pts,
             "location": location,
             "notes": g.get("notes") or "",
+            # CFBD's own flag -- counts toward conference standings (see
+            # conference_leaders()). Verified to reproduce CFBD's /records
+            # conference W-L exactly for every team.
+            "conference_game": bool(g.get("conferenceGame")),
         })
     # Sort deterministically -- the CFBD API doesn't guarantee stable ordering
     # between calls for games sharing a timestamp, which would otherwise cause
@@ -333,39 +337,66 @@ def conference_champions(game_rows, teams):
     return champions
 
 
-def conference_leaders(ranked_teams, teams, conf_champions=None):
-    """{conference: leader} for every conference with a team in
-    `ranked_teams` ([(team, value)], already sorted best-first) -- the
-    best-ranked/-scored team in that conference, independents excluded
-    since there's no conference championship to win.
+def conference_leaders(teams, game_rows, ranked_names, conf_champions=None):
+    """{conference: leader} for every conference (independents excluded,
+    since there's no conference title to win) -- whoever is first in the
+    conference standings as of `game_rows`:
 
-    `conf_champions` ({conference: team}, from conference_champions())
-    overrides that stand-in with the actual championship-game winner for
-    any conference whose title game has already been played -- the two
-    aren't always the same team (e.g. Clemson beating a higher-ranked SMU
-    for the 2024 ACC title). That holds even when the champion isn't in
-    `ranked_teams` at all: the committee's top 25 can leave a champion out
-    (2025's 8-5 ACC champion Duke), and from 2026 a Power Four champion
-    gets its auto bid regardless of rank. A conference whose title game
-    hasn't been played yet (or that has none) keeps the rank-based
-    stand-in -- the only option before its champion is actually decided."""
+      1. best conference win %,
+      2. then more conference wins (3-0 ahead of 1-0),
+      3. then head-to-head -- a tied team that beat every other tied team,
+      4. then our own rating (`ranked_names`, best-first -- the site's
+         order, see rank_by_public_score()).
+
+    A team with no conference games yet sorts below any that has played
+    one, so before conference play starts every conference falls through
+    to step 4. `conf_champions` ({conference: team}, from
+    conference_champions()) overrides all of that once a title game has
+    been played -- the champion isn't always the regular-season leader
+    (e.g. Clemson beating SMU for the 2024 ACC title).
+
+    One definition shared by the site's "*", the Slack post's "*", and
+    every projection's auto bids (via the `conf_leader` flag on each row),
+    so they always name the same team."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
-
-    conf_leader = {}
-    for team, _ in ranked_teams:
-        conf = conf_of.get(team)
-        if not conf or conf == "FBS Independents" or conf in conf_leader:
+    rank_of = {team: i for i, team in enumerate(ranked_names)}
+    record = {}
+    beat = set()
+    for g in game_rows:
+        if g.get("season_type") != "regular" or not g.get("conference_game"):
             continue
-        conf_leader[conf] = team
-    conf_leader.update(conf_champions or {})
-    return conf_leader
+        record.setdefault(g["winner"], [0, 0])[0] += 1
+        record.setdefault(g["loser"], [0, 0])[1] += 1
+        beat.add((g["winner"], g["loser"]))
+
+    def standing(team):
+        wins, losses = record.get(team, (0, 0))
+        return (wins / (wins + losses) if wins + losses else -1.0, wins)
+
+    members = {}
+    for team, conf in conf_of.items():
+        if conf and conf != "FBS Independents":
+            members.setdefault(conf, []).append(team)
+
+    leaders = {}
+    for conf, conf_teams in members.items():
+        best = max(standing(t) for t in conf_teams)
+        tied = sorted(
+            (t for t in conf_teams if standing(t) == best),
+            key=lambda t: (rank_of.get(t, len(rank_of)), t),
+        )
+        beat_all = [t for t in tied if all((t, o) in beat for o in tied if o != t)]
+        leaders[conf] = beat_all[0] if len(tied) > 1 and beat_all else tied[0]
+    leaders.update(conf_champions or {})
+    return leaders
 
 
-def conference_leader_field(ranked_teams, teams, season, conf_champions=None):
+def conference_leader_field(ranked_teams, season, conf_leaders):
     """The 12-team format's selection rule as a set of teams, shared by
     every playoff-field projection in this module (real_field_projection
     fed committee ranks, playoff_projection fed our own scores).
-    `ranked_teams` is [(team, value)] already sorted best-first.
+    `ranked_teams` is [(team, value)] already sorted best-first;
+    `conf_leaders` is {conference: leader} from conference_leaders().
 
     2024-2025: the 5 highest-ranked conference leaders + the next 7 best.
     2026+ (P4_AUTO_BID_ERA_START): every Power Four leader regardless of
@@ -373,11 +404,9 @@ def conference_leader_field(ranked_teams, teams, season, conf_champions=None):
     if it's inside the top NOTRE_DAME_TOP_N, with the best remaining teams
     filling the field out to 12.
 
-    Auto bids are chosen by each leader's own rank, not by whichever team
-    first put that conference on the board while scanning `ranked_teams`
-    -- those can differ once `conf_champions` swaps in a champion who
-    isn't that conference's highest-ranked team. A champion missing from
-    `ranked_teams` altogether (see conference_leaders()) ranks after every
+    Auto bids are chosen by each leader's own rank in `ranked_teams`. A
+    leader missing from `ranked_teams` altogether (common for a Group of
+    Six standings leader against the committee's top 25) ranks after every
     ranked team, team name breaking ties so the result never depends on
     dict order."""
     rank_of = {team: i for i, (team, _) in enumerate(ranked_teams)}
@@ -385,7 +414,7 @@ def conference_leader_field(ranked_teams, teams, season, conf_champions=None):
     def by_rank(team):
         return (rank_of.get(team, len(ranked_teams)), team)
 
-    conf_leader = conference_leaders(ranked_teams, teams, conf_champions)
+    conf_leader = conf_leaders or {}
     if season >= P4_AUTO_BID_ERA_START:
         power_four = [t for c, t in conf_leader.items() if c in POWER_FOUR]
         group_of_six = sorted((t for c, t in conf_leader.items() if c not in POWER_FOUR), key=by_rank)[:1]
@@ -399,7 +428,7 @@ def conference_leader_field(ranked_teams, teams, season, conf_champions=None):
     return field | set(at_large)
 
 
-def playoff_field_from_ranked(ranked_teams, teams, season, conf_champions=None):
+def playoff_field_from_ranked(ranked_teams, season, conf_leaders=None):
     """The full "who's in" rule for `season`, given `ranked_teams` already
     sorted best-first: top-2 pre-CFP (BCS), top-4 old-CFP, else the 12-team
     conference-leader + at-large field. Shared by real_field_projection
@@ -409,27 +438,25 @@ def playoff_field_from_ranked(ranked_teams, teams, season, conf_champions=None):
         return {team for team, _ in ranked_teams[:2]}
     if season < TWELVE_TEAM_ERA_START:
         return {team for team, _ in ranked_teams[:4]}
-    return conference_leader_field(ranked_teams, teams, season, conf_champions=conf_champions)
+    return conference_leader_field(ranked_teams, season, conf_leaders)
 
 
-def real_field_projection(committee_ranks, teams, season, conf_champions=None):
+def real_field_projection(committee_ranks, season, conf_leaders=None):
     """"If the real field were picked today," projected from this week's
     real committee ranking -- the same "conference leaders get automatic
     bids" mechanic as our own playoffFieldProjection (playoff-format.js),
-    just fed CFBD's real ranks instead of our own power_score. "Leader" here means
-    "this week's highest-real-ranked team in that conference" unless
-    `conf_champions` (from conference_champions()) already knows the real
-    champion for it, a proxy for the eventual conference champion before
-    that's decided -- so absent `conf_champions`, this is necessarily a
-    rougher estimate than real_playoff_field()'s ground truth, and callers
-    should prefer that whenever it's available (see build_snapshots
-    callers). Returns a plain set (no seeds -- those only mean something
-    once the real bracket is set), or None if there's no ranking to
-    project from yet this week."""
+    just fed CFBD's real ranks instead of our own power_score. The leaders
+    themselves (`conf_leaders`, from conference_leaders()) are the
+    standings leaders -- the best proxy for each eventual champion before
+    title games are played -- so this is necessarily a rougher estimate
+    than real_playoff_field()'s ground truth, and callers should prefer
+    that whenever it's available (see build_snapshots callers). Returns a
+    plain set (no seeds -- those only mean something once the real bracket
+    is set), or None if there's no ranking to project from yet this week."""
     if not committee_ranks:
         return None
     ranked = sorted(committee_ranks.items(), key=lambda kv: kv[1])
-    return playoff_field_from_ranked(ranked, teams, season, conf_champions=conf_champions)
+    return playoff_field_from_ranked(ranked, season, conf_leaders)
 
 
 def to_rating_games(game_rows):
@@ -625,6 +652,7 @@ def rank_by_public_score(results, scores):
 def build_public_rows(
     results, scores, teams, season, as_of, stage="regular",
     committee_ranks=None, playoff_field=None, playoff_seeds=None, conf_champions=None,
+    conf_leaders=None,
 ):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
@@ -650,9 +678,13 @@ def build_public_rows(
     fact once game data is in, never null) -- so the client-side "our
     projection" logic (index.html/accuracy.html) can apply the same
     real-champion override as conference_leader_field() without needing
-    game data of its own."""
+    game data of its own. `conf_leaders` ({conference: team}, from
+    conference_leaders()) likewise becomes `conf_leader` -- the site
+    can't work out standings or head-to-head itself, so it reads this
+    flag for both its "*" and its projection's auto bids."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
     champion_teams = set((conf_champions or {}).values())
+    leader_teams = set((conf_leaders or {}).values())
     rows = []
     for team, r in results.items():
         rows.append({
@@ -667,6 +699,7 @@ def build_public_rows(
             "power_score": public_score(scores[team]),
             **committee_row_fields(team, committee_ranks, playoff_field, playoff_seeds),
             "conf_champion": team in champion_teams,
+            "conf_leader": team in leader_teams,
         })
     return rows
 
@@ -682,7 +715,7 @@ def committee_row_fields(team, committee_ranks, playoff_field, playoff_seeds):
     }
 
 
-def fetch_committee_fields(year, api_key, teams, current_week, conf_champions, same_week_fallback=True):
+def fetch_committee_fields(year, api_key, current_week, conf_leaders, same_week_fallback=True):
     """(committee_ranks, playoff_field, playoff_seeds) for a live snapshot
     as of `current_week` -- 2 CFBD calls. The field is the real one once
     it's been selected, else a same-week projection from the committee
@@ -708,7 +741,7 @@ def fetch_committee_fields(year, api_key, teams, current_week, conf_champions, s
     if exact_seeds is not None:
         print(f"  {len(exact_seeds)} teams (real field determined)")
         return committee_ranks, set(exact_seeds.keys()), exact_seeds
-    playoff_field = real_field_projection(committee_ranks, teams, year, conf_champions=conf_champions)
+    playoff_field = real_field_projection(committee_ranks, year, conf_leaders)
     print(f"  {len(playoff_field) if playoff_field else 0} teams (projected -- real field not determined yet)")
     return committee_ranks, playoff_field, None
 
@@ -749,8 +782,15 @@ def update_cfp_ranks(year, api_key, out_dir):
             f"e.g. {mismatched[0]}) -- re-run the weekly update first."
         )
     current_week = current_week_number(game_rows)
+    # The leaders the weekly run already worked out for this snapshot --
+    # reused rather than recomputed, so the projection's auto bids can't
+    # drift from the "*" the site is already showing.
+    conf_leaders = {
+        r["conference"]: r["team"] for r in history
+        if r["season"] == year and r["as_of"] == latest and r.get("conf_leader")
+    }
     committee_ranks, playoff_field, playoff_seeds = fetch_committee_fields(
-        year, api_key, teams, current_week, conference_champions(game_rows, teams),
+        year, api_key, current_week, conf_leaders,
     )
     updated = 0
     for r in history:
@@ -762,7 +802,7 @@ def update_cfp_ranks(year, api_key, out_dir):
     print(f"Updated CFP ranks on the {latest} snapshot (week {current_week}): {updated} rows changed")
 
 
-def playoff_projection(scores, teams, season, conf_champions=None):
+def playoff_projection(scores, season, conf_leaders=None):
     """Mirrors the site's own projection (playoffFieldProjection in
     playoff-format.js): a running "if it ended today" field from that
     snapshot's own scores, not the actual selection. 2010-2013 (BCS): top
@@ -777,10 +817,10 @@ def playoff_projection(scores, teams, season, conf_champions=None):
     # snapshots), and ranking on the unrounded value instead would let this
     # pick a different team for the last slot than the site does.
     ranked = sorted(scores.items(), key=lambda kv: (-public_score(kv[1]), kv[0]))
-    return playoff_field_from_ranked(ranked, teams, season, conf_champions=conf_champions)
+    return playoff_field_from_ranked(ranked, season, conf_leaders)
 
 
-def format_weekly_blurb(results, scores, teams, season, title=None, conf_champions=None):
+def format_weekly_blurb(results, scores, season, title=None, conf_leaders=None):
     # Rank by the same (possibly blended) scores being displayed -- sorting
     # by raw rating instead would let the blend reorder teams without the
     # printed rank agreeing with the printed number -- and on the published
@@ -793,7 +833,7 @@ def format_weekly_blurb(results, scores, teams, season, title=None, conf_champio
         # From 2024 on, just the projected playoff field -- true rank
         # number kept, so an auto-bid conference champ ranked outside the
         # top 12 overall still shows its real position (e.g. 1-10, 14, 16).
-        selected = playoff_projection(scores, teams, season, conf_champions=conf_champions)
+        selected = playoff_projection(scores, season, conf_leaders)
     lines = [title or "Power Ratings"]
     for i, (team, r) in enumerate(ranked, start=1):
         if team not in selected:
@@ -802,7 +842,7 @@ def format_weekly_blurb(results, scores, teams, season, title=None, conf_champio
     return "\n".join(lines)
 
 
-def format_slack_blurb(results, scores, teams, season, week_label, conf_champions=None, link=None):
+def format_slack_blurb(results, scores, season, week_label, conf_leaders=None, link=None):
     """The Slack-posted version of the blurb -- 12-team-era only (we'll
     never post this for a past pre-2024 season, so there's no top-10/top-4/
     top-2 branching here like format_weekly_blurb has). Uses Slack's
@@ -818,10 +858,8 @@ def format_slack_blurb(results, scores, teams, season, week_label, conf_champion
     that and the closing link are italicized so they read as asides rather
     than part of the ranking itself."""
     ranked = rank_by_public_score(results, scores)
-    selected = playoff_projection(scores, teams, season, conf_champions=conf_champions)
-    leaders = set(conference_leaders(
-        [(team, scores[team]) for team, _ in ranked], teams, conf_champions,
-    ).values())
+    selected = playoff_projection(scores, season, conf_leaders)
+    leaders = set((conf_leaders or {}).values())
 
     lines = [f"*Belmore Rankings {season} - {week_label}*"]
     for i, (team, r) in enumerate(ranked, start=1):
@@ -935,6 +973,9 @@ def main():
     scores = normalize_values(blended_raw)
     stage = current_stage(game_rows)
     conf_champions = conference_champions(game_rows, teams)
+    conf_leaders = conference_leaders(
+        teams, game_rows, [team for team, _ in rank_by_public_score(results, scores)], conf_champions,
+    )
 
     # No same-week fallback during the regular season: this runs Sunday-
     # Tuesday morning, before that week's ranking airs Tuesday night, so the
@@ -942,14 +983,14 @@ def main():
     # the Wednesday --cfp-ranks-only run fills it in. Postseason snapshots
     # keep it, since the committee's final ranking is already out by then.
     committee_ranks, playoff_field, playoff_seeds = fetch_committee_fields(
-        args.year, api_key, teams, current_week, conf_champions,
+        args.year, api_key, current_week, conf_leaders,
         same_week_fallback=(stage == "postseason"),
     )
 
     new_rows = build_public_rows(
         results, scores, teams, season=args.year, as_of=as_of, stage=stage,
         committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,
-        conf_champions=conf_champions,
+        conf_champions=conf_champions, conf_leaders=conf_leaders,
     )
 
     print("Fetching team colors...")
@@ -962,8 +1003,8 @@ def main():
     write_json(history_path, history)
 
     blurb = format_weekly_blurb(
-        results, scores, teams, args.year, title=f"CFB Power Ratings -- {args.year} as of {as_of}",
-        conf_champions=conf_champions,
+        results, scores, args.year, title=f"CFB Power Ratings -- {args.year} as of {as_of}",
+        conf_leaders=conf_leaders,
     )
     (out_dir / "weekly_blurb.txt").write_text(blurb + "\n")
 
@@ -977,7 +1018,7 @@ def main():
     if args.slack_message_out and args.year >= TWELVE_TEAM_ERA_START:
         week_label = season_week_label(current_week, stage, conf_champions, game_rows)
         slack_text = format_slack_blurb(
-            results, scores, teams, args.year, week_label, conf_champions=conf_champions, link=SITE_URL,
+            results, scores, args.year, week_label, conf_leaders=conf_leaders, link=SITE_URL,
         )
         Path(args.slack_message_out).write_text(slack_text)
         print(f"Wrote Slack message to {args.slack_message_out}")

@@ -67,7 +67,7 @@
 </div>
 
 <!-- ?v= must match index.html's -- see the note there. -->
-<script src="playoff-format.js?v=2026-09-29.2"></script>
+<script src="playoff-format.js?v=2026-10-06"></script>
 <script>
 // One season's comparison, evaluated at the true final regular-season
 // snapshot only (never postseason, never a mid-season projection) -- the
@@ -86,8 +86,7 @@ function computeSeasonStats(rows, season) {
   // overall rank map below are derived from this same ordering, rather
   // than each re-sorting the snapshot independently.
   const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
-  const confChampions = confChampionsFromRows(snapshot);
-  const ourField = playoffFieldProjection(overallRanked, season, confChampions);
+  const ourField = playoffFieldProjection(overallRanked, season);
   const realField = snapshot.filter(r => r.seed != null).sort((a, b) => a.seed - b.seed).map(r => r.team);
   const realSet = new Set(realField);
 
