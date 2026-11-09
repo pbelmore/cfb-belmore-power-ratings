@@ -173,7 +173,7 @@ def main():
             if is_final_snapshot and exact_seeds is not None:
                 playoff_field, playoff_seeds = set(exact_seeds.keys()), exact_seeds
             else:
-                playoff_field, playoff_seeds = real_field_projection(committee_ranks, year, conf_leaders), None
+                playoff_field, playoff_seeds = real_field_projection(committee_ranks, year, teams, conf_leaders), None
             season_new_rows.extend(build_public_rows(
                 results, scores, teams, season=year, as_of=as_of, stage=stage,
                 committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,

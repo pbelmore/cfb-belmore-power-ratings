@@ -8,7 +8,7 @@
 // JS side (see the same-named constants in weekly_update.py for the Python
 // side). P4_AUTO_BID_ERA_START: from 2026, all four Power Four champions get
 // auto bids regardless of rank (plus the single highest-ranked Group of Six
-// champion), replacing 2024-2025's "five highest-ranked conference
+// team, champion or not), replacing 2024-2025's "five highest-ranked conference
 // champions", and Notre Dame is guaranteed a bid if it's in the top 12.
 // STRAIGHT_SEEDING_START: JS-only (Python never seeds) -- 2024 gave the four
 // best-ranked conference champions seeds 1-4 and seeded the rest by rank;
@@ -40,7 +40,7 @@ function conferenceLeaders(rows) {
 // (position 0 = #1 seed) -- accuracy.html lines it up slot-for-slot against
 // the real bracket. 2024-2025: the 5 highest-ranked conference leaders + the
 // next 7 best. 2026+: every Power Four leader regardless of rank + the
-// single highest-ranked Group of Six leader, plus Notre Dame if it's inside
+// single highest-ranked Group of Six team, plus Notre Dame if it's inside
 // the top 12, with the best remaining teams filling out 12.
 function playoffFieldProjection(rankedTeams, season) {
   if (season < TWELVE_TEAM_ERA_START) {
@@ -60,7 +60,11 @@ function playoffFieldProjection(rankedTeams, season) {
   if (season >= P4_AUTO_BID_ERA_START) {
     const entries = [...confLeader];
     const powerFour = entries.filter(([c]) => POWER_FOUR.has(c)).map(([, t]) => t);
-    const groupOfSix = entries.filter(([c]) => !POWER_FOUR.has(c)).map(([, t]) => t).sort(byRank).slice(0, 1);
+    // The highest-ranked Group of Six *team*, not leader -- it doesn't
+    // have to win its conference (see conference_leader_field()).
+    const groupOfSix = rankedTeams
+      .filter(r => r.conference && r.conference !== 'FBS Independents' && !POWER_FOUR.has(r.conference))
+      .slice(0, 1).map(r => r.team);
     autoBids = [...powerFour, ...groupOfSix];
     if (rankKey('Notre Dame') < NOTRE_DAME_TOP_N) guaranteed = ['Notre Dame'];
   } else {
