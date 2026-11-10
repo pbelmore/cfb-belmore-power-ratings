@@ -1,7 +1,8 @@
-// Trend charts for index.html -- hand-rolled SVG line charts, no library.
-// Renders a per-team rating trend (this season vs. last season) and a
-// per-conference average-rating trend, both fed from the same
-// ratings_history.json rows already fetched by index.html.
+// Trend charts for index.html -- hand-rolled SVG charts, no library.
+// Renders a week-by-week box plot of every FBS team's power score, a
+// per-team rating trend (this season vs. last season) and a per-conference
+// average-rating trend, all fed from the same ratings_history.json rows
+// already fetched by index.html.
 
 (function () {
   const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -27,6 +28,14 @@
     const ticks = [];
     for (let v = niceMin; v <= niceMax + step / 2; v += step) ticks.push(v);
     return ticks;
+  }
+
+  // Every k-th x label plus the last one, skipping a k-th label that would
+  // sit right next to the last (e.g. "Wk 13" crowding "Wk 14" on a phone).
+  function showXLabel(i, n) {
+    const every = Math.max(1, Math.ceil(n / 6));
+    if (i === n - 1) return true;
+    return i % every === 0 && n - 1 - i >= Math.ceil(every / 2);
   }
 
   // series: [{ name, color, points: [value|null, ...] }] aligned to xLabels
@@ -62,9 +71,8 @@
 
     svg.appendChild(svgEl('line', { x1: padL, x2: width - padR, y1: padT + plotH, y2: padT + plotH, stroke: 'var(--axis-line)', 'stroke-width': 1 }));
 
-    const labelEvery = Math.max(1, Math.ceil(n / 6));
     xLabels.forEach((lab, i) => {
-      if (i % labelEvery !== 0 && i !== n - 1) return;
+      if (!showXLabel(i, n)) return;
       const t = svgEl('text', { x: xAt(i), y: height - 6, 'text-anchor': 'middle', class: 'chart-axis' });
       t.textContent = lab;
       svg.appendChild(t);
@@ -333,6 +341,140 @@
     currentConfDraw = draw;
   }
 
+  // Linear-interpolation quantile of an ascending array (numpy's default).
+  function quantile(sorted, q) {
+    const pos = (sorted.length - 1) * q;
+    const lo = Math.floor(pos);
+    const hi = Math.ceil(pos);
+    return sorted[lo] + (sorted[hi] - sorted[lo]) * (pos - lo);
+  }
+
+  // Box-plot summary of one snapshot's power scores (every FBS team).
+  // Whiskers reach the furthest score within 1.5x the interquartile range
+  // of the box (Tukey's rule); anything past that is drawn as its own dot.
+  function boxStats(scores) {
+    const sorted = [...scores].sort((a, b) => a - b);
+    const q1 = quantile(sorted, 0.25);
+    const median = quantile(sorted, 0.5);
+    const q3 = quantile(sorted, 0.75);
+    const reach = 1.5 * (q3 - q1);
+    const inside = sorted.filter(v => v >= q1 - reach && v <= q3 + reach);
+    return {
+      min: sorted[0], q1, median, q3, max: sorted[sorted.length - 1],
+      whiskerLo: inside[0], whiskerHi: inside[inside.length - 1],
+      outliers: sorted.filter(v => v < q1 - reach || v > q3 + reach),
+    };
+  }
+
+  // One box per snapshot of `season` through `upToAsOf`, the selected week
+  // shaded darker. Follows the season/week controls only -- the standings'
+  // conference filter doesn't apply, since it's always all of FBS.
+  function renderSpreadChart(rows, season, upToAsOf) {
+    const card = document.getElementById('spread-card');
+    const byAsOf = new Map();
+    for (const r of rows) {
+      if (r.season !== season || r.as_of > upToAsOf) continue;
+      if (!byAsOf.has(r.as_of)) byAsOf.set(r.as_of, []);
+      byAsOf.get(r.as_of).push(r.power_score);
+    }
+    const asOfs = [...byAsOf.keys()].sort();
+    if (!asOfs.length) return;
+    card.hidden = false;
+    const labels = weekLabels(asOfs.length);
+    const stats = asOfs.map((asOf, i) => ({ ...boxStats(byAsOf.get(asOf)), label: labels[i], asOf }));
+
+    function draw() {
+      const container = document.getElementById('spread-chart');
+      container.replaceChildren();
+      const width = Math.max(280, container.clientWidth || 600);
+      const height = 260;
+      const padL = 46, padR = 16, padT = 16, padB = 26;
+      const plotW = width - padL - padR;
+      const plotH = height - padT - padB;
+      const n = stats.length;
+      const band = plotW / n;
+      const boxW = Math.max(4, Math.min(28, band * 0.6));
+      const xAt = i => padL + band * (i + 0.5);
+      const yAt = v => padT + plotH - (v / 100) * plotH;
+
+      const svg = svgEl('svg', { viewBox: `0 0 ${width} ${height}` });
+      [0, 25, 50, 75, 100].forEach(t => {
+        const y = yAt(t);
+        svg.appendChild(svgEl('line', { x1: padL, x2: width - padR, y1: y, y2: y, stroke: 'var(--grid)', 'stroke-width': 1 }));
+        const label = svgEl('text', { x: padL - 8, y: y + 3, 'text-anchor': 'end', class: 'chart-axis' });
+        label.textContent = String(t);
+        svg.appendChild(label);
+      });
+      svg.appendChild(svgEl('line', { x1: padL, x2: width - padR, y1: padT + plotH, y2: padT + plotH, stroke: 'var(--axis-line)', 'stroke-width': 1 }));
+
+      stats.forEach((s, i) => {
+        const x = xAt(i);
+        if (showXLabel(i, n)) {
+          const t = svgEl('text', { x, y: height - 6, 'text-anchor': 'middle', class: 'chart-axis' });
+          t.textContent = s.label;
+          svg.appendChild(t);
+        }
+        svg.appendChild(svgEl('line', { x1: x, x2: x, y1: yAt(s.whiskerHi), y2: yAt(s.q3), class: 'chart-whisker' }));
+        svg.appendChild(svgEl('line', { x1: x, x2: x, y1: yAt(s.q1), y2: yAt(s.whiskerLo), class: 'chart-whisker' }));
+        for (const v of [s.whiskerLo, s.whiskerHi]) {
+          svg.appendChild(svgEl('line', { x1: x - boxW / 4, x2: x + boxW / 4, y1: yAt(v), y2: yAt(v), class: 'chart-whisker' }));
+        }
+        svg.appendChild(svgEl('rect', {
+          x: x - boxW / 2, y: yAt(s.q3), width: boxW, height: Math.max(1, yAt(s.q1) - yAt(s.q3)),
+          class: s.asOf === upToAsOf ? 'chart-box selected' : 'chart-box',
+        }));
+        svg.appendChild(svgEl('line', { x1: x - boxW / 2, x2: x + boxW / 2, y1: yAt(s.median), y2: yAt(s.median), class: 'chart-median' }));
+        for (const v of s.outliers) {
+          svg.appendChild(svgEl('circle', { cx: x, cy: yAt(v), r: 2.5, class: 'chart-outlier' }));
+        }
+      });
+
+      const wrap = document.createElement('div');
+      wrap.className = 'chart-wrap';
+      wrap.appendChild(svg);
+      const tooltip = document.createElement('div');
+      tooltip.className = 'chart-tooltip';
+      tooltip.hidden = true;
+      wrap.appendChild(tooltip);
+
+      svg.addEventListener('pointermove', e => {
+        const rect = svg.getBoundingClientRect();
+        const px = (e.clientX - rect.left) * (width / rect.width);
+        const idx = Math.max(0, Math.min(n - 1, Math.floor((px - padL) / band)));
+        const s = stats[idx];
+        tooltip.replaceChildren();
+        const head = document.createElement('div');
+        head.className = 'chart-tooltip-head';
+        head.textContent = s.label;
+        tooltip.appendChild(head);
+        for (const [name, v] of [['High', s.max], ['75th pct', s.q3], ['Median', s.median], ['25th pct', s.q1], ['Low', s.min]]) {
+          const row = document.createElement('div');
+          row.className = 'chart-tooltip-row';
+          const val = document.createElement('strong');
+          val.textContent = v.toFixed(1);
+          const label = document.createElement('span');
+          label.className = 'chart-tooltip-name';
+          label.textContent = name;
+          row.append(val, label);
+          tooltip.appendChild(row);
+        }
+        tooltip.hidden = false;
+        const relLeft = (xAt(idx) / width) * rect.width;
+        tooltip.style.left = Math.min(Math.max(relLeft - 60, 0), Math.max(rect.width - 140, 0)) + 'px';
+      });
+      svg.addEventListener('pointerleave', () => { tooltip.hidden = true; });
+      container.appendChild(wrap);
+
+      const xLabels = stats.map(s => s.label);
+      const series = [['High', 'max'], ['75th pct', 'q3'], ['Median', 'median'], ['25th pct', 'q1'], ['Low', 'min']]
+        .map(([name, field]) => ({ name, points: stats.map(s => s[field]) }));
+      renderTableView(document.getElementById('spread-chart-table'), xLabels, series, v => v.toFixed(1));
+    }
+
+    draw();
+    currentSpreadDraw = draw;
+  }
+
   function debounce(fn, ms = 150) {
     let t;
     return (...args) => {
@@ -346,14 +488,17 @@
   // old approach) would stack up a new stale listener on every click, each
   // redrawing whatever week/team was current when it was attached. One
   // listener here, always calling whichever `draw` closure is current.
+  let currentSpreadDraw = null;
   let currentTeamDraw = null;
   let currentConfDraw = null;
   window.addEventListener('resize', debounce(() => {
+    currentSpreadDraw?.();
     currentTeamDraw?.();
     currentConfDraw?.();
   }));
 
   window.renderTrends = function (rows, season, upToAsOf) {
+    renderSpreadChart(rows, season, upToAsOf);
     renderTeamTrend(rows, season, upToAsOf);
     renderConferenceTrend(rows, season, upToAsOf);
   };

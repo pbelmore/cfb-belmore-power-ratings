@@ -144,6 +144,11 @@
   .chart-tooltip-row { display: flex; align-items: center; gap: 0.4rem; line-height: 1.5; }
   .chart-tooltip-key { display: inline-block; width: 10px; height: 2px; border-radius: 1px; }
   .chart-tooltip-name { color: var(--muted); }
+  .chart-box { fill: color-mix(in srgb, var(--series-1) 22%, var(--bg)); stroke: var(--series-1); stroke-width: 1.5; }
+  .chart-box.selected { fill: color-mix(in srgb, var(--series-1) 45%, var(--bg)); }
+  .chart-whisker { stroke: var(--series-1); stroke-width: 1.5; }
+  .chart-median { stroke: var(--fg); stroke-width: 2; }
+  .chart-outlier { fill: none; stroke: var(--series-1); stroke-width: 1.25; }
   .chart-legend { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted); }
   .chart-legend-item { display: flex; align-items: center; gap: 0.35rem; }
   .chart-legend-key { display: inline-block; width: 12px; height: 2px; border-radius: 1px; }
@@ -191,6 +196,12 @@
   </div>
   <div id="content"></div>
 
+  <section class="card" id="spread-card" hidden>
+    <h2>Power rating spread by week</h2>
+    <div id="spread-chart"></div>
+    <div id="spread-chart-table"></div>
+  </section>
+
   <section class="card" id="team-trend-card" hidden>
     <h2>Team rating trend</h2>
     <div class="chart-controls">
@@ -221,8 +232,8 @@
      changes, or a returning visitor can get the new page with the old
      script (and a blank table). The check-script-versions workflow fails
      a push that changes a .js file without bumping it. -->
-<script src="playoff-format.js?v=2026-11-09"></script>
-<script src="trends.js?v=2026-11-09"></script>
+<script src="playoff-format.js?v=2026-11-10"></script>
+<script src="trends.js?v=2026-11-10"></script>
 <script>
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 const HTML_ESCAPE_RE = /[&<>"']/g;
