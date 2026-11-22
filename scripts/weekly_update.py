@@ -5,6 +5,7 @@ the CFBD API, runs them through ratings_core, and writes:
 
   data/teams.json            current-season roster (school, conference)
   data/games.json             one row per completed game
+  data/games_archive.json     every season's FBS-vs-FBS games (this season's replaced each run)
   data/ratings_history.json   long-format, one row per team per run (appended)
   data/weekly_blurb.txt       plain-text top-25, ready to paste into a group chat
   data/team_colors.json       {team: {color, altColor}} for every team ever seen
@@ -503,6 +504,20 @@ def merge_history_rows(history, new_rows):
     return history
 
 
+def archive_season_games(archive, season, game_rows, fbs_teams):
+    """games_archive.json (see build_games_archive.py) with `season`'s games
+    replaced wholesale by `game_rows`' FBS-vs-FBS games -- replaced, not
+    appended, so a score correction or a re-run never duplicates a game.
+    Sorted the same way as games.json, season first."""
+    kept = [r for r in archive if r["season"] != season]
+    kept.extend(
+        r for r in game_rows
+        if r["season"] == season and r["winner"] in fbs_teams and r["loser"] in fbs_teams
+    )
+    kept.sort(key=lambda r: (r["season"], r["date"] or "", r["winner"], r["loser"]))
+    return kept
+
+
 def load_json(path, default):
     if path.exists():
         with path.open() as f:
@@ -974,6 +989,12 @@ def main():
 
     write_json(out_dir / "teams.json", teams)
     write_json(out_dir / "games.json", game_rows)
+    # The rivalry page's all-seasons game record -- games.json is replaced
+    # at every season rollover, so this season's games are copied here too.
+    archive_path = out_dir / "games_archive.json"
+    write_json(archive_path, archive_season_games(
+        load_json(archive_path, []), args.year, game_rows, {t["school"] for t in teams},
+    ))
 
     history_path = out_dir / "ratings_history.json"
     history = load_json(history_path, [])

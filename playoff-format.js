@@ -20,6 +20,14 @@ const P4_AUTO_BID_ERA_START = 2026;
 const POWER_FOUR = new Set(['ACC', 'Big Ten', 'Big 12', 'SEC']);
 const NOTRE_DAME_TOP_N = 12;
 
+// Best-first order for one snapshot's rows: published power_score, then
+// team name -- the same order the Python side uses (rank_by_public_score)
+// and the one every page's "#" column shows. Shared so the standings,
+// accuracy, and rivalry pages can't disagree on a tied team's rank.
+function compareByPower(a, b) {
+  return b.power_score - a.power_score || (a.team < b.team ? -1 : a.team > b.team ? 1 : 0);
+}
+
 // 2 (BCS title game), 4 (old CFP), or 12.
 function fieldSizeFor(season) {
   return season < CFP_ERA_START ? 2 : season < TWELVE_TEAM_ERA_START ? 4 : 12;

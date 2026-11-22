@@ -140,7 +140,7 @@ jobs:
         run: |
           git config user.name "ratings-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/teams.json data/games.json data/ratings_history.json data/weekly_blurb.txt data/team_colors.json
+          git add data/teams.json data/games.json data/games_archive.json data/ratings_history.json data/weekly_blurb.txt data/team_colors.json
           git diff --staged --quiet || git commit -m "$COMMIT_LABEL $(date -u +%F)"
           # Rebased onto anything pushed to the branch mid-run (e.g. a code
           # change) rather than failing non-fast-forward and dropping this

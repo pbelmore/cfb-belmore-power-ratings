@@ -52,6 +52,7 @@
     text-decoration: none;
   }
   .accuracy-link:hover { text-decoration: underline; }
+  .rivalry-link { margin-left: 1.25rem; }
   .standings-controls {
     display: flex;
     align-items: center;
@@ -185,6 +186,7 @@
   <h1>Belmore Rankings (CFB Power Ratings)</h1>
   <p class="subtitle" id="subtitle">Loading&hellip;</p>
   <a class="accuracy-link" href="accuracy.html">How accurate is this ranking? &rarr;</a>
+  <a class="accuracy-link rivalry-link" href="rivalries.html">Rivalry history &rarr;</a>
   <div class="standings-controls" id="standings-controls" hidden>
     <select id="season-select" aria-label="Select season"></select>
     <div class="week-nav">
@@ -227,13 +229,13 @@
   </section>
 </div>
 
-<!-- ?v= busts GitHub Pages' 10-minute browser cache: bump it (here and in
-     accuracy.html, same value on every script) whenever a .js file
+<!-- ?v= busts GitHub Pages' 10-minute browser cache: bump it (here, in
+     accuracy.html and in rivalries.html, same value on every script) whenever a .js file
      changes, or a returning visitor can get the new page with the old
      script (and a blank table). The check-script-versions workflow fails
      a push that changes a .js file without bumping it. -->
-<script src="playoff-format.js?v=2026-11-10"></script>
-<script src="trends.js?v=2026-11-10"></script>
+<script src="playoff-format.js?v=2026-11-22"></script>
+<script src="trends.js?v=2026-11-22"></script>
 <script>
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
 const HTML_ESCAPE_RE = /[&<>"']/g;
@@ -468,7 +470,7 @@ function setupStandingsControls(rows, colors) {
     // and blurb all read this same order.
     const current = (rowsBySeason.get(season) || [])
       .filter(r => r.as_of === asOf)
-      .sort((a, b) => b.power_score - a.power_score);
+      .sort(compareByPower);
     populateConfFilter(current);
     // A running "if it ended today" field from this week's own ratings, not
     // the actual (end-of-season-only) selection -- the shared rule lives in

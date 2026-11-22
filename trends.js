@@ -38,8 +38,11 @@
     return i % every === 0 && n - 1 - i >= Math.ceil(every / 2);
   }
 
-  // series: [{ name, color, points: [value|null, ...] }] aligned to xLabels
-  function renderLineChart(container, { series, xLabels, valueFmt }) {
+  // series: [{ name, color, points: [value|null, ...] }] aligned to xLabels.
+  // invertY: lower values plot higher (ranks -- #1 at the top). breakGaps:
+  // a null point ends the line instead of bridging straight across it (a
+  // rivalry that wasn't played for a decade shouldn't read as continuous).
+  function renderLineChart(container, { series, xLabels, valueFmt, invertY = false, breakGaps = false }) {
     container.replaceChildren();
     const width = Math.max(280, container.clientWidth || 600);
     const height = 260;
@@ -57,7 +60,8 @@
 
     const n = xLabels.length;
     const xAt = i => padL + (n <= 1 ? plotW / 2 : (i / (n - 1)) * plotW);
-    const yAt = v => padT + plotH - ((v - yMin) / (yMax - yMin || 1)) * plotH;
+    const frac = v => (v - yMin) / (yMax - yMin || 1);
+    const yAt = invertY ? v => padT + frac(v) * plotH : v => padT + plotH - frac(v) * plotH;
 
     const svg = svgEl('svg', { viewBox: `0 0 ${width} ${height}` });
 
@@ -80,9 +84,14 @@
 
     series.forEach(s => {
       let d = '';
+      let penDown = false;
       s.points.forEach((v, i) => {
-        if (v == null) return;
-        d += (d ? 'L' : 'M') + xAt(i) + ',' + yAt(v) + ' ';
+        if (v == null) {
+          if (breakGaps) penDown = false;
+          return;
+        }
+        d += (penDown ? 'L' : 'M') + xAt(i) + ',' + yAt(v) + ' ';
+        penDown = true;
       });
       svg.appendChild(svgEl('path', { d, fill: 'none', stroke: s.color, 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
       for (let i = n - 1; i >= 0; i--) {
@@ -496,6 +505,9 @@
     currentTeamDraw?.();
     currentConfDraw?.();
   }));
+
+  // The generic chart + its data-table twin, for rivalries.html.
+  window.cfbCharts = { renderLineChart, renderTableView };
 
   window.renderTrends = function (rows, season, upToAsOf) {
     renderSpreadChart(rows, season, upToAsOf);

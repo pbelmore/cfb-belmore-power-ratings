@@ -37,6 +37,7 @@
   .subtitle { color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; }
   .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--accent); text-decoration: none; }
   .back-link:hover { text-decoration: underline; }
+  .rivalry-link { margin-left: 1.25rem; }
   .status { color: var(--muted); padding: 2rem 0; }
 
   table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
@@ -61,13 +62,14 @@
 <body>
 <div class="wrap">
   <a class="back-link" href="index.html">&larr; Back to standings</a>
+  <a class="back-link rivalry-link" href="rivalries.html">Rivalry history &rarr;</a>
   <h1>Ranking Accuracy</h1>
   <p class="subtitle" id="subtitle">Loading&hellip;</p>
   <div id="content"></div>
 </div>
 
 <!-- ?v= must match index.html's -- see the note there. -->
-<script src="playoff-format.js?v=2026-11-10"></script>
+<script src="playoff-format.js?v=2026-11-22"></script>
 <script>
 // One season's comparison, evaluated at the true final regular-season
 // snapshot only (never postseason, never a mid-season projection) -- the
@@ -85,7 +87,7 @@ function computeSeasonStats(rows, season) {
   // position-for-position against the real field's seed order) and the
   // overall rank map below are derived from this same ordering, rather
   // than each re-sorting the snapshot independently.
-  const overallRanked = [...snapshot].sort((a, b) => b.power_score - a.power_score);
+  const overallRanked = [...snapshot].sort(compareByPower);
   const ourField = playoffFieldProjection(overallRanked, season);
   const realField = snapshot.filter(r => r.seed != null).sort((a, b) => a.seed - b.seed).map(r => r.team);
   const realSet = new Set(realField);

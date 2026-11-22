@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rivalry History</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #666666;
+    --border: #e0e0e0;
+    --row-alt: #f7f7f7;
+    --accent: #b3121b;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --grid: #e1e0d9;
+    --axis-line: #c3c2b7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a;
+      --fg: #eaeaea;
+      --muted: #9a9a9a;
+      --border: #2c2f34;
+      --row-alt: #1b1e23;
+      --accent: #ff6b6b;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --grid: #2c2c2a;
+      --axis-line: #383835;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  h1 { margin: 0 0 0.25rem; font-size: 1.5rem; }
+  h2 { font-size: 1.05rem; margin: 0 0 0.75rem; }
+  .subtitle { color: var(--muted); margin: 0 0 0.75rem; font-size: 0.9rem; }
+  .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 0.85rem; color: var(--accent); text-decoration: none; }
+  .back-link:hover { text-decoration: underline; }
+  .status { color: var(--muted); padding: 2rem 0; }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+  .controls .or { color: var(--muted); font-size: 0.85rem; }
+  select {
+    font: inherit;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+    max-width: 100%;
+  }
+  #rivalry-select { flex: 1 1 18rem; }
+
+  .matchup-head { margin: 0.5rem 0 0.25rem; font-size: 1.2rem; }
+  .matchup-meta { color: var(--muted); font-size: 0.85rem; margin: 0 0 0.75rem; }
+  .summary { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: 0 0 1.25rem; font-size: 0.88rem; }
+  .summary div span { color: var(--muted); }
+
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  th, td { padding: 0.45rem 0.55rem; text-align: left; vertical-align: top; }
+  thead th {
+    border-bottom: 2px solid var(--border);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  thead th.num, td.num { text-align: right; }
+  thead th button {
+    font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer;
+    text-transform: inherit; letter-spacing: inherit;
+  }
+  thead th button:hover { color: var(--fg); }
+  thead th button[aria-sort]::after { content: ' ↓'; }
+  thead th button[aria-sort="ascending"]::after { content: ' ↑'; }
+  tbody tr:nth-child(even) { background: var(--row-alt); }
+  td { font-variant-numeric: tabular-nums; }
+  .season { font-weight: 600; white-space: nowrap; }
+  td.season { min-width: 5.5rem; max-width: 10rem; }
+  td.season .sub { white-space: normal; font-weight: 400; }
+  .sub { display: block; color: var(--muted); font-size: 0.76rem; margin-top: 0.1rem; }
+  .team-line { white-space: nowrap; }
+  .team-line .rk { font-weight: 600; }
+  .team-line .sc { color: var(--muted); margin-left: 0.35rem; }
+  .prior { font-style: italic; }
+  .result { white-space: nowrap; }
+  .badge {
+    display: inline-block; font-size: 0.68rem; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.03em; padding: 0.05rem 0.35rem; border-radius: 4px;
+    color: var(--accent); border: 1px solid currentColor; margin-left: 0.35rem;
+  }
+  tr.gap td { color: var(--muted); font-style: italic; }
+  .legend-note { color: var(--muted); font-size: 0.78rem; margin: 0.75rem 0 0; }
+
+  .card { border-top: 1px solid var(--border); margin-top: 2rem; padding-top: 1.25rem; }
+  .chart-controls { margin-bottom: 0.75rem; }
+  .chart-wrap { position: relative; }
+  .chart-wrap svg { display: block; width: 100%; height: auto; }
+  .chart-axis { font-size: 10px; fill: var(--muted); }
+  .chart-tooltip {
+    position: absolute;
+    top: 4px;
+    pointer-events: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.4rem 0.55rem;
+    font-size: 0.78rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    min-width: 120px;
+  }
+  .chart-tooltip-head { color: var(--muted); font-size: 0.72rem; margin-bottom: 0.25rem; }
+  .chart-tooltip-row { display: flex; align-items: center; gap: 0.4rem; line-height: 1.5; }
+  .chart-tooltip-key { display: inline-block; width: 10px; height: 2px; border-radius: 1px; }
+  .chart-tooltip-name { color: var(--muted); }
+  .chart-legend { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted); }
+  .chart-legend-item { display: flex; align-items: center; gap: 0.35rem; }
+  .chart-legend-key { display: inline-block; width: 12px; height: 2px; border-radius: 1px; }
+  details.chart-table-toggle { margin-top: 0.5rem; font-size: 0.82rem; }
+  details.chart-table-toggle summary { cursor: pointer; color: var(--muted); }
+  details.chart-table-toggle table { margin-top: 0.5rem; font-size: 0.82rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back-link" href="index.html">&larr; Back to standings</a>
+  <h1>Rivalry History</h1>
+  <p class="subtitle" id="subtitle">Loading&hellip;</p>
+
+  <div class="controls" id="controls" hidden>
+    <select id="rivalry-select" aria-label="Choose a rivalry"></select>
+    <span class="or">or any two teams:</span>
+    <select id="team-a" aria-label="First team"></select>
+    <select id="team-b" aria-label="Second team"></select>
+  </div>
+
+  <div id="content"></div>
+
+  <section class="card" id="chart-card" hidden>
+    <h2>Going in, year by year</h2>
+    <div class="chart-controls">
+      <select id="chart-metric" aria-label="Chart metric">
+        <option value="rank">Pre-game rank</option>
+        <option value="score">Pre-game power score</option>
+      </select>
+    </div>
+    <div id="chart"></div>
+    <div id="chart-table"></div>
+  </section>
+</div>
+
+<!-- ?v= must match index.html's -- see the note there. -->
+<script src="playoff-format.js?v=2026-11-22"></script>
+<script src="trends.js?v=2026-11-22"></script>
+<script>
+const HTML_ESCAPE_RE = /[&<>"']/g;
+const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+function escapeHtml(s) {
+  return String(s).replace(HTML_ESCAPE_RE, c => HTML_ESCAPES[c]);
+}
+
+// ---- Snapshot index ------------------------------------------------------
+// Every number on this page is read straight out of a published weekly
+// snapshot in ratings_history.json -- the same rank/score the standings page
+// showed that week. Nothing is re-rated here.
+function buildSnapshotIndex(rows) {
+  const bySnap = new Map();  // "season|as_of" -> rows
+  for (const r of rows) {
+    const key = `${r.season}|${r.as_of}`;
+    if (!bySnap.has(key)) bySnap.set(key, []);
+    bySnap.get(key).push(r);
+  }
+  const seasons = new Map();  // season -> { regular: [{asOf, byTeam}], final, teams }
+  for (const snapRows of bySnap.values()) {
+    const { season, as_of: asOf, stage } = snapRows[0];
+    snapRows.sort(compareByPower);
+    const byTeam = new Map(snapRows.map((r, i) => [r.team, { rank: i + 1, row: r }]));
+    if (!seasons.has(season)) seasons.set(season, { regular: [], postseason: null, teams: new Set() });
+    const s = seasons.get(season);
+    snapRows.forEach(r => s.teams.add(r.team));
+    if (stage === 'postseason') s.postseason = { asOf, byTeam };
+    else s.regular.push({ asOf, byTeam });
+  }
+  for (const s of seasons.values()) {
+    s.regular.sort((a, b) => (a.asOf < b.asOf ? -1 : 1));
+    // A season's final word: end of bowl season, or (a season still in
+    // progress, or one with no postseason snapshot) its latest regular week.
+    s.final = s.postseason || s.regular[s.regular.length - 1] || null;
+  }
+  return seasons;
+}
+
+// Where `team` stood going into `game`: the latest regular-season snapshot
+// dated strictly before the game (snapshot labels and game dates are both
+// UTC dates from CFBD, so they compare cleanly). With no snapshot yet that
+// season -- a week-1 game -- falls back to the team's final rank from the
+// season before, flagged `prior`.
+function preGame(seasons, game, team) {
+  const date = (game.date || '').slice(0, 10);
+  const s = seasons.get(game.season);
+  let snap = null;
+  for (const r of (s ? s.regular : [])) {
+    if (r.asOf < date) snap = r; else break;
+  }
+  if (snap) {
+    const hit = snap.byTeam.get(team);
+    if (hit) return { ...hit, prior: false };
+  }
+  const prev = seasons.get(game.season - 1);
+  const hit = prev?.final?.byTeam.get(team);
+  return hit ? { ...hit, prior: true } : null;
+}
+
+// ---- Rivalry data --------------------------------------------------------
+function pairKey(a, b) {
+  return [a, b].sort().join('|');
+}
+
+function rivalryLabel(r) {
+  const base = `${r.teams[0]} – ${r.teams[1]}`;
+  return r.name ? `${base} · ${r.name}` : base;
+}
+
+function hostOf(game) {
+  if (game.location === 'neutral') return null;
+  return game.location === 'home' ? game.winner : game.loser;
+}
+
+// What kind of game a season's 2nd+ meeting was. CFBD's notes are usually
+// blank on conference title games, so a repeat conference matchup is taken
+// to be one -- the only way two conference teams meet twice in a regular
+// season.
+function rematchTag(game) {
+  if (game.season_type !== 'regular') return 'Bowl';
+  return game.conference_game ? 'CG' : 'rematch';
+}
+const TAG_NOTES = { CG: 'Conference championship', rematch: 'Rematch' };
+
+function buildMeetings(seasons, games, a, b) {
+  const meetings = games
+    .filter(g => (g.winner === a && g.loser === b) || (g.winner === b && g.loser === a))
+    .map(g => {
+      const preA = preGame(seasons, g, a);
+      const preB = preGame(seasons, g, b);
+      const both = preA && preB;
+      let favorite = null;
+      if (both) favorite = preA.rank < preB.rank ? a : b;
+      return {
+        game: g, season: g.season, preA, preB,
+        combinedRank: both ? preA.rank + preB.rank : null,
+        avgScore: both ? (preA.row.power_score + preB.row.power_score) / 2 : null,
+        favorite,
+        upset: favorite != null && favorite !== g.winner,
+      };
+    });
+  meetings.sort((x, y) => (x.game.date < y.game.date ? -1 : 1));
+  // A season's later meetings (a title-game or bowl rematch) get a tag so
+  // the chart's x labels and the table rows stay distinguishable.
+  const seen = new Set();
+  meetings.forEach(m => {
+    m.tag = seen.has(m.season) ? rematchTag(m.game) : '';
+    seen.add(m.season);
+    m.label = m.tag ? `${m.season} ${m.tag}` : String(m.season);
+  });
+  return meetings;
+}
+
+// One row per meeting plus a placeholder row for every season (on record)
+// they didn't play, chronological.
+function buildTimeline(seasons, meetings, a, b) {
+  const allSeasons = [...seasons.keys()].sort((x, y) => x - y);
+  const latest = allSeasons[allSeasons.length - 1];
+  const played = new Set(meetings.map(m => m.season));
+  const gaps = allSeasons.filter(s => !played.has(s)).map(season => {
+    const teams = seasons.get(season).teams;
+    const notFbs = [a, b].filter(t => !teams.has(t));
+    let reason;
+    if (notFbs.length) reason = `Not played — ${notFbs.join(' and ')} not in FBS`;
+    else if (season === latest && !seasons.get(season).postseason) reason = 'Not played (yet) this season';
+    else reason = 'Not played';
+    return { gap: true, season, label: String(season), reason };
+  });
+  return [...meetings, ...gaps].sort((x, y) =>
+    x.season - y.season || (x.gap ? 1 : 0) - (y.gap ? 1 : 0) || (x.game?.date < y.game?.date ? -1 : 1));
+}
+
+// ---- Rendering -----------------------------------------------------------
+function fmtTeamCell(pre, committeeLabel) {
+  if (!pre) return '<span class="sub">no rating</span>';
+  const r = pre.row;
+  const rank = `<span class="rk">#${pre.rank}</span><span class="sc">${r.power_score.toFixed(1)}</span>`;
+  if (pre.prior) {
+    return `<span class="team-line prior">${rank}</span><span class="sub prior">last season's final</span>`;
+  }
+  const extra = [`${r.wins}-${r.losses}`];
+  if (r.committee_rank != null) extra.push(`${committeeLabel} ${r.committee_rank}`);
+  return `<span class="team-line">${rank}</span><span class="sub">${extra.join(' · ')}</span>`;
+}
+
+function fmtResult(game) {
+  const host = hostOf(game);
+  const site = host ? `at ${host}` : 'neutral site';
+  return `<span class="result">${escapeHtml(game.winner)} ${game.winner_pts}–${game.loser_pts}</span>` +
+         `<span class="sub">${escapeHtml(site)}</span>`;
+}
+
+function renderSummary(container, meetings, a, b) {
+  const wins = { [a]: 0, [b]: 0 };
+  meetings.forEach(m => { wins[m.game.winner] += 1; });
+  let series;
+  if (wins[a] === wins[b]) series = `Tied ${wins[a]}–${wins[b]}`;
+  else {
+    const [lead, trail] = wins[a] > wins[b] ? [a, b] : [b, a];
+    series = `${lead} leads ${wins[lead]}–${wins[trail]}`;
+  }
+  let streak = '—';
+  if (meetings.length) {
+    const last = meetings[meetings.length - 1].game.winner;
+    let n = 0;
+    for (let i = meetings.length - 1; i >= 0 && meetings[i].game.winner === last; i--) n++;
+    streak = n === 1 ? `${last} won the last meeting` : `${last}, ${n} straight`;
+  }
+  const rated = meetings.filter(m => m.favorite != null);
+  const chalk = rated.filter(m => !m.upset).length;
+  const ranked = meetings.filter(m => m.combinedRank != null);
+  const best = ranked.reduce((x, m) => (!x || m.combinedRank < x.combinedRank ? m : x), null);
+  const worst = ranked.reduce((x, m) => (!x || m.combinedRank > x.combinedRank ? m : x), null);
+
+  const items = [
+    ['Series', series],
+    ['Streak', streak],
+    ['Higher-rated team won', rated.length ? `${chalk} of ${rated.length}` : '—'],
+  ];
+  if (best && worst && best !== worst) {
+    items.push(['Strongest matchup', `${best.label} (combined #${best.combinedRank})`]);
+    items.push(['Weakest matchup', `${worst.label} (combined #${worst.combinedRank})`]);
+  }
+  container.innerHTML = items.map(([k, v]) => `<div><span>${escapeHtml(k)}:</span> ${escapeHtml(v)}</div>`).join('');
+}
+
+const SORTS = {
+  season: { label: 'Season', key: m => m.season, defaultDir: 1 },
+  combined: { label: 'Comb. rank', key: m => m.combinedRank, defaultDir: 1 },
+  avg: { label: 'Avg score', key: m => m.avgScore, defaultDir: -1 },
+};
+
+function renderTable(container, timeline, a, b, sortState, onSort) {
+  const { by, dir } = sortState;
+  let rows = timeline;
+  if (by !== 'season') {
+    // Non-season sorts rank meetings only; unrated and unplayed rows trail.
+    const key = SORTS[by].key;
+    const meetings = timeline.filter(t => !t.gap && key(t) != null)
+      .sort((x, y) => (key(x) - key(y)) * dir || x.season - y.season);
+    rows = [...meetings, ...timeline.filter(t => t.gap || key(t) == null)];
+  } else if (dir === -1) {
+    rows = [...timeline].reverse();
+  }
+
+  const sortBtn = id => {
+    const aria = by === id ? ` aria-sort="${dir === 1 ? 'ascending' : 'descending'}"` : '';
+    return `<button type="button" data-sort="${id}"${aria}>${SORTS[id].label}</button>`;
+  };
+
+  const body = rows.map(t => {
+    if (t.gap) {
+      return `<tr class="gap"><td class="season">${t.season}</td><td colspan="5">${escapeHtml(t.reason)}</td></tr>`;
+    }
+    const g = t.game;
+    const committeeLabel = t.season < CFP_ERA_START ? 'BCS' : 'CFP';
+    const date = new Date(g.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' });
+    const noteText = g.notes || TAG_NOTES[t.tag] || '';
+    const note = noteText ? ` · ${escapeHtml(noteText)}` : '';
+    return `
+      <tr>
+        <td class="season">${t.season}<span class="sub">${date}${note}</span></td>
+        <td>${fmtTeamCell(t.preA, committeeLabel)}</td>
+        <td>${fmtTeamCell(t.preB, committeeLabel)}</td>
+        <td class="num">${t.combinedRank ?? '—'}</td>
+        <td class="num">${t.avgScore != null ? t.avgScore.toFixed(1) : '—'}</td>
+        <td>${fmtResult(g)}${t.upset ? '<span class="badge">Upset</span>' : ''}</td>
+      </tr>`;
+  }).join('');
+
+  const scroll = document.createElement('div');
+  scroll.className = 'table-scroll';
+  scroll.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>${sortBtn('season')}</th>
+        <th>${escapeHtml(a)}</th>
+        <th>${escapeHtml(b)}</th>
+        <th class="num">${sortBtn('combined')}</th>
+        <th class="num">${sortBtn('avg')}</th>
+        <th>Result</th>
+      </tr></thead>
+      <tbody>${body}</tbody>
+    </table>`;
+  scroll.querySelectorAll('button[data-sort]').forEach(btn => {
+    btn.addEventListener('click', () => onSort(btn.dataset.sort));
+  });
+  container.replaceChildren(scroll);
+}
+
+function renderChart(timeline, a, b) {
+  const metric = document.getElementById('chart-metric').value;
+  const pick = (t, pre) => {
+    if (t.gap || !pre) return null;
+    return metric === 'rank' ? pre.rank : pre.row.power_score;
+  };
+  const xLabels = timeline.map(t => t.label);
+  const series = [
+    { name: a, color: 'var(--series-1)', points: timeline.map(t => pick(t, t.preA)) },
+    { name: b, color: 'var(--series-2)', points: timeline.map(t => pick(t, t.preB)) },
+  ];
+  // Rank axes start at a gridline for 0, which isn't a rank -- left unlabeled.
+  const valueFmt = metric === 'rank'
+    ? v => (v === 0 ? '' : `#${Math.round(v)}`)
+    : v => v.toFixed(1);
+  const { renderLineChart, renderTableView } = window.cfbCharts;
+  renderLineChart(document.getElementById('chart'), {
+    series, xLabels, valueFmt, invertY: metric === 'rank', breakGaps: true,
+  });
+  renderTableView(document.getElementById('chart-table'), xLabels, series, valueFmt);
+}
+
+// ---- Page ----------------------------------------------------------------
+async function fetchJson(path) {
+  const res = await fetch(path, { cache: 'no-cache' });
+  if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+  return res.json();
+}
+
+async function main() {
+  const content = document.getElementById('content');
+  const subtitle = document.getElementById('subtitle');
+
+  let rows, games, rivalries;
+  try {
+    [rows, games, rivalries] = await Promise.all([
+      fetchJson('data/ratings_history.json'),
+      fetchJson('data/games_archive.json'),
+      fetchJson('data/rivalries.json'),
+    ]);
+  } catch (err) {
+    subtitle.textContent = '';
+    content.innerHTML = `<p class="status">Couldn't load data (${escapeHtml(err.message)}).</p>`;
+    return;
+  }
+
+  const seasons = buildSnapshotIndex(rows);
+  const seasonList = [...seasons.keys()].sort((x, y) => x - y);
+  subtitle.textContent = `Every meeting since ${seasonList[0]}, with where each team stood in the Belmore Rankings going in.`;
+
+  const rivalryByPair = new Map(rivalries.map(r => [pairKey(...r.teams), r]));
+  const sortedRivalries = [...rivalries].sort((x, y) => rivalryLabel(x).localeCompare(rivalryLabel(y)));
+  const allTeams = [...new Set(rows.map(r => r.team))].sort();
+
+  const rivalrySelect = document.getElementById('rivalry-select');
+  const teamA = document.getElementById('team-a');
+  const teamB = document.getElementById('team-b');
+  rivalrySelect.replaceChildren(
+    new Option('— Custom matchup —', ''),
+    ...sortedRivalries.map(r => new Option(rivalryLabel(r), pairKey(...r.teams))),
+  );
+  for (const sel of [teamA, teamB]) sel.replaceChildren(...allTeams.map(t => new Option(t, t)));
+
+  const header = document.createElement('div');
+  const summary = document.createElement('div');
+  summary.className = 'summary';
+  const tableWrap = document.createElement('div');
+  const note = document.createElement('p');
+  note.className = 'legend-note';
+  note.innerHTML = 'Rank and power score come from the last weekly snapshot published <em>before</em> each game (rank = overall among all FBS teams that week), with the record and CFP/BCS committee rank at that point. A season-opening game with no snapshot yet shows each team’s final rank from the previous season, in italics. Comb. rank = the two ranks added together (lower = bigger game); “Upset” = the lower-ranked team won. Army–Navy follows championship week, but its last snapshot predates that week’s conference title games.';
+  content.replaceChildren(header, summary, tableWrap, note);
+
+  const chartCard = document.getElementById('chart-card');
+  let current = null;  // { a, b, timeline, meetings }
+  const sortState = { by: 'season', dir: -1 };
+
+  function drawTable() {
+    renderTable(tableWrap, current.timeline, current.a, current.b, sortState, id => {
+      if (sortState.by === id) sortState.dir = -sortState.dir;
+      else { sortState.by = id; sortState.dir = SORTS[id].defaultDir; }
+      drawTable();
+    });
+  }
+
+  function show(a, b, { updateHash = true } = {}) {
+    if (a === b) {
+      header.innerHTML = '<p class="status">Pick two different teams.</p>';
+      summary.replaceChildren(); tableWrap.replaceChildren(); chartCard.hidden = true;
+      return;
+    }
+    const rivalry = rivalryByPair.get(pairKey(a, b));
+    // A listed rivalry always shows its teams in the listed order.
+    if (rivalry) [a, b] = rivalry.teams;
+    rivalrySelect.value = rivalry ? pairKey(a, b) : '';
+    teamA.value = a;
+    teamB.value = b;
+
+    const meetings = buildMeetings(seasons, games, a, b);
+    current = { a, b, meetings, timeline: buildTimeline(seasons, meetings, a, b) };
+
+    const meta = [rivalry?.trophy, `${meetings.length} meeting${meetings.length === 1 ? '' : 's'} since ${seasonList[0]}`]
+      .filter(Boolean);
+    header.innerHTML = `
+      <h2 class="matchup-head">${escapeHtml(a)} vs. ${escapeHtml(b)}${rivalry?.name ? ` · ${escapeHtml(rivalry.name)}` : ''}</h2>
+      <p class="matchup-meta">${escapeHtml(meta.join(' · '))}</p>`;
+    renderSummary(summary, meetings, a, b);
+    drawTable();
+    chartCard.hidden = !meetings.length;
+    if (meetings.length) renderChart(current.timeline, a, b);
+
+    if (updateHash) {
+      const params = new URLSearchParams({ a, b });
+      history.replaceState(null, '', `#${params}`);
+    }
+  }
+
+  rivalrySelect.addEventListener('change', () => {
+    const r = rivalryByPair.get(rivalrySelect.value);
+    if (r) show(...r.teams);
+  });
+  teamA.addEventListener('change', () => show(teamA.value, teamB.value));
+  teamB.addEventListener('change', () => show(teamA.value, teamB.value));
+  document.getElementById('chart-metric').addEventListener('change', () => {
+    if (current?.meetings.length) renderChart(current.timeline, current.a, current.b);
+  });
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      if (current?.meetings.length) renderChart(current.timeline, current.a, current.b);
+    }, 150);
+  });
+
+  // #a=Team&b=Team deep links; otherwise the first listed rivalry.
+  const params = new URLSearchParams(location.hash.slice(1));
+  const fromHash = [params.get('a'), params.get('b')];
+  document.getElementById('controls').hidden = false;
+  if (fromHash.every(t => t && allTeams.includes(t))) show(...fromHash, { updateHash: false });
+  else show(...rivalries[0].teams, { updateHash: false });
+}
+
+main();
+</script>
+</body>
+</html>
