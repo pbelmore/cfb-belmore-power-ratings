@@ -7,7 +7,7 @@ the CFBD API, runs them through ratings_core, and writes:
   data/games.json             one row per completed game
   data/games_archive.json     every season's FBS-vs-FBS games (this season's replaced each run)
   data/ratings_history.json   long-format, one row per team per run (appended)
-  data/weekly_blurb.txt       plain-text top-25, ready to paste into a group chat
+  data/weekly_blurb.txt       plain-text top 10 (pre-2024) or projected playoff field, ready to paste
   data/team_colors.json       {team: {color, altColor}} for every team ever seen
 
 Usage:
@@ -98,8 +98,8 @@ def fetch_raw_games(year, api_key):
     return cfbd_get("/games", api_key, year=year, seasonType="both", classification="fbs")
 
 
-def fetch_games(year, api_key, through_week=None):
-    return parse_games(fetch_raw_games(year, api_key), year, through_week)
+def fetch_games(year, api_key):
+    return parse_games(fetch_raw_games(year, api_key), year)
 
 
 def parse_games(raw, year, through_week=None):
@@ -107,8 +107,6 @@ def parse_games(raw, year, through_week=None):
     for g in raw:
         home_pts, away_pts = g.get("homePoints"), g.get("awayPoints")
         if not g.get("completed") or home_pts is None or away_pts is None:
-            continue
-        if through_week is not None and (g.get("week") or 0) > through_week:
             continue
 
         home, away = g["homeTeam"], g["awayTeam"]
@@ -136,11 +134,51 @@ def parse_games(raw, year, through_week=None):
             # conference W-L exactly for every team.
             "conference_game": bool(g.get("conferenceGame")),
         })
+    fold_title_games_into_regular(games)
+    if through_week is not None:
+        # After the fold above, so a refiled title game is filtered by its
+        # regular-season week, not its postseason one.
+        games = [r for r in games if (r["week"] or 0) <= through_week]
     # Sort deterministically -- the CFBD API doesn't guarantee stable ordering
     # between calls for games sharing a timestamp, which would otherwise cause
     # a spurious diff/commit every run even when no game data actually changed.
     games.sort(key=lambda r: (r["date"] or "", r["winner"], r["loser"]))
     return games
+
+
+def fold_title_games_into_regular(game_rows):
+    """Refiles, in place, conference championship games that CFBD tags as
+    postseason back into the regular season. CFBD does this for 1998-2000
+    (10 games, e.g. Texas A&M's upset of Kansas State in the 1998 Big 12
+    title game), which otherwise leaves them out of the "End of Regular
+    Season" snapshot -- the one the BCS actually selected from.
+
+    A game is refiled when it's tagged postseason, flagged as a conference
+    game, and played (UTC date) on or before the season's last regular-
+    season game. Checked against every season 1998-2025: that matches
+    exactly those 10 games -- CFBD also flags a few later bowls as
+    conference games, but those are always played after the regular
+    season ends. A refiled game takes the regular-season week it falls in
+    (the first week whose last game is on or after it)."""
+    regular = [r for r in game_rows if r["season_type"] == "regular" and r["week"] is not None and r["date"]]
+    if not regular:
+        return
+    last_regular_day = max(r["date"] for r in regular)[:10]
+    week_end = {}
+    for r in regular:
+        week_end[r["week"]] = max(week_end.get(r["week"], ""), r["date"][:10])
+    for r in game_rows:
+        if r["season_type"] != "postseason" or not r["conference_game"] or not r["date"]:
+            continue
+        day = r["date"][:10]
+        if day > last_regular_day:
+            continue
+        r["season_type"] = "regular"
+        r["week"] = min(wk for wk, end in week_end.items() if end >= day)
+
+
+def is_army_navy_game(game_row):
+    return {game_row["winner"], game_row["loser"]} == {"Army", "Navy"}
 
 
 def pending_games_in_latest_week(raw_games):
@@ -162,7 +200,18 @@ def game_identities(game_rows):
     telling whether any game has finished since the last snapshot (a later
     CFBD score correction on an already-counted game doesn't count as a
     new one)."""
-    return {(g["season"], g["season_type"], g["week"], g["date"], frozenset((g["winner"], g["loser"]))) for g in game_rows}
+    return {game_identity(g) for g in game_rows}
+
+
+def game_identity(g):
+    return (g["season"], g["season_type"], g["week"], g["date"], frozenset((g["winner"], g["loser"])))
+
+
+def new_game_rows(game_rows, previous_rows):
+    """The rows in `game_rows` that weren't in `previous_rows` (games.json
+    from the last snapshot) -- see game_identities()."""
+    seen = game_identities(previous_rows)
+    return [g for g in game_rows if game_identity(g) not in seen]
 
 
 def fetch_team_colors(api_key, team_names):
@@ -225,6 +274,22 @@ KNOWN_RANK_FIXES = {
     (2023, 15, "Georgia"): 6,
 }
 
+# Whole CFBD releases to ignore, as (year, week). CFBD's 2011 "week 14" BCS
+# Standings (the Nov 27 release) is a copy of the week-15 final, identical
+# in all 25 spots -- it has Houston at 19 when Houston was still 12-0 (it
+# fell to 19 only after losing the C-USA title game on Dec 3) and Oregon 5
+# before its Pac-12 title game. Ignoring it leaves that week unranked
+# rather than showing the final a week early.
+KNOWN_BAD_RELEASES = {(2011, 14)}
+
+# CFBD releases filed under the wrong week, as {(year, cfbd_week):
+# corrected_week}. CFBD's 2001 "week 16" BCS Standings is the Dec 9 final
+# (Tennessee 6 and LSU 13 -- only true after LSU won the Dec 8 SEC title
+# game; Tennessee was 2nd on Dec 2), and the Dec 2 release is missing.
+# Read as week 17, it lands on the final snapshot instead of the week
+# before it.
+KNOWN_RELABELED_RELEASES = {(2001, 16): 17}
+
 # The real BCS title-game matchup per season, as (BCS #1, BCS #2) in the
 # final BCS Standings -- the BCS title game was always exactly those two.
 # Hand-entered because CFBD's "BCS Standings" are missing or incomplete for
@@ -270,46 +335,47 @@ def fetch_committee_rankings(year, api_key):
     returns nothing for a week before rankings start (early season), and
     for postseason snapshots (week=99 sentinel -- no week 100 ranking will
     ever exist, since the committee's job -- the actual selection -- ends
-    once the field is picked)."""
+    once the field is picked).
+
+    A committee ranking CFBD files under the postseason is kept as the
+    week after the last regular-season release. CFBD does this with 2020's
+    final (selection-day) ranking, filing it as "postseason week 1" -- its
+    regular "week 16" is the Dec 15 release, from before that season's
+    title games."""
     poll_name = "BCS Standings" if year < CFP_ERA_START else "Playoff Committee Rankings"
     raw = cfbd_get("/rankings", api_key, year=year)
     by_week = {}
+    postseason = None
     for entry in raw:
-        if entry.get("seasonType") != "regular":
-            continue
         for poll in entry.get("polls", []):
-            if poll["poll"] == poll_name:
-                ranks = {r["school"]: r["rank"] for r in poll["ranks"]}
+            if poll["poll"] != poll_name:
+                continue
+            ranks = {r["school"]: r["rank"] for r in poll["ranks"]}
+            if entry.get("seasonType") == "postseason":
+                postseason = ranks
+            elif entry.get("seasonType") == "regular" and (year, entry["week"]) not in KNOWN_BAD_RELEASES:
                 for team in ranks:
                     fix = KNOWN_RANK_FIXES.get((year, entry["week"], team))
                     if fix is not None:
                         ranks[team] = fix
-                by_week[entry["week"]] = ranks
+                by_week[KNOWN_RELABELED_RELEASES.get((year, entry["week"]), entry["week"])] = ranks
+    if postseason and by_week:
+        by_week[max(by_week) + 1] = postseason
     return by_week
 
 
-def committee_ranks_for_week(rankings_by_week, week, same_week_fallback=True):
+def committee_ranks_for_week(rankings_by_week, week):
     """The real committee ranking for an as-of-week-`week` snapshot: week
     (week + 1) in CFBD's own numbering (see fetch_committee_rankings()),
-    falling back to week `week` itself if that's not available. That
-    fallback matters for at least one real season: 2020's pandemic-
-    compressed schedule had conference championships and the CFP selection
-    announcement land in the same week, so CFBD tagged the final/selection
-    ranking with that same week number instead of the usual +1 (verified:
-    its "week 16" ranking is exactly the real final four -- Alabama, Notre
-    Dame, Clemson, Ohio State -- with no "week 17" release at all that
-    season).
-
-    `same_week_fallback=False` skips that fallback, for a live run made
-    before this week's ranking has been released (the weekly run goes out
-    Sunday-Tuesday morning, the ranking Tuesday night): falling back then
-    would attach *last* week's ranking to this week's snapshot. The
-    Wednesday CFP-ranks run (update_cfp_ranks()) fills it in instead."""
+    or None if CFBD has no such release. There's deliberately no fallback
+    to week `week` itself: that release is the one the previous week's
+    snapshot already shows, so falling back only ever repeats a stale
+    ranking (it did for 2019's Nov 24 snapshot, where CFBD is missing the
+    Nov 26 release) -- and on a live run it would attach last week's
+    ranking to a snapshot made before this week's has aired."""
     if week is None:
         return None
-    if (week + 1) in rankings_by_week:
-        return rankings_by_week[week + 1]
-    return rankings_by_week.get(week) if same_week_fallback else None
+    return rankings_by_week.get(week + 1)
 
 
 def fetch_cfp_participants(year, api_key):
@@ -663,7 +729,29 @@ def is_trailing_army_navy_week(games_in_week):
     current_week_number() (drop it from "current") and
     backfill_history.build_snapshots() (fold it into the prior week's
     snapshot instead of giving it a milestone of its own)."""
-    return bool(games_in_week) and all({g["winner"], g["loser"]} == {"Army", "Navy"} for g in games_in_week)
+    return bool(games_in_week) and all(is_army_navy_game(g) for g in games_in_week)
+
+
+def army_navy_snapshot_to_replace(history, season, new_games, conf_champions):
+    """The as_of of `season`'s latest snapshot when the only games since it
+    (`new_games`, see new_game_rows()) are a regular-season Army-Navy played
+    after conference championships -- the live run's version of
+    build_snapshots()' fold. The caller drops that snapshot and writes the
+    new one in its place, dated today, so (as in a backfilled season) the
+    "End of Regular Season" snapshot includes Army-Navy and there's no
+    second one. None in every other case, including once any bowl has been
+    played (then it's an ordinary "Bowl Season" snapshot)."""
+    if not conf_champions or not new_games:
+        return None
+    if not all(g["season_type"] == "regular" and is_army_navy_game(g) for g in new_games):
+        return None
+    season_rows = [r for r in history if r["season"] == season]
+    if not season_rows:
+        return None
+    latest = max(r["as_of"] for r in season_rows)
+    if any(r["as_of"] == latest and r["stage"] != "regular" for r in season_rows):
+        return None
+    return latest
 
 
 def current_week_number(game_rows):
@@ -710,13 +798,13 @@ def rank_by_public_score(results, scores):
 
 def build_public_rows(
     results, scores, teams, season, as_of, stage="regular",
-    committee_ranks=None, playoff_field=None, playoff_seeds=None, conf_champions=None,
-    conf_leaders=None,
+    committee_ranks=None, playoff_field=None, playoff_seeds=None, conf_leaders=None,
 ):
     """Like ratings_core.build_snapshot_rows(), but persists power_score
     instead of the raw sos/rating fields -- those never touch a committed
     file. Reuses compute_ratings()'s actual math untouched; this only
-    changes what gets written. `stage` ("regular"/"postseason") lets the
+    changes what gets written. Rows are compact (see compact_row()): a
+    field that would be null or false is left out. `stage` ("regular"/"postseason") lets the
     site label the last regular-season snapshot and the last
     postseason-inclusive snapshot as season milestones instead of just
     another week. `committee_ranks` ({team: rank}, already resolved to the
@@ -730,23 +818,17 @@ def build_public_rows(
     (real_field_projection()). `playoff_seeds` ({team: seed}) is only ever
     passed alongside the exact field, giving real bracket position for the
     dashboard's exact-position-match stat; projected weeks leave it None
-    since a projection's "seed" isn't a real fact yet. `conf_champions`
-    ({conference: team}, from conference_champions()) becomes each row's
-    `conf_champion` flag -- true only for that snapshot's actual
-    conference-championship-game winner, false otherwise (always a known
-    fact once game data is in, never null) -- so the client-side "our
-    projection" logic (index.html/accuracy.html) can apply the same
-    real-champion override as conference_leader_field() without needing
-    game data of its own. `conf_leaders` ({conference: team}, from
-    conference_leaders()) likewise becomes `conf_leader` -- the site
-    can't work out standings or head-to-head itself, so it reads this
-    flag for both its "*" and its projection's auto bids."""
+    since a projection's "seed" isn't a real fact yet. `conf_leaders`
+    ({conference: team}, from conference_leaders()) becomes `conf_leader`
+    -- the site can't work out standings or head-to-head itself, so it
+    reads this flag for both its "*" and its projection's auto bids. Only
+    12-team-era rows (TWELVE_TEAM_ERA_START on) carry it, since only that
+    format uses leaders."""
     conf_of = {t["school"]: t.get("conference") for t in teams}
-    champion_teams = set((conf_champions or {}).values())
-    leader_teams = set((conf_leaders or {}).values())
+    leader_teams = set((conf_leaders or {}).values()) if season >= TWELVE_TEAM_ERA_START else set()
     rows = []
     for team, r in results.items():
-        rows.append({
+        rows.append(compact_row({
             "season": season,
             "as_of": as_of,
             "stage": stage,
@@ -754,13 +836,20 @@ def build_public_rows(
             "conference": conf_of.get(team),
             "wins": r["wins"],
             "losses": r["losses"],
-            "win_pct": r["win_pct"],
             "power_score": public_score(scores[team]),
             **committee_row_fields(team, committee_ranks, playoff_field, playoff_seeds),
-            "conf_champion": team in champion_teams,
             "conf_leader": team in leader_teams,
-        })
+        }))
     return rows
+
+
+def compact_row(row):
+    """`row` without its null and false fields. ratings_history.json is the
+    site's one big fetch, and most rows are unranked, outside the playoff
+    field, and not a conference leader -- every page already reads a
+    missing field the same as null/false. (0 and 0.0 are kept: a winless
+    record or a bottom-of-the-scale score is real data.)"""
+    return {k: v for k, v in row.items() if v is not None and v is not False}
 
 
 def committee_row_fields(team, committee_ranks, playoff_field, playoff_seeds):
@@ -774,14 +863,14 @@ def committee_row_fields(team, committee_ranks, playoff_field, playoff_seeds):
     }
 
 
-def fetch_committee_fields(year, api_key, current_week, teams, conf_leaders, same_week_fallback=True):
+def fetch_committee_fields(year, api_key, current_week, teams, conf_leaders):
     """(committee_ranks, playoff_field, playoff_seeds) for a live snapshot
     as of `current_week` -- 2 CFBD calls. The field is the real one once
     it's been selected, else a same-week projection from the committee
     ranking (see build_public_rows())."""
     print("Fetching committee rankings...")
     rankings_by_week = fetch_committee_rankings(year, api_key)
-    committee_ranks = committee_ranks_for_week(rankings_by_week, current_week, same_week_fallback)
+    committee_ranks = committee_ranks_for_week(rankings_by_week, current_week)
     print(f"  {len(committee_ranks) if committee_ranks else 0} teams ranked this week")
 
     print("Fetching real playoff field...")
@@ -845,18 +934,24 @@ def update_cfp_ranks(year, api_key, out_dir):
     # reused rather than recomputed, so the projection's auto bids can't
     # drift from the "*" the site is already showing.
     conf_leaders = {
-        r["conference"]: r["team"] for r in history
+        r.get("conference"): r["team"] for r in history
         if r["season"] == year and r["as_of"] == latest and r.get("conf_leader")
     }
     committee_ranks, playoff_field, playoff_seeds = fetch_committee_fields(
         year, api_key, current_week, teams, conf_leaders,
     )
+    if committee_ranks is None and playoff_seeds is None:
+        # CFBD doesn't have this week's ranking yet (or there isn't one) --
+        # leave the snapshot as it is; the 17:23 backup run tries again.
+        print(f"No committee ranking for the {latest} snapshot (week {current_week}) yet -- nothing written.")
+        return
     updated = 0
-    for r in history:
+    for i, r in enumerate(history):
         if r["season"] == year and r["as_of"] == latest:
             fields = committee_row_fields(r["team"], committee_ranks, playoff_field, playoff_seeds)
-            updated += any(r.get(k) != v for k, v in fields.items())
-            r.update(fields)
+            new_row = compact_row({**r, **fields})
+            updated += new_row != r
+            history[i] = new_row
     write_json(history_path, history)
     print(f"Updated CFP ranks on the {latest} snapshot (week {current_week}): {updated} rows changed")
 
@@ -874,8 +969,9 @@ def playoff_projection(scores, season, teams=(), conf_leaders=None):
     # tie-break -- the site's own ordering, see public_score(). Ties are
     # common at 1 decimal (e.g. #12 and #13 in 8 of the first 252
     # snapshots), and ranking on the unrounded value instead would let this
-    # pick a different team for the last slot than the site does.
-    ranked = sorted(scores.items(), key=lambda kv: (-public_score(kv[1]), kv[0]))
+    # pick a different team for the last slot than the site does. Passing
+    # `scores` as both arguments gives (team, score) pairs.
+    ranked = rank_by_public_score(scores, scores)
     return playoff_field_from_ranked(ranked, season, teams, conf_leaders)
 
 
@@ -995,11 +1091,10 @@ def main():
 
     # Both checks run before anything is written, so a skipped run leaves
     # nothing to commit and no Slack message for the workflow to post.
-    if args.skip_if_no_new_games:
-        previous = load_json(out_dir / "games.json", [])
-        if not game_identities(game_rows) - game_identities(previous):
-            print("No games have finished since the last snapshot -- skipping.")
-            return
+    new_games = new_game_rows(game_rows, load_json(out_dir / "games.json", []))
+    if args.skip_if_no_new_games and not new_games:
+        print("No games have finished since the last snapshot -- skipping.")
+        return
     # Regular season only: bowl season is a single CFBD "week" spread over
     # a month, so waiting for it to finish would mean no update until the
     # national championship.
@@ -1022,18 +1117,26 @@ def main():
     write_json(out_dir / "games.json", game_rows)
     # The rivalry page's all-seasons game record -- games.json is replaced
     # at every season rollover, so this season's games are copied here too.
+    # Not for a --week run, whose game_rows stop partway through the season
+    # and would cut the archive's copy of it short.
     archive_path = out_dir / "games_archive.json"
-    write_json(archive_path, archive_season_games(
-        load_json(archive_path, []), args.year, game_rows, {t["school"] for t in teams},
-    ))
+    if args.week is None:
+        write_json(archive_path, archive_season_games(
+            load_json(archive_path, []), args.year, game_rows, {t["school"] for t in teams},
+        ))
 
     history_path = out_dir / "ratings_history.json"
     history = load_json(history_path, [])
 
     print("Computing ratings...")
     results = compute_ratings(teams, to_rating_games(game_rows))
-    prior_raw = prior_season_raw_ratings(history, args.year, api_key)
     current_week = current_week_number(game_rows)
+    # Last season's ratings only matter while the preseason blend is on
+    # (weeks 1-6) -- skipping them after that saves 2 CFBD calls a run.
+    prior_raw = (
+        prior_season_raw_ratings(history, args.year, api_key)
+        if preseason_blend_weight(current_week) > 0 else None
+    )
     blended_raw = blend_raw_ratings(results, prior_raw, current_week)
     scores = normalize_values(blended_raw)
     stage = current_stage(game_rows)
@@ -1042,27 +1145,41 @@ def main():
         teams, game_rows, [team for team, _ in rank_by_public_score(results, scores)], conf_champions,
     )
 
-    # No same-week fallback during the regular season: this runs Sunday-
-    # Tuesday morning, before that week's ranking airs Tuesday night, so the
-    # fallback would attach last week's ranking to this week's snapshot --
-    # the Wednesday --cfp-ranks-only run fills it in. Postseason snapshots
-    # keep it, since the committee's final ranking is already out by then.
+    # Army-Navy, the week after conference championships, replaces that
+    # week's snapshot instead of adding one -- the same fold
+    # backfill_history.build_snapshots() makes -- and gets no Slack post,
+    # which would otherwise repeat the "End of Regular Season" one.
+    replaced_as_of = None if args.as_of else army_navy_snapshot_to_replace(
+        history, args.year, new_games, conf_champions,
+    )
+    if replaced_as_of:
+        print(f"Only Army-Navy since the {replaced_as_of} snapshot -- replacing it rather than adding one.")
+        history = [r for r in history if (r["season"], r["as_of"]) != (args.year, replaced_as_of)]
+
+    # Regular-season runs go out Sunday-Tuesday morning, before that week's
+    # ranking airs Tuesday night, so this normally finds none -- the
+    # Wednesday --cfp-ranks-only run fills it in.
     committee_ranks, playoff_field, playoff_seeds = fetch_committee_fields(
         args.year, api_key, current_week, teams, conf_leaders,
-        same_week_fallback=(stage == "postseason"),
     )
 
     new_rows = build_public_rows(
         results, scores, teams, season=args.year, as_of=as_of, stage=stage,
         committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,
-        conf_champions=conf_champions, conf_leaders=conf_leaders,
+        conf_leaders=conf_leaders,
     )
 
-    print("Fetching team colors...")
-    all_team_names = {t["school"] for t in teams} | {r["team"] for r in history}
-    colors = fetch_team_colors(api_key, all_team_names)
-    write_json(out_dir / "team_colors.json", colors)
-    print(f"  {len(colors)} teams with colors")
+    # Colors almost never change, so /teams (every team CFBD has ever
+    # tracked) is only fetched when a current FBS team has none yet --
+    # e.g. a team new to FBS.
+    colors_path = out_dir / "team_colors.json"
+    colors = load_json(colors_path, {})
+    if {t["school"] for t in teams} - set(colors):
+        print("Fetching team colors...")
+        all_team_names = {t["school"] for t in teams} | {r["team"] for r in history}
+        colors = fetch_team_colors(api_key, all_team_names)
+        write_json(colors_path, colors)
+        print(f"  {len(colors)} teams with colors")
 
     history = merge_history_rows(history, new_rows)
     write_json(history_path, history)
@@ -1080,7 +1197,7 @@ def main():
     # step after the data commit is pushed, so a Slack failure can't block
     # the site's data update, and a push that fails can't leave a Slack
     # post behind for the backup cron run to repeat.
-    if args.slack_message_out and args.year >= TWELVE_TEAM_ERA_START:
+    if args.slack_message_out and args.year >= TWELVE_TEAM_ERA_START and not replaced_as_of:
         week_label = season_week_label(current_week, stage, conf_champions, game_rows)
         slack_text = format_slack_blurb(
             results, scores, args.year, week_label, teams, conf_leaders=conf_leaders, link=SITE_URL,
@@ -1094,8 +1211,8 @@ def main():
         print(f"  {i}. {team} ({r['wins']}-{r['losses']}) -- {scores[team]:.1f}")
 
     print(
-        f"\nWrote {out_dir}/teams.json, {out_dir}/games.json, {out_dir}/ratings_history.json, "
-        f"{out_dir}/weekly_blurb.txt, {out_dir}/team_colors.json"
+        f"\nWrote {out_dir}/teams.json, {out_dir}/games.json, {out_dir}/games_archive.json, "
+        f"{out_dir}/ratings_history.json, {out_dir}/weekly_blurb.txt (and team_colors.json if fetched)"
     )
 
 

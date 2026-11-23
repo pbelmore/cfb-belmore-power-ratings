@@ -338,7 +338,7 @@ function renderStandings(current, season, asOf, colors, highlighted, confFilter,
   }
 }
 
-// Same "N. Team (W-L) -- score" format as the standalone weekly_blurb.txt
+// Same "N. Team (W-L)" format as the standalone weekly_blurb.txt
 // the pipeline writes, but computed here for whichever week is currently
 // selected -- that file only ever holds the latest live run's snapshot.
 let currentBlurbText = '';
@@ -515,6 +515,15 @@ async function main() {
   const content = document.getElementById('content');
   const subtitle = document.getElementById('subtitle');
 
+  // Colors are cosmetic (highlight-row team accent) -- a failure fetching
+  // this file shouldn't take down the whole page the way a failure on the
+  // required ratings_history.json below does, so its errors are handled
+  // separately (resolving to {}) rather than in the same try as the
+  // required fetch. Started first so the two downloads run in parallel.
+  const colorsPromise = fetch('data/team_colors.json', { cache: 'no-cache' })
+    .then(res => (res.ok ? res.json() : {}))
+    .catch(() => ({}));
+
   let rows;
   try {
     // 'no-cache', not 'no-store': still always checks for this week's data,
@@ -528,20 +537,7 @@ async function main() {
     content.innerHTML = `<p class="status">Couldn't load ratings data (${err.message}).</p>`;
     return;
   }
-
-  // Colors are cosmetic (highlight-row team accent) -- a failure fetching
-  // this file shouldn't take down the whole page the way a failure on the
-  // required ratings_history.json above does, so it's fetched and handled
-  // separately rather than in the same Promise.all/try as the required
-  // fetch (which would otherwise fail the page for a colors-only network
-  // hiccup even though the ratings data loaded fine).
-  let colors = {};
-  try {
-    const colorsRes = await fetch('data/team_colors.json', { cache: 'no-cache' });
-    if (colorsRes.ok) colors = await colorsRes.json();
-  } catch {
-    // Missing colors just means no accent highlighting -- not fatal.
-  }
+  const colors = await colorsPromise;
 
   if (!rows.length) {
     subtitle.textContent = '';

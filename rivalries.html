@@ -243,13 +243,14 @@ function hostOf(game) {
   return game.location === 'home' ? game.winner : game.loser;
 }
 
-// What kind of game a season's 2nd+ meeting was. CFBD's notes are usually
-// blank on conference title games, so a repeat conference matchup is taken
-// to be one -- the only way two conference teams meet twice in a regular
-// season.
+// What kind of game a season's 2nd+ meeting was. A regular-season repeat is
+// a conference title game if CFBD's notes say so (filled in from 2022 on)
+// or it's flagged a conference game -- the only way two conference teams
+// meet twice in a regular season. Both are needed: CFBD's notes are blank
+// before 2022, and 2025's title games aren't flagged conference games.
 function rematchTag(game) {
   if (game.season_type !== 'regular') return 'Bowl';
-  return game.conference_game ? 'CG' : 'rematch';
+  return game.conference_game || /championship/i.test(game.notes || '') ? 'CG' : 'rematch';
 }
 const TAG_NOTES = { CG: 'Conference championship', rematch: 'Rematch' };
 

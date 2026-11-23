@@ -8,8 +8,9 @@ already in ratings_history.json -- no ratings are computed here.
 
 games.json only ever holds the current season (it's overwritten at each
 season rollover), so weekly_update.py keeps the archive's current season
-in sync on every run (see archive_season_games()); this script is only
-needed to (re)build past seasons.
+in sync on every run (see archive_season_games()), and backfill_history.py
+refreshes every season it backfills; this script is only needed to
+(re)build past seasons without recomputing their ratings.
 
 "FBS" per season = the teams that season's ratings_history.json snapshots
 cover, so a game against an FCS opponent (or a team still transitioning

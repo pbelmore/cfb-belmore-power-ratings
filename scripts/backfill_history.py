@@ -16,8 +16,10 @@ Regular-season weeks are snapshotted 1..max, cumulatively. Postseason games
 their own weekly ones, since postseason week numbers restart at 1 and would
 otherwise collide with regular-season week numbers.
 
-Only writes data/ratings_history.json -- unlike weekly_update.py, this does
-NOT touch teams.json/games.json, since those represent current-season state,
+Writes data/ratings_history.json, and each season's FBS-vs-FBS games into
+data/games_archive.json (the rivalry page's game record -- the same games
+just fetched, so no extra calls). Unlike weekly_update.py, this does NOT
+touch teams.json/games.json, since those represent current-season state,
 not a historical archive.
 
 Usage:
@@ -31,6 +33,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from weekly_update import (
     BCS_TITLE_GAMES,
+    archive_season_games,
     blend_raw_ratings,
     build_public_rows,
     committee_ranks_for_week,
@@ -116,6 +119,8 @@ def main():
     out_dir = Path(args.out_dir)
     history_path = out_dir / "ratings_history.json"
     history = load_json(history_path, [])
+    archive_path = out_dir / "games_archive.json"
+    archive = load_json(archive_path, [])
 
     call_count = 0
     prior_season_data = None  # (year, teams, game_rows) from the previous loop iteration
@@ -190,13 +195,16 @@ def main():
             season_new_rows.extend(build_public_rows(
                 results, scores, teams, season=year, as_of=as_of, stage=stage,
                 committee_ranks=committee_ranks, playoff_field=playoff_field, playoff_seeds=playoff_seeds,
-                conf_champions=conf_champs, conf_leaders=conf_leaders,
+                conf_leaders=conf_leaders,
             ))
 
         snapshot_count = len({r["as_of"] for r in season_new_rows})
         history = merge_history_rows(history, season_new_rows)
         write_json(history_path, history)
-        print(f"  wrote {len(season_new_rows)} rows across {snapshot_count} snapshots")
+        archive = archive_season_games(archive, year, game_rows, {t["school"] for t in teams})
+        write_json(archive_path, archive)
+        print(f"  wrote {len(season_new_rows)} rows across {snapshot_count} snapshots, "
+              f"{sum(1 for r in archive if r['season'] == year)} archived games")
 
     print(f"\nTotal API calls: {call_count}")
 

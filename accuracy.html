@@ -74,8 +74,7 @@
 // One season's comparison, evaluated at the true final regular-season
 // snapshot only (never postseason, never a mid-season projection) -- the
 // same point in time the real committee actually made their selection.
-function computeSeasonStats(rows, season) {
-  const seasonRows = rows.filter(r => r.season === season);
+function computeSeasonStats(seasonRows, season) {
   const finalAsOf = seasonRows.find(r => r.stage === 'regular' && r.seed != null)?.as_of;
   if (!finalAsOf) return null;
   const snapshot = seasonRows.filter(r => r.as_of === finalAsOf);
@@ -185,8 +184,14 @@ async function main() {
     return;
   }
 
-  const seasons = [...new Set(rows.map(r => r.season))].sort((a, b) => a - b);
-  const statsList = seasons.map(s => computeSeasonStats(rows, s)).filter(Boolean);
+  // Grouped in one pass, not re-filtered from the full history per season.
+  const rowsBySeason = new Map();
+  for (const r of rows) {
+    if (!rowsBySeason.has(r.season)) rowsBySeason.set(r.season, []);
+    rowsBySeason.get(r.season).push(r);
+  }
+  const seasons = [...rowsBySeason.keys()].sort((a, b) => a - b);
+  const statsList = seasons.map(s => computeSeasonStats(rowsBySeason.get(s), s)).filter(Boolean);
 
   subtitle.textContent = `How the Belmore Rankings' projected playoff field compares to the real ${statsList.length ? 'BCS/CFP' : ''} selection, season by season.`;
   renderTable(statsList);
