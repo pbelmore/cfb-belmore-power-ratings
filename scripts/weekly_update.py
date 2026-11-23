@@ -274,21 +274,45 @@ KNOWN_RANK_FIXES = {
     (2023, 15, "Georgia"): 6,
 }
 
-# Whole CFBD releases to ignore, as (year, week). CFBD's 2011 "week 14" BCS
-# Standings (the Nov 27 release) is a copy of the week-15 final, identical
-# in all 25 spots -- it has Houston at 19 when Houston was still 12-0 (it
-# fell to 19 only after losing the C-USA title game on Dec 3) and Oregon 5
-# before its Pac-12 title game. Ignoring it leaves that week unranked
-# rather than showing the final a week early.
-KNOWN_BAD_RELEASES = {(2011, 14)}
-
 # CFBD releases filed under the wrong week, as {(year, cfbd_week):
 # corrected_week}. CFBD's 2001 "week 16" BCS Standings is the Dec 9 final
 # (Tennessee 6 and LSU 13 -- only true after LSU won the Dec 8 SEC title
-# game; Tennessee was 2nd on Dec 2), and the Dec 2 release is missing.
+# game; Tennessee was 2nd on Dec 3), and the Dec 3 release is missing.
 # Read as week 17, it lands on the final snapshot instead of the week
 # before it.
 KNOWN_RELABELED_RELEASES = {(2001, 16): 17}
+
+# Hand-entered committee releases, best first, as {(year, cfbd_week):
+# [team, ...]} -- used in place of whatever CFBD has for that week (after
+# KNOWN_RELABELED_RELEASES), keyed by CFBD's week numbering (see
+# fetch_committee_rankings()). Team names are CFBD's spellings. Transcribed
+# 2026-11-22 from each season's "NCAA Division I FBS/I-A football rankings"
+# page on Wikipedia, and checked against CFBD's releases on either side.
+MANUAL_RELEASES = {
+    # 2001 BCS Standings, Dec 3 -- missing from CFBD. The BCS published 15
+    # teams that season.
+    (2001, 16): [
+        "Miami", "Tennessee", "Nebraska", "Colorado", "Oregon", "Florida", "Texas", "Illinois",
+        "Stanford", "Maryland", "Oklahoma", "BYU", "Washington State", "Washington", "South Carolina",
+    ],
+    # 2011 BCS Standings, Nov 27. CFBD's week 14 is a copy of the Dec 4
+    # final, identical in all 25 spots -- it has Houston 19th when Houston
+    # was still 12-0 (6th here; it fell to 19th only after losing the C-USA
+    # title game on Dec 3).
+    (2011, 14): [
+        "LSU", "Alabama", "Oklahoma State", "Stanford", "Virginia Tech", "Houston", "Boise State",
+        "Arkansas", "Oregon", "Oklahoma", "Kansas State", "South Carolina", "Michigan State",
+        "Georgia", "Wisconsin", "Michigan", "Baylor", "TCU", "Nebraska", "Clemson", "Penn State",
+        "Texas", "West Virginia", "Southern Miss", "Missouri",
+    ],
+    # 2019 CFP ranking, Nov 26 -- missing from CFBD.
+    (2019, 14): [
+        "Ohio State", "LSU", "Clemson", "Georgia", "Alabama", "Utah", "Oklahoma", "Minnesota",
+        "Baylor", "Penn State", "Florida", "Wisconsin", "Michigan", "Oregon", "Auburn",
+        "Notre Dame", "Iowa", "Memphis", "Cincinnati", "Boise State", "Oklahoma State", "USC",
+        "Iowa State", "Virginia Tech", "App State",
+    ],
+}
 
 # The real BCS title-game matchup per season, as (BCS #1, BCS #2) in the
 # final BCS Standings -- the BCS title game was always exactly those two.
@@ -353,7 +377,7 @@ def fetch_committee_rankings(year, api_key):
             ranks = {r["school"]: r["rank"] for r in poll["ranks"]}
             if entry.get("seasonType") == "postseason":
                 postseason = ranks
-            elif entry.get("seasonType") == "regular" and (year, entry["week"]) not in KNOWN_BAD_RELEASES:
+            elif entry.get("seasonType") == "regular":
                 for team in ranks:
                     fix = KNOWN_RANK_FIXES.get((year, entry["week"], team))
                     if fix is not None:
@@ -361,6 +385,9 @@ def fetch_committee_rankings(year, api_key):
                 by_week[KNOWN_RELABELED_RELEASES.get((year, entry["week"]), entry["week"])] = ranks
     if postseason and by_week:
         by_week[max(by_week) + 1] = postseason
+    for (manual_year, week), manual_teams in MANUAL_RELEASES.items():
+        if manual_year == year:
+            by_week[week] = {team: i + 1 for i, team in enumerate(manual_teams)}
     return by_week
 
 
