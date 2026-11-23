@@ -21,7 +21,7 @@ NOT touch teams.json/games.json, since those represent current-season state,
 not a historical archive.
 
 Usage:
-  CFBD_API_KEY=xxxx python scripts/backfill_history.py --start-year 2010 --end-year 2025
+  CFBD_API_KEY=xxxx python scripts/backfill_history.py --start-year 1998 --end-year 2025
 """
 import argparse
 import os
@@ -30,6 +30,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from weekly_update import (
+    BCS_TITLE_GAMES,
     blend_raw_ratings,
     build_public_rows,
     committee_ranks_for_week,
@@ -150,6 +151,18 @@ def main():
         regular_weeks = [wk for (_, _, wk, stage) in snapshots if stage == "regular"]
         final_week = regular_weeks[-1] if regular_weeks else None
         final_committee_ranks = committee_ranks_for_week(rankings_by_week, final_week) if final_week is not None else None
+        if year in BCS_TITLE_GAMES and final_week is not None:
+            # CFBD's BCS Standings are missing or stop short for most BCS
+            # seasons (see BCS_TITLE_GAMES) -- its "final" here is then
+            # either nothing or a week-early release. Trust it only if its
+            # top 2 is the real title game; otherwise the only final ranks
+            # we know for sure are that #1 and #2.
+            title_game = BCS_TITLE_GAMES[year]
+            cfbd_top2 = tuple(t for t, _ in sorted((final_committee_ranks or {}).items(), key=lambda kv: kv[1])[:2])
+            if cfbd_top2 != title_game:
+                if final_committee_ranks:
+                    print(f"  CFBD's last BCS Standings top 2 {cfbd_top2} isn't the title game {title_game} -- using #1/#2 only")
+                final_committee_ranks = {team: i + 1 for i, team in enumerate(title_game)}
 
         cfp_participants = fetch_cfp_participants(year, api_key)
         call_count += 1
@@ -168,8 +181,8 @@ def main():
             # committee_ranks_for_week() can never resolve (no week 100/99
             # ranking exists) -- it belongs to the true final regular week's
             # committee ranking instead, which we already have on hand.
-            committee_ranks = final_committee_ranks if stage == "postseason" else committee_ranks_for_week(rankings_by_week, week)
             is_final_snapshot = stage == "postseason" or week == final_week
+            committee_ranks = final_committee_ranks if is_final_snapshot else committee_ranks_for_week(rankings_by_week, week)
             if is_final_snapshot and exact_seeds is not None:
                 playoff_field, playoff_seeds = set(exact_seeds.keys()), exact_seeds
             else:

@@ -361,6 +361,18 @@ const SORTS = {
   avg: { label: 'Avg score', key: m => m.avgScore, defaultDir: -1 },
 };
 
+// Seasons whose CFBD games carry no kickoff time (every game stored at
+// midnight UTC -- 1998-2000): their date is the calendar date as-is, and
+// shifting it to US Eastern would land on the day before. Filled once the
+// archive loads; a midnight-UTC kickoff in any other season is a real
+// evening game (e.g. 8 p.m. EDT) and still converts normally.
+const dateOnlySeasons = new Set();
+
+function fmtGameDate(g) {
+  const opts = { month: 'short', day: 'numeric', timeZone: dateOnlySeasons.has(g.season) ? 'UTC' : 'America/New_York' };
+  return new Date(g.date).toLocaleDateString('en-US', opts);
+}
+
 function renderTable(container, timeline, a, b, sortState, onSort) {
   const { by, dir } = sortState;
   let rows = timeline;
@@ -385,7 +397,7 @@ function renderTable(container, timeline, a, b, sortState, onSort) {
     }
     const g = t.game;
     const committeeLabel = t.season < CFP_ERA_START ? 'BCS' : 'CFP';
-    const date = new Date(g.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' });
+    const date = fmtGameDate(g);
     const noteText = g.notes || TAG_NOTES[t.tag] || '';
     const note = noteText ? ` · ${escapeHtml(noteText)}` : '';
     return `
@@ -464,6 +476,8 @@ async function main() {
     content.innerHTML = `<p class="status">Couldn't load data (${escapeHtml(err.message)}).</p>`;
     return;
   }
+  const timedSeasons = new Set(games.filter(g => g.date && !g.date.includes('T00:00:00')).map(g => g.season));
+  for (const g of games) if (g.date && !timedSeasons.has(g.season)) dateOnlySeasons.add(g.season);
 
   const seasons = buildSnapshotIndex(rows);
   const seasonList = [...seasons.keys()].sort((x, y) => x - y);

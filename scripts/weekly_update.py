@@ -225,6 +225,34 @@ KNOWN_RANK_FIXES = {
     (2023, 15, "Georgia"): 6,
 }
 
+# The real BCS title-game matchup per season, as (BCS #1, BCS #2) in the
+# final BCS Standings -- the BCS title game was always exactly those two.
+# Hand-entered because CFBD's "BCS Standings" are missing or incomplete for
+# most BCS seasons (verified 2026-11-22): none at all for 1998-2000 and
+# 2002-2006, and 2007-2008 stop a week short of the final release (their
+# last release predates conference championship week, so its top 2 --
+# Missouri/West Virginia, Alabama/Oklahoma -- were never the matchup).
+# Takes precedence over CFBD's standings in real_playoff_field(); 2010-2013
+# are listed too and match CFBD's own final standings.
+BCS_TITLE_GAMES = {
+    1998: ("Tennessee", "Florida State"),
+    1999: ("Florida State", "Virginia Tech"),
+    2000: ("Oklahoma", "Florida State"),
+    2001: ("Miami", "Nebraska"),
+    2002: ("Miami", "Ohio State"),
+    2003: ("Oklahoma", "LSU"),
+    2004: ("USC", "Oklahoma"),
+    2005: ("USC", "Texas"),
+    2006: ("Ohio State", "Florida"),
+    2007: ("Ohio State", "LSU"),
+    2008: ("Oklahoma", "Florida"),
+    2009: ("Alabama", "Texas"),
+    2010: ("Auburn", "Oregon"),
+    2011: ("LSU", "Alabama"),
+    2012: ("Notre Dame", "Alabama"),
+    2013: ("Florida State", "Auburn"),
+}
+
 
 def fetch_committee_rankings(year, api_key):
     """{cfbd_week: {team: rank}} for that season's real committee rankings
@@ -289,7 +317,7 @@ def fetch_cfp_participants(year, api_key):
     /playoffs/cfp/participants endpoint -- {team: seed}. Naturally empty
     before that season's selection actually happens (verified: the
     current not-yet-selected season returns []) and empty for every year
-    before the CFP existed (2010-2013 uses the BCS top-2 instead, see
+    before the CFP existed (1998-2013 uses the BCS top-2 instead, see
     real_playoff_field())."""
     raw = cfbd_get("/playoffs/cfp/participants", api_key, year=year)
     return {p["team"]["school"]: p["seed"] for p in raw}
@@ -299,13 +327,16 @@ def real_playoff_field(year, cfp_participants, final_committee_ranks):
     """The real playoff/BCS field as {team: seed}, or None if that isn't
     determined yet. 2014+: CFP's real field (cfp_participants, empty
     until selection happens -- so this stays None all season until then,
-    then flips to the real seeded field). 2010-2013 (no CFP existed): the
+    then flips to the real seeded field). 1998-2013 (no CFP existed): the
     top 2 teams in the final BCS Standings, seeded 1 and 2 by that same
     rank -- the BCS title game was always exactly the top 2, no other
-    selection criteria, so rank IS the seed. Needs that season's true
-    final ranking (`final_committee_ranks`), not just whatever week is
-    current."""
+    selection criteria, so rank IS the seed. Taken from BCS_TITLE_GAMES
+    (hand-entered, since CFBD's own BCS Standings are incomplete); for a
+    BCS season not listed there, from that season's true final ranking
+    (`final_committee_ranks`), not just whatever week is current."""
     if year < CFP_ERA_START:
+        if year in BCS_TITLE_GAMES:
+            return {team: i + 1 for i, team in enumerate(BCS_TITLE_GAMES[year])}
         if not final_committee_ranks:
             return None
         ranked = sorted(final_committee_ranks.items(), key=lambda kv: kv[1])[:2]
@@ -833,7 +864,7 @@ def update_cfp_ranks(year, api_key, out_dir):
 def playoff_projection(scores, season, teams=(), conf_leaders=None):
     """Mirrors the site's own projection (playoffFieldProjection in
     playoff-format.js): a running "if it ended today" field from that
-    snapshot's own scores, not the actual selection. 2010-2013 (BCS): top
+    snapshot's own scores, not the actual selection. 1998-2013 (BCS): top
     2. 2014-2023 (old CFP): top 4. 2024+: the 12-team conference-leader +
     at-large field -- see conference_leader_field() for 2024-2025's vs.
     2026+'s rules. (Currently only ever called for season >= 2024 -- see
