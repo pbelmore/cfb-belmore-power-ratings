@@ -33,6 +33,9 @@
     }
   }
   * { box-sizing: border-box; }
+  /* Stop iOS Safari from inflating long text runs (e.g. the full-width
+     "Not played" cells) inside the horizontally-scrolling table. */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   body {
     margin: 0;
     padding: 2rem 1rem 4rem;
@@ -102,7 +105,8 @@
     letter-spacing: 0.03em; padding: 0.05rem 0.35rem; border-radius: 4px;
     color: var(--accent); border: 1px solid currentColor; margin-left: 0.35rem;
   }
-  tr.gap td { color: var(--muted); font-style: italic; }
+  tr.gap td { color: var(--muted); font-style: italic; font-size: 0.8rem; }
+  tr.gap td.season { font-size: inherit; font-style: normal; }
   .legend-note { color: var(--muted); font-size: 0.78rem; margin: 0.75rem 0 0; }
 
   .card { border-top: 1px solid var(--border); margin-top: 2rem; padding-top: 1.25rem; }
@@ -306,7 +310,7 @@ function fmtTeamCell(pre, committeeLabel) {
     return `<span class="team-line prior">${rank}</span><span class="sub prior">last season's final</span>`;
   }
   const extra = [`${r.wins}-${r.losses}`];
-  if (r.committee_rank != null) extra.push(`${committeeLabel} ${r.committee_rank}`);
+  if (r.committee_rank != null) extra.push(`${committeeLabel}&nbsp;${r.committee_rank}`);
   return `<span class="team-line">${rank}</span><span class="sub">${extra.join(' · ')}</span>`;
 }
 
